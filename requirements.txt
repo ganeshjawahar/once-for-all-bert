@@ -1,0 +1,9 @@
+transformers==4.11
+datasets
+seqeval
+wandb
+plotly
+accelerate
+more_itertools
+tensorboard
+torchinfo

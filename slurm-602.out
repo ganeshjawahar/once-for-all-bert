@@ -1,0 +1,26 @@
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/cuda/amp/grad_scaler.py:115: UserWarning: torch.cuda.amp.GradScaler is enabled, but CUDA is not available.  Disabling.
+  warnings.warn("torch.cuda.amp.GradScaler is enabled, but CUDA is not available.  Disabling.")
+Traceback (most recent call last):
+  File "train_mlm.py", line 1826, in <module>
+    main()
+  File "train_mlm.py", line 724, in main
+    show_args(accelerator, args)
+  File "/fsx/ganayu/code/SuperShaper/sampling.py", line 515, in show_args
+    f"Free gpu Memory ( in MBs) on each gpus before starting training: {get_gpu_memory()}"
+  File "/fsx/ganayu/code/SuperShaper/utils/wipe_memory.py", line 13, in get_gpu_memory
+    memory_free_info = _output_to_list(sp.check_output(COMMAND.split()))[1:]
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/subprocess.py", line 415, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/subprocess.py", line 516, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['nvidia-smi', '--query-gpu=memory.free', '--format=csv']' returned non-zero exit status 6.
+Traceback (most recent call last):
+  File "/data/home/ganayu/miniconda/envs/basic/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/commands/accelerate_cli.py", line 44, in main
+    args.func(args)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/commands/launch.py", line 568, in launch_command
+    simple_launcher(args)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/commands/launch.py", line 250, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/data/home/ganayu/miniconda/envs/basic/bin/python', 'train_mlm.py', '--per_device_train_batch_size', '128', '--per_device_eval_batch_size', '256', '--gradient_accumulation_steps', '2', '--fp16', '1', '--max_seq_length', '128', '--mixing', 'bert-bottleneck', '--max_train_steps', '175214', '--c4_dir', '/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_final', '--model_name_or_path', 'bert-base-cased', '--sampling_type', 'random', '--sampling_rule', 'sandwich', '--learning_rate', '2e-5', '--weight_decay', '0.01', '--num_warmup_steps', '10000', '--eval_random_subtransformers', '1', '--wandb_suffix', 'trial', '--wandb_entity', 'ganayu', '--wandb_project', 'effbert', '--output_dir', '/fsx/ganayu/experiments/supershaper/jul6_bertdata_bertbottleneck']' returned non-zero exit status 1.
