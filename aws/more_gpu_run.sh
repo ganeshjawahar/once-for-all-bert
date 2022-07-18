@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## job name
-#SBATCH --job-name=128
+#SBATCH --job-name=moresh
 ## filename for job standard output (stdout)
 ## %j is the job id, %u is the user id
 #SBATCH --output=/fsx/ganayu/experiments/trial/sample-%j.out
@@ -10,17 +10,25 @@
 ## partition name
 #SBATCH --partition=a100
 ## number of nodes
-#SBATCH --nodes=1
-#SBATCH --gres=gpu:2
+#SBATCH --nodes=2
+#SBATCH --gres=gpu:8
 ## time
-#SBATCH --time 1000
+#SBATCH --time 100
 
 ## number of tasks per node
-#SBATCH --ntasks-per-node=1
+#SBATCH --ntasks-per-node=8
 #SBATCH --cpus-per-task=10
+
+export NCCL_NSOCKS_PERTHREAD=4
+export NCCL_SOCKET_NTHREADS=2
+export NCC_INFO=INFO
 
 # Start clean
 module purge
+conda activate basic
+
+export SL_NUM_NODES=2
+export PYTHONPATH=$(pwd)
 
 # Debug output
 echo $SLURMD_NODENAME $SLURM_JOB_ID $CUDA_VISIBLE_DEVICES $SLURM_LOCALID

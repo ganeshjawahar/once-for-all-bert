@@ -4,7 +4,7 @@ utilities to start jobs in AWS
 
 import sys, os, json, glob, shutil
 
-def script_creator(output_folder, commands, time_in_mins=10000, num_gpus=8, code_dir="/fsx/ganayu/code/SuperShaper", wandb="online", wandb_entity="ganayu", wandb_project="effbert"):
+def script_creator(output_folder, commands, time_in_mins=15000, num_gpus=8, code_dir="/fsx/ganayu/code/SuperShaper", wandb="online", wandb_entity="ganayu", wandb_project="effbert"):
     print("ensure you are in login node and 'basic' conda environment")
     # create output folder
     os.makedirs(output_folder, exist_ok=True)
@@ -69,6 +69,7 @@ def dataset_factory(name):
     datasets["wikibooks"] = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_final"
     datasets["wikibooks_dummy"] = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_dummy"
     datasets["wikibooks_tokenized"] = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_final_tokenized"
+    datasets["wikibooks_dummy_tokenized"] = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_dummy_tokenized"
 
     # c4-pretraining data
     datasets["c4"] = "/fsx/ganayu/data/supershaper_pretraining_data/c4_datasets_cleaned"
@@ -86,7 +87,8 @@ def config_factory(name):
     configs["bertbase.standard.train_mlm"] = {"per_device_train_batch_size": 128, "per_device_eval_batch_size": 256, "gradient_accumulation_steps": 2, "fp16": 1, "max_seq_length": 512, "mixing": "attention", "max_train_steps": 125000, "c4_dir": dataset_factory("wikibooks"), "model_name_or_path": "bert-base-cased", "sampling_type": "none", "sampling_rule": "none", "learning_rate": 1e-4, "weight_decay": 0.01, "num_warmup_steps": 10000, "eval_random_subtransformers": 0, "output_dir": "<<OUTPUT_DIR>>", "preprocessing_num_workers": 1, "betas_2": 0.98}
     configs["supernetbase.standard.train_mlm"] = {"per_device_train_batch_size": 128, "per_device_eval_batch_size": 256, "gradient_accumulation_steps": 2, "fp16": 1, "max_seq_length": 512, "mixing": "bert-bottleneck", "max_train_steps": 125000, "tokenized_c4_dir": dataset_factory("wikibooks_tokenized"), "model_name_or_path": "bert-base-cased", "sampling_type": "random", "sampling_rule": "sandwich", "learning_rate": 1e-4, "weight_decay": 0.01, "num_warmup_steps": 10000, "eval_random_subtransformers": 0, "output_dir": "<<OUTPUT_DIR>>", "preprocessing_num_workers": 1, "betas_2": 0.98}
     # CUDA OOM issue
-    configs["supernetbase.standard.train_mlm"] = modify_config(configs["supernetbase.standard.train_mlm"], {"per_device_train_batch_size": "16", "gradient_accumulation_steps": "16", "per_device_eval_batch_size": "128"})
+    configs["supernetbase.standard.train_mlm"] = modify_config(configs["supernetbase.standard.train_mlm"], {"per_device_train_batch_size": "16", "gradient_accumulation_steps": "16", "per_device_eval_batch_size": "16"})
+    configs["supernetbase.standard.train_mlm.32bsz"] = modify_config(configs["supernetbase.standard.train_mlm"], {"per_device_train_batch_size": "32", "gradient_accumulation_steps": "8", "per_device_eval_batch_size": "32"})
 
     return configs[name]
 
@@ -139,8 +141,13 @@ changes:
 train independent models
 '''
 # supernetbase - base, base_longer250K, base_lr6e-4
-script_creator(get_experiments_dir() + "/jul14_supernetbase_initial", [ {"exp_name": "base", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"experiment_name": "jul14_supernetbase_initial_base"})}]}, {"exp_name": "base_longer250K", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"max_train_steps": 250000, "experiment_name": "jul14_supernetbase_initial_base_longer250K"})}]}, {"exp_name": "base_lr6e-4", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"learning_rate": 6e-4, "experiment_name": "jul14_supernetbase_initial_base_lr6e-4"})}]} ] )
+# script_creator(get_experiments_dir() + "/jul16_supernetbase_initial", [ {"exp_name": "base", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"experiment_name": "jul14_supernetbase_initial_base"})}]}  ]) #, {"exp_name": "base_longer250K", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"max_train_steps": 250000, "experiment_name": "jul14_supernetbase_initial_base_longer250K"})}]}, {"exp_name": "base_lr6e-4", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"learning_rate": 6e-4, "experiment_name": "jul14_supernetbase_initial_base_lr6e-4"})}]} ] )
+script_creator(get_experiments_dir() + "/jul17_supernetbase_initial_largebsz", [ {"exp_name": "base", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm.32bsz"), {"experiment_name": "jul17_supernetbase_initial_largebsz"})}]}  ]) 
 
-# train bert-base (110M) - no bottleneck
+# train largest transformer bert-base 768H 12L (110M) w bottleneck
+# train smallest transformer bert-base 120H 12L w bottleneck
+# script_creator(get_experiments_dir() + "/jul16_bertstandalone", [ {"exp_name": "12L_768H", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"sampling_type": "none", "sampling_rule": "none", "subtransformer_config_path": "/fsx/ganayu/experiments/supershaper/configs/bert/bertbase_12L_768H.csv"})}]}, {"exp_name": "12L_120H", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm"), {"sampling_type": "none", "sampling_rule": "none", "subtransformer_config_path": "/fsx/ganayu/experiments/supershaper/configs/bert/bertbase_12L_120H.csv"})}]}  ] )
+script_creator(get_experiments_dir() + "/jul17_bertstandalone_largebsz", [ {"exp_name": "12L_768H", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm.32bsz"), {"sampling_type": "none", "sampling_rule": "none", "subtransformer_config_path": "/fsx/ganayu/experiments/supershaper/configs/bert/bertbase_12L_768H.csv", "experiment_name": "jul17_bertstandalone_largebsz_12L_768H"})}]}, {"exp_name": "12L_120H", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbase.standard.train_mlm.32bsz"), {"sampling_type": "none", "sampling_rule": "none", "subtransformer_config_path": "/fsx/ganayu/experiments/supershaper/configs/bert/bertbase_12L_120H.csv", "experiment_name": "jul17_bertstandalone_largebsz_12L_120H"})}]}  ] )
+
 
 

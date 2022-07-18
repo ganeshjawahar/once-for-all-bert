@@ -605,12 +605,20 @@ def parse_args():
         default=0.999,
         help="betas(-,x)",
     )
+    #parser.add_argument(
+    #    "--checkpoint_every_x_steps",
+    #    type=float,
+    #    default=25000,
+    #    help="number of steps before running validation",
+    #)
+
     parser.add_argument(
-        "--checkpoint_every_x_steps",
-        type=float,
-        default=25000,
-        help="number of steps before running validation",
+        "--sample_one_arch",
+        type=str,
+        default="none",
+        help=f"sample between ==min, max, rand, rand==",
     )
+
 
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
@@ -1189,8 +1197,7 @@ def main():
         if args.c4_dir is not None:
             if "url" in tokenized_datasets["train"][0].keys() and "timestamp" in tokenized_datasets["train"][0].keys():
                 tokenized_datasets = tokenized_datasets.remove_columns(["url", "timestamp"])
-            tokenized_datasets.save_to_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_final_tokenized")
-        sys.exit(0)
+            # tokenized_datasets.save_to_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_dummy_tokenized")
     else:
         logger.info(
             f"Skipping tokenization! as we have the tokenized dataset is already loaded from {args.tokenized_c4_dir}"
@@ -1815,8 +1822,27 @@ def main():
         )
         completed_epochs += 1
 
+
+
         if args.output_dir is not None:
             accelerator.wait_for_everyone()
+            ## Saving the best model
+            unwrapped_model = accelerator.unwrap_model(model)
+            unwrapped_model.save_pretrained(
+                os.path.join(args.output_dir, "epoch_%d"%completed_epochs),
+                save_function=accelerator.save,
+            )
+            accelerator.save(
+                {
+                    "epoch": completed_epochs,
+                    "current_seed": seed,
+                    "steps": completed_steps,
+                    "optimizer": optimizer.state_dict(),
+                    "scheduler": lr_scheduler.state_dict(),
+                    "scaler": accelerator.scaler.state_dict(),
+                },
+                args.optim_scheduler_states_path.format("epoch_%d"%completed_epochs),
+            )
             if (
                 best_val_perplexity >= eval_metric["perplexity"]
             ):  ## Saving the best model

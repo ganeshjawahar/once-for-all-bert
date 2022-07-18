@@ -169,6 +169,8 @@ def calculate_params(
         output_emb_layer = vocab_size * emb_dim + vocab_size
     else:
         output_emb_layer = 0
+    
+    # print(emb_params, per_layer_params, output_emb_params, output_emb_layer)
 
     return emb_params + per_layer_params + output_emb_params + output_emb_layer
 
