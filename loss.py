@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 from torch.nn.modules.loss import _Loss
-
+# from custom_layers.KD_loss import DistributionLoss 
+from torch.nn import functional as F
 
 def compute_layerwise_distillation(
     args,
@@ -25,21 +26,22 @@ def compute_layerwise_distillation(
         teacher_hidden_states[-1].shape[1:], elementwise_affine=False
     )
     for teacher_hidden, student_hidden in zip(
-        teacher_hidden_states, student_hidden_states
+        teacher_hidden_states[-1:], student_hidden_states[-1:]
     ):
-        teacher_hidden = non_trainable_layernorm(teacher_hidden.detach())
+        teacher_hidden = non_trainable_layernorm(teacher_hidden.detach()) 
         student_hidden = non_trainable_layernorm(student_hidden)
         fkt = nn.MSELoss()(teacher_hidden, student_hidden)
         student_fkt = student_fkt + fkt
         if track_layerwise_loss:
             layer_wise_fkt.append(fkt)
+
     # the attention maps already have softmax applied, hence we pass logits = False
     loss_alpha_div = AdaptiveLossSoft(
         args.alpha_min, args.alpha_max, args.beta_clip, logits=False
     )
-
+    
     for (teacher_attention, student_attention) in zip(
-        teacher_attention_maps, student_attention_maps
+        teacher_attention_maps[-1:], student_attention_maps[-1:]
     ):
         # attentions are already in probabilities, hence no softmax
         if args.alpha_divergence:
@@ -59,22 +61,56 @@ def compute_layerwise_distillation(
 
 def compute_student_loss(
     outputs,
-    teacher_hidden_states,
-    teacher_attention_maps,
+    teacher_info,
     args,
     track_layerwise_loss=False,
 ):
 
     # outputs = model(**batch, use_soft_loss=True)
     loss = outputs.loss
-    student_hidden_states = outputs.hidden_states
-    student_attention_maps = outputs.attentions
+    # student_hidden_states = outputs.hidden_states
+    # student_attention_maps = outputs.attentions
 
     student_mlm_loss = loss
     student_mlm_loss = student_mlm_loss / args.gradient_accumulation_steps
 
-    overall_loss = student_mlm_loss
+    overall_loss = 0.0
+    losses = {}
+    losses["student_mlm_loss"] = student_mlm_loss.item()
+    
+    if "logits" in args.distillation_type:
+        # compute KL-div of student logits and teacher logits
+        # https://raw.githubusercontent.com/liuzechun/ReActNet/master/utils/KD_loss.py
+        student_logits = outputs.logits
+        student_logits = student_logits.reshape(-1, student_logits.size(2))
+        model_output_log_prob = F.log_softmax(student_logits, dim=1)
+        model_output_log_prob = model_output_log_prob.unsqueeze(2)
 
+        teacher_logits = teacher_info["teacher_logits"]
+        real_output_soft = F.softmax(teacher_logits.reshape(-1, teacher_logits.size(2)), dim=1)
+        real_output_soft = real_output_soft.unsqueeze(1)
+
+        cross_entropy_loss = -torch.bmm(real_output_soft, model_output_log_prob)
+        cross_entropy_loss = cross_entropy_loss.mean()
+        overall_loss = cross_entropy_loss * args.inplace_kd_distill_loss_weights
+        losses["student_distill_loss"] = cross_entropy_loss.item()
+        if "hard" in args.distillation_type:
+            overall_loss = overall_loss + student_mlm_loss
+    
+    if "hiddenlastlayer" in args.distillation_type:
+        non_trainable_layernorm = nn.LayerNorm(teacher_info["teacher_hidden_states"][-1].shape[1:], elementwise_affine=False)
+        for teacher_hidden, student_hidden in zip(teacher_info["teacher_hidden_states"][-1:], outputs.hidden_states[-1:]):
+            teacher_hidden = non_trainable_layernorm(teacher_hidden.detach()) 
+            student_hidden = non_trainable_layernorm(student_hidden)
+            fkt = nn.MSELoss()(teacher_hidden, student_hidden)
+            losses["student_hidden_loss"] = fkt.item()
+            overall_loss = overall_loss + fkt
+
+    losses["overall_loss"] = overall_loss.item()
+
+    # overall_loss = student_mlm_loss
+
+    '''
     losses = {
         "overall_loss": overall_loss,
         "student_distill_loss": 0,
@@ -85,7 +121,7 @@ def compute_student_loss(
         "layer_wise_fkt": [],
     }
 
-    if args.layerwise_distillation:
+    if args.layerwise_distillation or args.distillation_type:
         (
             student_akt,
             student_fkt,
@@ -116,6 +152,7 @@ def compute_student_loss(
         losses["student_attention_knowledge_transfer_loss"] = student_akt
         losses["layer_wise_akt"] = layer_wise_akt
         losses["layer_wise_fkt"] = layer_wise_fkt
+    '''
 
     return overall_loss, losses
 
@@ -205,13 +242,16 @@ class CrossEntropyLossSoft(_Loss):
         :param input: (batch, *)
         :param target: (batch, *) same shape as input, each item must be a valid distribution: target[i, :].sum() == 1.
         """
+        print(preds.size(), target_logits.size())
         logprobs = torch.nn.functional.log_softmax(
             preds.view(preds.shape[0], -1), dim=1
         )
         target = torch.nn.functional.softmax(
             target_logits.view(target_logits.shape[0], -1).detach(), dim=1
         )
+        print(target.view(target.shape[0], -1).size(), logprobs.size())
         batchloss = -torch.sum(target.view(target.shape[0], -1) * logprobs, dim=1)
+        sys.exit(0)
         if reduction == "none":
             return batchloss
         elif reduction == "mean":
@@ -220,3 +260,4 @@ class CrossEntropyLossSoft(_Loss):
             return torch.sum(batchloss)
         else:
             raise NotImplementedError("Unsupported reduction mode.")
+

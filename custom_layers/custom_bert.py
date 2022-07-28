@@ -74,6 +74,7 @@ from custom_layers.custom_layernorm import CustomLayerNorm, CustomNoNorm
 from copy import deepcopy
 from loss import CrossEntropyLossSoft
 from loss import *
+from custom_layers.HyperNetDynamicLinear import HyperNetDynamicLinear
 
 from utils import get_overlap_order
 from utils import dropout_layers
@@ -328,7 +329,7 @@ class BertSelfAttention(nn.Module):
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
-        # TODO: make all these hidden_sizes different for supertransformer
+        # TODO: make all these hidden_sizes different for supertransformer # might be error
         self.query = CustomLinear(config.hidden_size, self.all_head_size)
         self.key = CustomLinear(config.hidden_size, self.all_head_size)
         self.value = CustomLinear(config.hidden_size, self.all_head_size)
@@ -350,7 +351,7 @@ class BertSelfAttention(nn.Module):
         self.is_decoder = config.is_decoder
 
         self.sample_num_attention_heads = self.num_attention_heads
-        self.sample_num_attention_heads = self.attention_head_size
+        self.sample_num_attention_heads = self.attention_head_size ## ?? doesn;t matter as set_sample_config is called
         self.sample_all_head_size = self.all_head_size
 
     def transpose_for_scores(self, x):
@@ -1209,7 +1210,7 @@ class BertIntermediate(nn.Module):
             self.intermediate_act_fn = config.hidden_act
 
     def set_sample_config(self, config):
-        sample_intermediate_size = config.sample_intermediate_size
+        sample_intermediate_size = config.sample_intermediate_size if config.sample_intermediate_size > 10 else int(config.sample_intermediate_size * config.sample_hidden_size) # todo: make it dynamic
         sample_hidden_size = config.sample_hidden_size
         self.dense.set_sample_config(sample_hidden_size, sample_intermediate_size)
 
@@ -1230,7 +1231,7 @@ class BertOutput(nn.Module):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def set_sample_config(self, config, prev_layer_importance_order=None):
-        sample_intermediate_size = config.sample_intermediate_size
+        sample_intermediate_size = config.sample_intermediate_size if config.sample_intermediate_size > 10 else int(config.sample_intermediate_size * config.sample_hidden_size) # todo: make it dynamic
         sample_hidden_size = config.sample_hidden_size
         self.LayerNorm.set_sample_config(sample_hidden_size)
         self.dense.set_sample_config(sample_intermediate_size, sample_hidden_size)
@@ -1285,10 +1286,15 @@ class BertLayer(nn.Module):
         self.use_bottleneck = config.mixing == "bert-bottleneck"
         if self.use_bottleneck:
             # TODO: add initializer to the linear layer
-            self.input_bottleneck = CustomLinear(config.hidden_size, config.hidden_size)
-            self.output_bottleneck = CustomLinear(
-                config.hidden_size, config.hidden_size
-            )
+            if config.use_hypernet_w_low_rank == 0:
+                self.input_bottleneck = CustomLinear(config.hidden_size, config.hidden_size)
+                self.output_bottleneck = CustomLinear(
+                    config.hidden_size, config.hidden_size
+                )
+            else:
+                self.input_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
+                self.output_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
+
         self.attention = BertAttention(config)
         self.is_decoder = config.is_decoder
         self.add_cross_attention = config.add_cross_attention

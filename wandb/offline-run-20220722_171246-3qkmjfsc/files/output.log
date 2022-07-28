@@ -1,0 +1,22 @@
+file /fsx/ganayu/experiments/supershaper/jul19_v3_supernetbase/base/config.json not found
+Traceback (most recent call last):
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py", line 546, in get_config_dict
+    resolved_config_file = cached_path(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/file_utils.py", line 1417, in cached_path
+    raise EnvironmentError(f"file {url_or_filename} not found")
+OSError: file /fsx/ganayu/experiments/supershaper/jul19_v3_supernetbase/base/config.json not found
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "train_mlm.py", line 1983, in <module>
+    main()
+  File "train_mlm.py", line 923, in main
+    global_config = get_supertransformer_config(
+  File "/fsx/ganayu/code/SuperShaper/sampling.py", line 464, in get_supertransformer_config
+    config = AutoConfig.from_pretrained(model_name_or_path)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/models/auto/configuration_auto.py", line 527, in from_pretrained
+    config_dict, _ = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py", line 570, in get_config_dict
+    raise EnvironmentError(msg)
+OSError: Can't load config for '/fsx/ganayu/experiments/supershaper/jul19_v3_supernetbase/base'. Make sure that:
+- '/fsx/ganayu/experiments/supershaper/jul19_v3_supernetbase/base' is a correct model identifier listed on 'https://huggingface.co/models'
+- or '/fsx/ganayu/experiments/supershaper/jul19_v3_supernetbase/base' is the correct path to a directory containing a config.json file

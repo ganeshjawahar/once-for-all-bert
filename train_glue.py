@@ -346,6 +346,27 @@ def parse_args():
         help=f"path to augmented train file",
     )
 
+    parser.add_argument(
+        "--experiment_name",
+        type=str,
+        default="trial",
+        help=f"experiment name",
+    )
+
+    parser.add_argument(
+        "--tokenizer_name",
+        type=str,
+        default="Graphcore/bert-base-uncased",
+        help="Pretrained tokenizer name or path if not the same as model_name",
+    )
+    
+    parser.add_argument(
+        "--skip_saving_checkpoints",
+        type=str,
+        default="no",
+        help="Skip saving checkpoint whatsover",
+    )
+
     args = parser.parse_args()
 
     # args.model_name_or_path = "bert-base-cased"
@@ -408,9 +429,9 @@ def parse_args():
 
     if args.output_dir is not None and args.resume_from_checkpoint_dir is None:
         task_name = args.task_name.split("/")[-1].strip()
-        args.output_dir += (
-            "/" + task_name + "_" + args.mixing + "_" + get_current_datetime()
-        )
+        #args.output_dir += (
+        #    "/" + task_name + "_" + args.mixing + "_" + get_current_datetime()
+        #)
         args.optim_scheduler_states_path = os.path.join(
             args.output_dir, "optimizer_scheduler.pt"
         )
@@ -545,14 +566,14 @@ def main():
         wandb.init(
             project=args.wandb_project,
             entity=args.wandb_entity,
-            name=args.task_name.split("/")[-1].strip() + "_" + str_name,
+            name=args.experiment_name,
         )
 
     if args.output_dir is not None and args.resume_from_checkpoint_dir is None:
         dataset_name = args.task_name.split("/")[-1].strip()
-        args.output_dir += (
-            "/" + dataset_name + "_" + str_name + "_" + get_current_datetime()
-        )
+        #args.output_dir += (
+        #    "/" + dataset_name + "_" + str_name + "_" + get_current_datetime()
+        #)
         args.optim_scheduler_states_path = os.path.join(
             args.output_dir, "{}/optimizer_scheduler.pt"
         )
@@ -665,12 +686,12 @@ def main():
     # config = AutoConfig.from_pretrained(
     #     args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name
     # )
-    global_config = get_supertransformer_config("bert-base-cased", mixing=args.mixing)
+    global_config = get_supertransformer_config(args.tokenizer_name, mixing=args.mixing)
     global_config.rewire = args.rewire
     global_config.layer_drop_prob = 0.0
 
     tokenizer = AutoTokenizer.from_pretrained(
-        "bert-base-cased", use_fast=not args.use_slow_tokenizer
+        args.tokenizer_name, use_fast=not args.use_slow_tokenizer
     )
 
     if args.max_length:
@@ -693,7 +714,7 @@ def main():
 
         for key, value in subtransformer_config.items():
             # update global_config with attributes of subtransformer_config
-            if key in ["rewire", "label2id", "id2label"]:
+            if key in ["rewire", "label2id", "id2label", "mixing"]:
                 continue
             setattr(global_config, key, value)
         print(global_config)
@@ -1169,22 +1190,23 @@ def main():
             if early_stopping.counter == 0:
                 # if counter is 0, it means the metric has improved
                 accelerator.wait_for_everyone()
-                unwrapped_model = accelerator.unwrap_model(model)
-                unwrapped_model.save_pretrained(
-                    os.path.join(args.output_dir, "best_model"),
-                    save_function=accelerator.save,
-                )
-                accelerator.save(
-                    {
-                        "epoch": completed_epochs,
-                        "steps": completed_steps,
-                        "optimizer": optimizer.state_dict(),
-                        "scheduler": lr_scheduler.state_dict(),
-                        "scaler": accelerator.scaler.state_dict(),
-                        metric_key: early_stopping.best_score,
-                    },
-                    args.optim_scheduler_states_path.format("best_model"),
-                )
+                if args.skip_saving_checkpoints != "yes":
+                    unwrapped_model = accelerator.unwrap_model(model)
+                    unwrapped_model.save_pretrained(
+                        os.path.join(args.output_dir, "best_model"),
+                        save_function=accelerator.save,
+                    )
+                    accelerator.save(
+                        {
+                            "epoch": completed_epochs,
+                            "steps": completed_steps,
+                            "optimizer": optimizer.state_dict(),
+                            "scheduler": lr_scheduler.state_dict(),
+                            "scaler": accelerator.scaler.state_dict(),
+                            metric_key: early_stopping.best_score,
+                        },
+                        args.optim_scheduler_states_path.format("best_model"),
+                    )
             if early_stopping.early_stop:
                 logger.info(
                     "==========================================================================="

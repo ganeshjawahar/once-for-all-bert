@@ -55,6 +55,7 @@ class Sampler:
         static_keys=None,
         layerwise_changing_keys=None,
         magic_sampling=False,
+        search_space_id=None
     ):
         self.config = config
         self.sampling_type = sampling_type
@@ -62,6 +63,7 @@ class Sampler:
         self.mixing = mixing
         self.magic_sampling = magic_sampling
         self.prev_subtransformer_configs = None
+        self.search_space_id = search_space_id
         self.static_keys = static_keys or [
             "sample_hidden_size",
             "sample_num_hidden_layers",
@@ -134,12 +136,49 @@ class Sampler:
             choices["sample_num_hidden_layers"] = [12]
             choices["sample_num_attention_heads"] = [12]
         elif self.mixing == "bert-bottleneck":
-            choices = {
-                "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
-                "sample_num_attention_heads": [12],
-                "sample_intermediate_size": [3072],
-                "sample_num_hidden_layers": [12],
-            }
+            if self.search_space_id:
+                if self.search_space_id == "attn_elastic":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [2, 4, 6, 8, 10, 12],
+                        "sample_intermediate_size": [3072],
+                        "sample_num_hidden_layers": [12],
+                    }
+                elif self.search_space_id == "ffn_intermediate_elastic":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [12],
+                        "sample_intermediate_size": [512, 1024, 2048, 3072],
+                        "sample_num_hidden_layers": [12],
+                    }
+                elif self.search_space_id == "hidden_layer_elastic":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [12],
+                        "sample_intermediate_size": [3072],
+                        "sample_num_hidden_layers": list(range(6, self.config.num_hidden_layers, 2)) + [self.config.num_hidden_layers],
+                    }
+                elif self.search_space_id == "ffn_intermediate_ratio_elastic":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [12],
+                        "sample_intermediate_size": [2, 3, 4], # ratios
+                        "sample_num_hidden_layers": [12],
+                    }
+                elif self.search_space_id == "v2":
+                    choices = {
+                        "sample_hidden_size": [120, 360, 540, 768],
+                        "sample_num_attention_heads": [12],
+                        "sample_intermediate_size": [2, 3, 4], # ratios
+                        "sample_num_hidden_layers": [6, 9, 12],
+                    }
+            else:
+                choices = {
+                    "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                    "sample_num_attention_heads": [12],
+                    "sample_intermediate_size": [3072],
+                    "sample_num_hidden_layers": [12],
+                }
 
         return choices
 
@@ -308,15 +347,13 @@ class Sampler:
 
         return config
 
-    def get_small_config(self):
+    def get_small_config(self, v1_small=False):
 
         config = copy.deepcopy(self.config)
         choices = self.get_choices()
 
         config_dict = {}
-        config_dict["sample_num_hidden_layers"] = min(
-            choices["sample_num_hidden_layers"]
-        )
+        config_dict["sample_num_hidden_layers"] = min(choices["sample_num_hidden_layers"]) if not v1_small else 12 # todo: make this dynamic
         config_dict["sample_hidden_size"] = min(choices["sample_hidden_size"])
 
         if self.mixing == "bert-bottleneck":
@@ -352,16 +389,14 @@ class Sampler:
             if choice in assigned_keys:
                 continue
 
-            config_dict[choice] = [min(choices[choice])] * config_dict[
-                "sample_num_hidden_layers"
-            ]
+            config_dict[choice] = [min(choices[choice])] * config_dict["sample_num_hidden_layers"] if not v1_small else [max(choices[choice])] * config_dict["sample_num_hidden_layers"] # todo: make this dynamic
 
         for key in config_dict.keys():
             setattr(config, key, config_dict[key])
-
+            
         return config
 
-    def sample_subtransformer(self, randomize=True, rand_seed=0, pop_size=1):
+    def sample_subtransformer(self, randomize=True, rand_seed=0, pop_size=1, sample_one_arch="none", v1_small=False):
         # we store the previous subtransformer configs so that we can do random
         # walks (ie change some parameters on previous configs) instead of uniform
         # sampling
@@ -370,8 +405,8 @@ class Sampler:
 
         smallest_config = None
 
-        if self.sampling_rule == "sandwich":
-            smallest_config = self.get_small_config()
+        if self.sampling_rule == "sandwich" or sample_one_arch != "none":
+            smallest_config = self.get_small_config(v1_small=v1_small)
 
         def _sample():
             configs = []
@@ -411,7 +446,7 @@ class Sampler:
                 configs = _sample()
         else:
             configs = _sample()
-
+        
         self.prev_subtransformer_configs = configs
         return {
             "smallest_subtransformer": smallest_config,
@@ -460,6 +495,7 @@ def get_supertransformer_config(
     mixing="attention",
     additional_random_softmaxing=False,
     random_layer_selection_probability=0.1,
+    use_hypernet_w_low_rank=0, bottleneck_rank=50, hypernet_hidden_size=64
 ):
     config = AutoConfig.from_pretrained(model_name_or_path)
 
@@ -470,11 +506,14 @@ def get_supertransformer_config(
 
     config.sample_hidden_size = config.hidden_size
     config.sample_num_hidden_layers = config.num_hidden_layers
+    config.hypernet_hidden_size = hypernet_hidden_size
 
     if mixing == "bert-bottleneck":
         config.sample_hidden_size = [
             config.hidden_size
         ] * config.sample_num_hidden_layers
+    config.use_hypernet_w_low_rank = use_hypernet_w_low_rank
+    config.bottleneck_rank = bottleneck_rank
 
     # for all networks we use layernorm and feedforwardnetworks 1
     config.normalization_type = "layer_norm"

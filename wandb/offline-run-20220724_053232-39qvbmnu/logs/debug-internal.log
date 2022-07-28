@@ -1,0 +1,58 @@
+2022-07-24 05:32:34,941 INFO    MainThread:3889616 [internal.py:wandb_internal():90] W&B internal server running at pid: 3889616, started at: 2022-07-24 05:32:34.939235
+2022-07-24 05:32:34,973 INFO    WriterThread:3889616 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220724_053232-39qvbmnu/run-39qvbmnu.wandb
+2022-07-24 05:32:34,974 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: run_start
+2022-07-24 05:32:35,000 DEBUG   HandlerThread:3889616 [meta.py:__init__():35] meta init
+2022-07-24 05:32:35,000 DEBUG   HandlerThread:3889616 [meta.py:__init__():49] meta init done
+2022-07-24 05:32:35,000 DEBUG   HandlerThread:3889616 [meta.py:probe():209] probe
+2022-07-24 05:32:35,018 DEBUG   HandlerThread:3889616 [meta.py:_setup_git():199] setup git
+2022-07-24 05:32:35,142 DEBUG   HandlerThread:3889616 [meta.py:_setup_git():206] setup git done
+2022-07-24 05:32:35,142 DEBUG   HandlerThread:3889616 [meta.py:_save_pip():53] save pip
+2022-07-24 05:32:35,145 DEBUG   HandlerThread:3889616 [meta.py:_save_pip():67] save pip done
+2022-07-24 05:32:35,146 DEBUG   HandlerThread:3889616 [meta.py:_save_conda():74] save conda
+2022-07-24 05:32:53,472 DEBUG   HandlerThread:3889616 [meta.py:_save_conda():84] save conda done
+2022-07-24 05:32:53,472 DEBUG   HandlerThread:3889616 [meta.py:probe():247] probe done
+2022-07-24 05:33:05,375 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:05,881 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:06,465 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:06,961 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:07,495 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:08,061 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:08,635 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:09,093 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:09,604 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:10,045 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:10,613 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:11,057 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:11,735 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:12,169 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:12,794 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:13,237 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:13,693 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:14,161 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:15,287 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:15,745 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:16,288 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:16,753 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:17,343 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:17,805 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:18,244 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:18,685 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:19,263 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:19,725 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:20,236 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:20,693 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:21,166 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:21,657 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:22,183 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:22,625 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:23,170 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:23,705 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:24,177 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:24,634 DEBUG   HandlerThread:3889616 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-24 05:33:24,652 WARNING MainThread:3889616 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-07-24 05:33:25,150 WARNING MainThread:3889616 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-07-24 05:33:25,151 ERROR   MainThread:3889616 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-07-24 05:33:25,634 INFO    HandlerThread:3889616 [handler.py:finish():806] shutting down handler
+2022-07-24 05:33:25,635 INFO    WriterThread:3889616 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220724_053232-39qvbmnu/run-39qvbmnu.wandb
+2022-07-24 05:33:26,073 INFO    SenderThread:3889616 [sender.py:finish():1111] shutting down sender
+2022-07-24 05:33:26,074 INFO    MainThread:3889616 [internal.py:handle_exit():80] Internal process exited

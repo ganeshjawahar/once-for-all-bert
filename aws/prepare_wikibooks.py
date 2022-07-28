@@ -68,9 +68,9 @@ def convert_to_datasets_format(c4_dir, dest_dir):
     raw_datasets.save_to_disk(dest_dir)
     print(len(raw_datasets["train"]))
     print(len(raw_datasets["validation"]))
-# dest_dir = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_dummy"
-dest_dir = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_final"
-convert_to_datasets_format(data_dir, dest_dir)
+dest_dir = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_dummy"
+# dest_dir = "/fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_final"
+# convert_to_datasets_format(data_dir, dest_dir)
 # 72M train docs
 # 4M valid docs
 
@@ -196,3 +196,65 @@ def tokenization_stats(data_dir, max_seq_length=512):
 
 # tokenization_stats(dest_dir)
 
+def download_graphcore_dataset():
+    from datasets import load_dataset
+    dataset = load_dataset("Graphcore/wikipedia-bert-512", cache_dir="/fsx/ganayu/experiments/supershaper/cache")
+    dataset.save_to_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_512")
+    dataset = load_dataset("Graphcore/wikipedia-bert-128", cache_dir="/fsx/ganayu/experiments/supershaper/cache")
+    dataset.save_to_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128")
+# download_graphcore_dataset()
+
+def split_graphcore_into_train_val_splits():
+    from datasets import load_dataset, DatasetDict
+    '''
+    dataset = datasets.load_from_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_512")
+    train_testvalid = dataset["train"].train_test_split(test_size=0.1, seed=123)
+    test_valid = train_testvalid["test"].train_test_split(test_size=0.8, seed=123)
+    new_dataset = DatasetDict({'train': train_testvalid['train'], 'test': test_valid['test'], 'validation': test_valid['train'] })
+    #new_dataset.save_to_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_512_train_val_test_splits")
+    print(len(new_dataset["train"]), len(new_dataset["validation"]), len(new_dataset["test"]))
+    # 15544352 863575 863576 90/10/10
+    # 15544352 345430 1381721 90/2/8
+    '''
+
+    dataset = datasets.load_from_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128")
+    dataset = dataset.filter(lambda example: example['next_sentence_label']==0)
+    train_testvalid = dataset["train"].train_test_split(test_size=0.1, seed=123)
+    test_valid = train_testvalid["test"].train_test_split(test_size=0.95, seed=123)
+    new_dataset = DatasetDict({'train': train_testvalid['train'], 'test': test_valid['test'], 'validation': test_valid['train'] })
+    # new_dataset.save_to_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128_next_sentence_label_removed_w_splits")
+    return
+    def check_if_all_labels_100(label):
+        for dim in label:
+            if dim != -100:
+                return False
+        return True
+    '''
+    for i in range(len(dataset["train"])):
+        print(dataset["train"][0].keys())
+        print(type(dataset["train"][0]["labels"]))
+        assert(check_if_all_labels_100(dataset["train"][0]["labels"]))
+        print(i)
+    '''
+    train_testvalid = dataset["train"].train_test_split(test_size=0.1, seed=123)
+    test_valid = train_testvalid["test"].train_test_split(test_size=0.8, seed=123)
+    new_dataset = DatasetDict({'train': train_testvalid['train'], 'test': test_valid['test'], 'validation': test_valid['train'] })
+    print(len(new_dataset["train"]), len(new_dataset["validation"]), len(new_dataset["test"]))
+    # 34794866 1933048 1933049 90/10/10
+    # 34794866 773219 3092878 90/2/8
+    
+# split_graphcore_into_train_val_splits()
+
+def check_tokenization_output():
+    from transformers import AutoTokenizer
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased", use_fast=True)
+    print(tokenizer.decode([1012, 3434, 1010, 9640, 1012, 16327, 1013, 1012, 26257, 1013, 1012, 23944, 2007, 2260, 2188, 3216, 1010, 4464, 23583, 1010, 1998, 2340, 7376, 7888, 2058]))
+    tokenizer = AutoTokenizer.from_pretrained("Graphcore/bert-base-uncased", use_fast=True)
+    print(tokenizer.decode([1012, 3434, 1010, 9640, 1012, 16327, 1013, 1012, 26257, 1013, 1012, 23944, 2007, 2260, 2188, 3216, 1010, 4464, 23583, 1010, 1998, 2340, 7376, 7888, 2058]))
+# check_tokenization_output()
+
+def check_dataset_stats():
+    dataset = datasets.load_from_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128_next_sentence_label_removed_w_splits")
+    print(len(dataset["train"]), len(dataset["validation"]), len(dataset["test"]))
+
+check_dataset_stats()

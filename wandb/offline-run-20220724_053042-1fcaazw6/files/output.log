@@ -1,0 +1,240 @@
+tensor(1.8766, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2073, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6115, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.5567, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9201, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.7470, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6581, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8066, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9140, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8227, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6891, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.4699, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8998, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2226, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6371, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.7959, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9169, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9828, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.4948, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.6837, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8961, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0249, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.5237, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8417, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8954, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1606, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6483, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2723, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8949, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1990, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.5193, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2970, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9099, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8373, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.4978, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0161, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9183, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9109, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.5006, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0524, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9013, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0497, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.7038, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2470, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8828, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2175, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6149, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.5043, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9041, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9751, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.7069, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1827, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8909, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1608, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.7329, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.4479, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8871, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1174, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.5455, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(6.1519, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9012, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0179, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.5142, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.4285, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8959, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2047, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8323, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2065, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9085, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9593, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8433, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9717, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9026, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0567, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8699, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0493, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8972, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9760, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8682, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9729, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9152, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8787, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.7766, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8560, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9060, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0694, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.7610, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0499, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8990, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.9901, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8172, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0097, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9014, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.7938, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8367, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.7705, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9065, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1850, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6434, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.6279, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9043, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0923, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6767, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.5096, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8752, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.0738, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6003, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.3465, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8819, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2266, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6340, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.4011, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8779, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2074, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8350, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.2442, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9088, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8083, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8752, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8706, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9147, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8122, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8586, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8494, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8918, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.5590, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8705, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.5785, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.8786, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.1074, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.6130, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(6.0747, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.9043, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(4.8970, device='cuda:0', grad_fn=<AddBackward0>) fkt
+tensor(1.5846, device='cuda:0', grad_fn=<AddBackward0>) 0 fkt
+tensor(5.7601, device='cuda:0', grad_fn=<AddBackward0>) fkt
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+07/24/2022 05:30:59 - INFO - __main__ -   BERT-Bottleneck Initiliazed with BERT-base
+07/24/2022 05:30:59 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForMaskedLM                                              --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              8,269,056
+│    │    │    └─BertLayer: 4-2                              8,269,056
+│    │    │    └─BertLayer: 4-3                              8,269,056
+│    │    │    └─BertLayer: 4-4                              8,269,056
+│    │    │    └─BertLayer: 4-5                              8,269,056
+│    │    │    └─BertLayer: 4-6                              8,269,056
+│    │    │    └─BertLayer: 4-7                              8,269,056
+│    │    │    └─BertLayer: 4-8                              8,269,056
+│    │    │    └─BertLayer: 4-9                              8,269,056
+│    │    │    └─BertLayer: 4-10                             8,269,056
+│    │    │    └─BertLayer: 4-11                             8,269,056
+│    │    │    └─BertLayer: 4-12                             8,269,056
+├─BertOnlyMLMHead: 1-2                                       --
+│    └─BertLMPredictionHead: 2-3                             --
+│    │    └─BertPredictionHeadTransform: 3-7                 --
+│    │    │    └─CustomLinear: 4-13                          590,592
+│    │    │    └─CustomLayerNorm: 4-14                       1,536
+│    │    └─CustomLinear: 3-8                                23,471,418
+=====================================================================================
+Total params: 123,688,506
+Trainable params: 123,688,506
+Non-trainable params: 0
+=====================================================================================
+07/24/2022 05:30:59 - INFO - __main__ -   Skipping tokenization! as we have the tokenized dataset is already loaded from /fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128_next_sentence_label_removed_w_splits
+07/24/2022 05:30:59 - INFO - __main__ -   Sample 10727801 of the training set: {'input_ids': [101, 8799, 2649, 2014, 2679, 2004, 1037, 1000, 9535, 3723, 2836, 1000, 1998, 2158, 12662, 2050, 3090, 1010, 1000, 2016, 2743, 2428, 2204, 1010, 2074, 2117, 2190, 1012, 1000, 102, 2119, 13989, 1998, 10365, 5228, 4847, 2005, 1996, 2836, 1997, 1996, 3453, 1012, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+07/24/2022 05:30:59 - INFO - __main__ -   Sample 1867825 of the training set: {'input_ids': [101, 8362, 2000, 1996, 4746, 1999, 1996, 2262, 2621, 3783, 1010, 2174, 1010, 2931, 7576, 2020, 2583, 2000, 5566, 1999, 2035, 1996, 2168, 2998, 2004, 2273, 1012, 1999, 1996, 3467, 3783, 1010, 2308, 2024, 2145, 4039, 2000, 5566, 1999, 1996, 13649, 4117, 1012, 2045, 2024, 2747, 2048, 4386, 2824, 1999, 2029, 3287, 7576, 2089, 2025, 5566, 1024, 26351, 8093, 27296, 2098, 5742, 1998, 14797, 102, 2093, 25225, 2015, 2000, 3413, 2302, 1037, 7401, 1997, 1996, 2399, 1024, 1996, 4947, 2399, 2020, 8014, 2138, 1997, 2088, 2162, 1045, 1010, 1998, 1996, 2621, 1998, 3467, 2399, 1997, 3878, 1998, 3646, 2020, 8014, 2138, 1997, 2088, 2162, 2462, 1012, 1996, 17023, 1011, 9166, 2162, 2090, 4108, 1998, 3607, 12591, 2006, 1996, 3098, 2154, 1997, 1996, 2263, 2621, 3783, 1999, 7211, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}.
+07/24/2022 05:30:59 - INFO - __main__ -   Sample 419610 of the training set: {'input_ids': [101, 5115, 2005, 2570, 1516, 2603, 2244, 2325, 1012, 999, 8902, 13102, 2319, 1027, 1000, 1017, 1000, 2806, 1027, 1000, 4281, 1024, 1001, 10507, 9468, 4246, 1025, 1000, 1064, 2570, 2244, 999, 8902, 13102, 2319, 1027, 1000, 1017, 1000, 2806, 1027, 1000, 4281, 1024, 1001, 10507, 9468, 4246, 1025, 1000, 1064, 2603, 2244, 2461, 1016, 1012, 1996, 2117, 2461, 7208, 2024, 5115, 2005, 1021, 1516, 2403, 2255, 2325, 1012, 999, 8902, 13102, 2319, 1027, 1000, 1017, 1000, 2806, 1027, 1000, 4281, 1024, 102, 999, 8902, 13102, 2319, 1027, 1000, 1017, 1000, 2806, 1027, 1000, 4281, 1024, 1001, 10507, 9468, 4246, 1025, 1000, 1064, 1022, 2255, 999, 8902, 13102, 2319, 1027, 1000, 1017, 1000, 2806, 1027, 1000, 4281, 1024, 1001, 10507, 9468, 4246, 1025, 1000, 1064, 1023, 2255, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}.
+07/24/2022 05:31:05 - INFO - __main__ -   Number of steps/updates per epoch: 946603
+07/24/2022 05:31:05 - INFO - __main__ -   ***** Running training *****
+07/24/2022 05:31:05 - INFO - __main__ -     Num examples = 15145643
+07/24/2022 05:31:05 - INFO - __main__ -     Num Epochs = 1
+07/24/2022 05:31:05 - INFO - __main__ -     Instantaneous batch size per device = 4
+07/24/2022 05:31:05 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 16
+07/24/2022 05:31:05 - INFO - __main__ -     Gradient Accumulation steps = 2
+07/24/2022 05:31:05 - INFO - __main__ -     Total optimization steps = 125000, 0 steps completed so far
+  0%|                                                                                                           | 0/125000 [00:00<?, ?it/s]07/24/2022 05:31:05 - INFO - __main__ -   =============================
+07/24/2022 05:31:05 - INFO - __main__ -   Starting training from epoch 0
+07/24/2022 05:31:05 - INFO - __main__ -   Training till epoch  1
+07/24/2022 05:31:05 - INFO - __main__ -   =============================
+[W reducer.cpp:1289] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+  0%|                                                                                               | 17/125000 [00:25<35:22:12,  1.02s/it]Traceback (most recent call last):
+  File "train_mlm.py", line 2019, in <module>
+    main()
+  File "train_mlm.py", line 1627, in main
+    outputs = model(**batch)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/utils/module_proxy_wrapper.py", line 53, in forward
+    return self.module(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/utils/operations.py", line 487, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/autocast_mode.py", line 12, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 963, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2551, in forward
+    outputs = self.bert(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2130, in forward
+    encoder_outputs = self.encoder(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1622, in forward
+    layer_outputs = layer_module(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1384, in forward
+    self_attention_outputs = self.attention(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1177, in forward
+    self_outputs = self.self(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 439, in forward
+    key_layer = self.transpose_for_scores(self.key(hidden_states))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_linear.py", line 81, in forward
+    self._sample_parameters()
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_linear.py", line 60, in _sample_parameters
+    self.samples["bias"] = self.bias
+KeyboardInterrupt

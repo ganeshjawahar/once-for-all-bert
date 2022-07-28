@@ -1,0 +1,170 @@
+BertConfig {
+  "additional_random_softmaxing": false,
+  "alpha_divergence": 0,
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_drop_prob": 0.0,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "max_seq_length": 128,
+  "mixing": "attention",
+  "model_type": "bert",
+  "normalization_type": "layer_norm",
+  "num_attention_heads": 12,
+  "num_feedforward_networks": 1,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "random_layer_selection_probability": 0.1,
+  "rewire": 0,
+  "sample_hidden_size": 768,
+  "sample_intermediate_size": [
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072
+  ],
+  "sample_num_attention_heads": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "sample_num_hidden_layers": 12,
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 30522
+}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+07/21/2022 16:31:49 - INFO - __main__ -   ==================================================================
+07/21/2022 16:31:49 - INFO - __main__ -   Number of parameters in custom config is 117 Million
+07/21/2022 16:31:49 - INFO - __main__ -   ==================================================================
+07/21/2022 16:31:59 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForMaskedLM                                              --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              7,087,872
+│    │    │    └─BertLayer: 4-2                              7,087,872
+│    │    │    └─BertLayer: 4-3                              7,087,872
+│    │    │    └─BertLayer: 4-4                              7,087,872
+│    │    │    └─BertLayer: 4-5                              7,087,872
+│    │    │    └─BertLayer: 4-6                              7,087,872
+│    │    │    └─BertLayer: 4-7                              7,087,872
+│    │    │    └─BertLayer: 4-8                              7,087,872
+│    │    │    └─BertLayer: 4-9                              7,087,872
+│    │    │    └─BertLayer: 4-10                             7,087,872
+│    │    │    └─BertLayer: 4-11                             7,087,872
+│    │    │    └─BertLayer: 4-12                             7,087,872
+├─BertOnlyMLMHead: 1-2                                       --
+│    └─BertLMPredictionHead: 2-3                             --
+│    │    └─BertPredictionHeadTransform: 3-7                 --
+│    │    │    └─CustomLinear: 4-13                          590,592
+│    │    │    └─CustomLayerNorm: 4-14                       1,536
+│    │    └─CustomLinear: 3-8                                23,471,418
+=====================================================================================
+Total params: 109,514,298
+Trainable params: 109,514,298
+Non-trainable params: 0
+=====================================================================================
+07/21/2022 16:31:59 - INFO - __main__ -   Skipping tokenization! as we have the tokenized dataset is already loaded from /fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128
+07/21/2022 16:31:59 - INFO - __main__ -   Sample 7471301 of the training set: {'input_ids': [101, 2003, 2019, 2981, 2547, 2276, 1999, 11345, 7265, 2015, 11265, 17643, 2015, 1010, 28155, 20552, 2721, 1012, 1996, 2276, 9639, 2993, 2004, 3565, 3149, 2260, 1012, 2381, 1012, 1060, 22269, 2078, 2860, 2363, 2049, 16427, 2006, 2255, 2861, 1010, 2807, 1010, 2044, 10093, 6777, 19565, 2527, 10718, 1010, 1055, 1012, 1037, 1012, 2139, 1039, 1012, 1058, 1012, 2001, 3479, 2013, 2426, 2176, 7226, 102, 6777, 19565, 2527, 10718, 2001, 3079, 2011, 7779, 2080, 9298, 8447, 2139, 2474, 1051, 1010, 2040, 3079, 2694, 3703, 1999, 20759, 25398, 1998, 2033, 9048, 9289, 2072, 1012, 2005, 2087, 1997, 2049, 2381, 2044, 6608, 2006, 1999, 2727, 1010, 1996, 2276, 8846, 2098, 1996, 25245, 2050, 1021, 2897, 1010, 2029, 2106, 2025, 2031, 1037, 11659, 1999, 11345, 7265, 2015, 11265, 17643, 2015, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}.
+07/21/2022 16:31:59 - INFO - __main__ -   Sample 1678443 of the training set: {'input_ids': [101, 17508, 6063, 7034, 1024, 1000, 1045, 1005, 2310, 2787, 2000, 5851, 1996, 2925, 1997, 1000, 2630, 9001, 1000, 2005, 1996, 2111, 1997, 9530, 20483, 2078, 1010, 1996, 22949, 4939, 2688, 1998, 1996, 2111, 1997, 1996, 2088, 1000, 1012, 102, 17508, 1005, 1055, 26161, 1998, 2059, 2056, 1024, 1000, 3021, 3044, 2038, 8916, 2149, 2002, 2064, 2131, 1000, 2630, 9001, 1000, 3929, 19995, 1998, 28667, 2239, 8873, 27390, 2098, 2012, 2053, 3465, 2000, 1996, 2688, 1012, 1010, 1000, 1047, 2581, 1000, 2003, 2108, 3929, 5854, 2011, 1996, 2630, 9001, 2622, 1010, 2000, 1037, 2200, 2152, 3115, 1997, 2551, 4650, 1999, 2167, 11824, 1010, 17742, 1998, 4929, 1010, 2478, 1037, 3278, 10817, 1997, 2014, 2434, 8313, 1010, 2021, 2007, 1037, 6110, 18667, 2030, 22809, 3194, 1997, 1996, 2168, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}.
+07/21/2022 16:31:59 - INFO - __main__ -   Sample 18456905 of the training set: {'input_ids': [101, 1996, 2294, 1516, 5718, 11265, 2213, 4371, 3775, 8670, 22895, 6559, 3736, 2290, 2462, 2001, 5872, 1005, 1055, 29087, 2161, 1997, 1996, 11265, 2213, 4371, 3775, 8670, 22895, 6559, 3736, 2290, 2462, 1010, 1996, 2117, 7563, 1997, 1996, 5588, 2374, 2223, 2291, 1012, 2223, 2795, 1012, 2530, 2177, 1012, 1004, 8318, 1025, 2069, 2378, 20464, 12672, 1004, 14181, 1025, 1004, 8318, 1025, 1013, 2069, 2378, 20464, 12672, 1004, 14181, 1025, 102, 2789, 2177, 1012, 1004, 8318, 1025, 2069, 2378, 20464, 12672, 1004, 14181, 1025, 1004, 8318, 1025, 1013, 2069, 2378, 20464, 12672, 1004, 14181, 1025, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+07/21/2022 16:32:05 - INFO - __main__ -   Number of steps/updates per epoch: 67959
+07/21/2022 16:32:05 - INFO - __main__ -   ***** Running training *****
+07/21/2022 16:32:05 - INFO - __main__ -     Num examples = 34794866
+07/21/2022 16:32:05 - INFO - __main__ -     Num Epochs = 2
+07/21/2022 16:32:05 - INFO - __main__ -     Instantaneous batch size per device = 16
+07/21/2022 16:32:05 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 512
+07/21/2022 16:32:05 - INFO - __main__ -     Gradient Accumulation steps = 16
+07/21/2022 16:32:05 - INFO - __main__ -     Total optimization steps = 125000, 0 steps completed so far
+  0%|                                                                                                                               | 0/125000 [00:00<?, ?it/s]07/21/2022 16:32:05 - INFO - __main__ -   =============================
+07/21/2022 16:32:05 - INFO - __main__ -   Starting training from epoch 0
+07/21/2022 16:32:05 - INFO - __main__ -   Training till epoch  2
+07/21/2022 16:32:05 - INFO - __main__ -   =============================
+                                                                                                                                                               Traceback (most recent call last):
+  File "train_mlm.py", line 1956, in <module>                                                                                         | 0/6041 [00:00<?, ?it/s]
+    # with torch.autograd.set_detect_anomaly(True):
+  File "train_mlm.py", line 1469, in main
+    logger.info("=============================")
+  File "train_mlm.py", line 133, in validate_subtransformer
+    outputs = model(**batch)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/utils/module_proxy_wrapper.py", line 53, in forward
+    return self.module(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/utils/operations.py", line 487, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/autocast_mode.py", line 12, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 963, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2551, in forward
+    outputs = self.bert(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2130, in forward
+    encoder_outputs = self.encoder(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1622, in forward
+    layer_outputs = layer_module(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1384, in forward
+    self_attention_outputs = self.attention(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1177, in forward
+    self_outputs = self.self(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 417, in forward
+    mixed_query_layer = self.query(hidden_states)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_linear.py", line 82, in forward
+    return F.linear(x, self.samples["weight"], self.samples["bias"])
+KeyboardInterrupt

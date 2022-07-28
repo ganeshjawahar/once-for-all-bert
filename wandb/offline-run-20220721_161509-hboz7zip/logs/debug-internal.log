@@ -1,0 +1,20 @@
+2022-07-21 16:15:12,132 INFO    MainThread:4154641 [internal.py:wandb_internal():90] W&B internal server running at pid: 4154641, started at: 2022-07-21 16:15:12.129550
+2022-07-21 16:15:12,135 INFO    WriterThread:4154641 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220721_161509-hboz7zip/run-hboz7zip.wandb
+2022-07-21 16:15:12,135 DEBUG   HandlerThread:4154641 [handler.py:handle_request():141] handle_request: run_start
+2022-07-21 16:15:12,147 DEBUG   HandlerThread:4154641 [meta.py:__init__():35] meta init
+2022-07-21 16:15:12,147 DEBUG   HandlerThread:4154641 [meta.py:__init__():49] meta init done
+2022-07-21 16:15:12,147 DEBUG   HandlerThread:4154641 [meta.py:probe():209] probe
+2022-07-21 16:15:12,156 DEBUG   HandlerThread:4154641 [meta.py:_setup_git():199] setup git
+2022-07-21 16:15:12,248 DEBUG   HandlerThread:4154641 [meta.py:_setup_git():206] setup git done
+2022-07-21 16:15:12,248 DEBUG   HandlerThread:4154641 [meta.py:_save_pip():53] save pip
+2022-07-21 16:15:12,256 DEBUG   HandlerThread:4154641 [meta.py:_save_pip():67] save pip done
+2022-07-21 16:15:12,257 DEBUG   HandlerThread:4154641 [meta.py:_save_conda():74] save conda
+2022-07-21 16:15:29,808 DEBUG   HandlerThread:4154641 [meta.py:_save_conda():84] save conda done
+2022-07-21 16:15:29,808 DEBUG   HandlerThread:4154641 [meta.py:probe():247] probe done
+2022-07-21 16:17:52,705 WARNING MainThread:4154641 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-07-21 16:18:25,738 WARNING MainThread:4154641 [internal.py:is_dead():387] Internal process exiting, parent pid 4137630 disappeared
+2022-07-21 16:18:25,741 ERROR   MainThread:4154641 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-07-21 16:18:26,199 INFO    SenderThread:4154641 [sender.py:finish():1111] shutting down sender
+2022-07-21 16:18:26,566 INFO    WriterThread:4154641 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220721_161509-hboz7zip/run-hboz7zip.wandb
+2022-07-21 16:18:26,580 INFO    HandlerThread:4154641 [handler.py:finish():806] shutting down handler
+2022-07-21 16:18:26,581 INFO    MainThread:4154641 [internal.py:handle_exit():80] Internal process exited

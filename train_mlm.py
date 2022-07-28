@@ -34,7 +34,7 @@ import sys
 import numpy as np
 import datasets
 import torch
-from datasets import load_dataset, load_metric
+from datasets import load_dataset, load_metric, DatasetDict
 from torch.utils.data.dataloader import DataLoader
 from tqdm.auto import tqdm
 import torch.nn as nn
@@ -618,7 +618,89 @@ def parse_args():
         default="none",
         help=f"sample between ==min, max, rand, rand==",
     )
+    parser.add_argument(
+        "--skip_random_sentences_graphcore",
+        type=str,
+        default="yes",
+        help=f"skip inputs from graph core dataset where next_sentence_label=1 B is random w.r.t. A",
+    )
+    parser.add_argument(
+        "--initialize_pretrained_weights",
+        type=str,
+        default="yes",
+        help=f"do you want to initialize BERT layers with pretrained weights",
+    )
+    parser.add_argument(
+        "--check_validation_loss_only",
+        type=str,
+        default="no",
+        help=f"no training. only compute validation loss only.",
+    )
+    parser.add_argument(
+        "--check_test_loss_only",
+        type=str,
+        default="no",
+        help=f"no training. only compute test loss only.",
+    )
+    parser.add_argument(
+        "--check_test_loss_only_percent",
+        type=float,
+        default=1.0,
+        help=f"how much percentage of test set to use for reporting.",
+    )
+    parser.add_argument(
+        "--skip_validate_before_training",
+        type=str,
+        default="no",
+        help=f"no validation before training starts.",
+    )
+    parser.add_argument(
+        "--distillation_type",
+        type=str,
+        default=None,
+        help=f"only used when inplace_distillation=0. logits+hiddenlastlayer, logits+attentionlastlayer, logits+hiddenlastlayer+attentionlastlayer, logits, logits+hard, logits+hard+hiddenlastlayer",
+    )
+    parser.add_argument(
+        "--once_for_all_progressive_shrinking",
+        type=str,
+        default="no",
+        help=f"train largest models and gradually train smaller models also",
+    )
+    
+    parser.add_argument(
+        "--search_space_id",
+        type=str,
+        default=None,
+        help=f"change default search space: attn_elastic, ffn_intermediate_elastic",
+    )
 
+    parser.add_argument(
+        "--use_hypernet_w_low_rank",
+        type=int,
+        default=0,
+        help=f"use HyperNetDynamicLinear. only useful if mixing is set to bert-bottleneck",
+    )
+
+    parser.add_argument(
+        "--bottleneck_rank",
+        type=int,
+        default=50,
+        help=f"use HyperNetDynamicLinear. only useful if use_hypernet_w_low_rank is set",
+    )
+
+    parser.add_argument(
+        "--hypernet_hidden_size",
+        type=int,
+        default=64,
+        help=f"set hidden size for hypernet. only useful if use_hypernet_w_low_rank is set",
+    )
+
+    parser.add_argument(
+        "--inplace_kd_distill_loss_weights",
+        type=float,
+        default=1.0,
+        help=f"only useful if inplace_distillation is set",
+    )
 
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
@@ -626,8 +708,11 @@ def parse_args():
 
     args = parser.parse_args()
 
-    if args.subtransformer_config_path is None:
-        args.model_name_or_path = "bert-base-cased"
+    if args.distillation_type:
+        args.distillation_type = args.distillation_type.split("+")
+
+    #if args.subtransformer_config_path is None:
+    #    args.model_name_or_path = "bert-base-cased"
 
     # Sanity checks
 
@@ -831,8 +916,19 @@ def main():
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
     if args.tokenized_c4_dir is not None:
-        logger.info("Loading Tokenized C4 Dataset...")
+        # logger.info("Loading Tokenized C4 Dataset...")
         tokenized_datasets = datasets.load_from_disk(args.tokenized_c4_dir)
+        if "graphcore" in args.tokenized_c4_dir:
+            #if args.skip_random_sentences_graphcore == "yes":
+            #    tokenized_datasets = tokenized_datasets.filter(lambda example: example['next_sentence_label']==0)
+            tokenized_datasets = tokenized_datasets.remove_columns(["next_sentence_label", "labels"]) # , "token_type_ids"
+            #train_testvalid = tokenized_datasets["train"].train_test_split(test_size=0.1, seed=123)
+            #test_valid = train_testvalid["test"].train_test_split(test_size=0.95, seed=123)
+            #tokenized_datasets = DatasetDict({'train': train_testvalid['train'], 'test': test_valid['test'], 'validation': test_valid['train'] })
+            if args.check_test_loss_only == "yes":
+                test_valid = tokenized_datasets["test"].train_test_split(test_size=args.check_test_loss_only_percent, seed=123)
+                tokenized_datasets = DatasetDict({'train': tokenized_datasets['train'], 'validation': tokenized_datasets['validation'], 'test': test_valid['test']})
+                
     elif args.dataset_name is not None:
         # Downloading and loading a dataset from the hub.
         if args.dataset_name == "c4_realnews":
@@ -877,11 +973,13 @@ def main():
             args.model_name_or_path,
             mixing=args.mixing,
             additional_random_softmaxing=args.additional_random_softmaxing,
-            random_layer_selection_probability=args.random_layer_selection_probability,
+            random_layer_selection_probability=args.random_layer_selection_probability, 
+            use_hypernet_w_low_rank=args.use_hypernet_w_low_rank, bottleneck_rank=args.bottleneck_rank,
+            hypernet_hidden_size=args.hypernet_hidden_size
         )
     else:
         global_config = get_supertransformer_config(
-            "bert-base-cased",
+            args.model_name_or_path,
             mixing=args.mixing,
             additional_random_softmaxing=args.additional_random_softmaxing,
             random_layer_selection_probability=args.random_layer_selection_probability,
@@ -932,6 +1030,13 @@ def main():
         # for attention transfer and feature transfer enable these.
         global_config.output_attentions = True
         global_config.output_hidden_states = True
+    
+    if args.distillation_type:
+        # logits is always included
+        if "hiddenlastlayer" in args.distillation_type:
+            global_config.output_hidden_states = True # need to correct name to last_hidden_states
+        if "attentionlastlayer" in args.distillation_type:
+            global_config.output_attentions = True # need to correct name to attentionlastlayer
 
     global_config.alpha_divergence = args.alpha_divergence
 
@@ -962,9 +1067,10 @@ def main():
         subtransformer_config = subtransformer_config.to_dict()
         for key, value in subtransformer_config.items():
             # update global_config with attributes of subtransformer_config
-            if key in ["rewire", "label2id", "id2label"]:
+            if key in ["rewire", "label2id", "id2label", "mixing"]:
                 continue
             setattr(global_config, key, value)
+        print(global_config)
 
         logger.info(
             "=================================================================="
@@ -988,7 +1094,7 @@ def main():
         states = OD()
 
         model = custom_mobile_bert.MobileBertForMaskedLM(config=global_config)
-        model2 = BertForMaskedLM.from_pretrained("bert-base-cased")
+        model2 = BertForMaskedLM.from_pretrained("bert-base-uncased")
 
         for key in model2.state_dict().keys():
             _key = key.replace("bert.", "mobilebert.")
@@ -1014,28 +1120,40 @@ def main():
         logger.info("MobileBert Initiliazed with bert-base")
 
     elif args.mixing == "bert-bottleneck":
-        model = custom_bert.BertForMaskedLM.from_pretrained(
-            args.model_name_or_path, config=global_config
-        )
+        model = None
+        if args.initialize_pretrained_weights == "yes":
+            print('pre-initialized with BERT weights')
+            model = custom_bert.BertForMaskedLM.from_pretrained(
+                args.model_name_or_path, config=global_config
+            )
+            logger.info("BERT-Bottleneck Initiliazed with BERT-base")
+        else:
+            print('initialized with random BERT weights')
+            model = custom_bert.BertForMaskedLM(global_config)
 
         if not os.path.exists(args.model_name_or_path):
             identity = torch.eye(global_config.hidden_size)
 
             for key in model.state_dict().keys():
-                if "input_bottleneck.weight" in key or "output_bottleneck.weight" in key:
+                if "input_bottleneck.weight" in key or "output_bottleneck.weight" in key or "output_bottleneck.base_Linear.weight" in key or "input_bottleneck.base_Linear.weight" in key:
                     model.state_dict()[key].data.copy_(identity)
-                elif "input_bottleneck.bias" in key or "output_bottleneck.bias" in key:
+                elif "input_bottleneck.bias" in key or "output_bottleneck.bias" in key or "output_bottleneck.base_Linear.bias" in key or "input_bottleneck.base_Linear.bias" in key:
                     model.state_dict()[key].data.zero_()
 
-        logger.info("BERT-Bottleneck Initiliazed with BERT-base")
-
-    elif args.inplace_distillation or args.sampling_type == "none":
-        # initialize with pretrained model if we are using inplace distillation or if we are using no sampling
-        model = custom_bert.BertForMaskedLM.from_pretrained(
-            args.model_name_or_path, config=global_config
-        )
+    # elif args.inplace_distillation or args.sampling_type == "none":
+    #    # initialize with pretrained model if we are using inplace distillation or if we are using no sampling
+    #    model = custom_bert.BertForMaskedLM.from_pretrained(
+    #        args.model_name_or_path, config=global_config
+    #    )
     else:
-        model = custom_bert.BertForMaskedLM(global_config)
+        # global_config["mixing"] = args.mixing
+        model = None
+        if args.initialize_pretrained_weights == "yes":
+            print('pre-initialized with BERT weights')
+            model = custom_bert.BertForMaskedLM.from_pretrained(args.model_name_or_path, config=global_config)
+        else:
+            print('initialized with random BERT weights')
+            model = custom_bert.BertForMaskedLM(global_config)
 
     # if rewiring and resuming from checkpoint, we will load the rewiring weights seperately
     if args.rewire:
@@ -1136,6 +1254,7 @@ def main():
                 remove_columns=[text_column_name],
                 load_from_cache_file=False # not args.overwrite_cache,
             )
+
         else:
             # Otherwise, we tokenize every text, then concatenate them together before splitting them in smaller parts.
             # We use `return_special_tokens_mask=True` because DataCollatorForLanguageModeling (see below) is more
@@ -1166,7 +1285,6 @@ def main():
                     k: sum(examples[k], []) for k in examples.keys()
                 }
                 total_length = len(concatenated_examples[list(examples.keys())[0]])
-                print(total_length // max_seq_length)
                 # We drop the small remainder, we could add padding if the model supported it instead of this drop, you can
                 # customize this part to your needs.
                 total_length = (total_length // max_seq_length) * max_seq_length
@@ -1204,7 +1322,7 @@ def main():
         )
 
     train_dataset = tokenized_datasets["train"]
-    eval_dataset = tokenized_datasets["validation"]
+    eval_dataset = tokenized_datasets["validation"] if args.check_test_loss_only == "no" else tokenized_datasets["test"]
 
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):
@@ -1215,6 +1333,8 @@ def main():
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer, mlm_probability=args.mlm_probability
     )
+    #if "graphcore" in args.tokenized_c4_dir:
+    #    data_collator = None
 
     # DataLoaders creation:
     train_dataloader = DataLoader(
@@ -1374,6 +1494,7 @@ def main():
         args.mixing,
         global_config,
         magic_sampling=magic_sampling,
+        search_space_id=args.search_space_id
     )
 
     if args.eval_random_subtransformers:
@@ -1440,16 +1561,21 @@ def main():
     logger.info(f"Training till epoch  {args.num_train_epochs}")
     logger.info("=============================")
 
-    eval_metric = validate_subtransformer(
-        model,
-        eval_dataloader,
-        accelerator,
-        len(eval_dataset),
-        args.per_device_eval_batch_size,
-        args.pad_to_max_length,
-    )
-    perpx = eval_metric["perplexity"]
-    logger.info(f"perplexity before starting: {perpx:.2f} ")
+    if args.skip_validate_before_training == "no":
+        eval_metric = validate_subtransformer(
+            model,
+            eval_dataloader,
+            accelerator,
+            len(eval_dataset),
+            args.per_device_eval_batch_size,
+            args.pad_to_max_length,
+        )
+        perpx = eval_metric["perplexity"]
+        logger.info(f"perplexity before starting: {perpx:.2f} ")
+        print(f"perplexity before starting: {perpx:.2f} ")
+
+    if args.check_validation_loss_only == "yes" or args.check_test_loss_only == "yes":
+        return
 
     for epoch in range(completed_epochs, args.num_train_epochs):
         # first evaluate random subtransformers before starting training
@@ -1509,16 +1635,22 @@ def main():
 
         for step, batch in enumerate(train_dataloader):
             seed += 1
+
+            cur_sampling_one_arch_choice = "none"
+            if args.sample_one_arch != "none":
+                cur_sampling_one_arch_choice = random.choice(["sample", "sample", "smallest", "biggest"]) 
+
             # k_count += 1
             # use the same subtransformer during gradient accumulations
             if (
-                args.sampling_type != "none"
+                (args.sampling_type != "none" or args.sample_one_arch != "none")
                 and step % args.gradient_accumulation_steps == 0
             ):
                 config_dict = sampler.sample_subtransformer(
                     randomize=True,
                     rand_seed=seed,
                     pop_size=args.pop_size,
+                    sample_one_arch=args.sample_one_arch,
                 )
                 # k_count = 0
 
@@ -1537,88 +1669,113 @@ def main():
             track_loss = step % args.logging_steps == 0 and step > 0
 
             ### Applying Sandwich Rule ###
-            if args.sampling_rule == "sandwich":
+            if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice in ["smallest", "biggest"]:
 
-                ## Sample Supertransformer
-                model.set_sample_config(global_config, drop_layers=True)
+                if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "biggest":
+                    ## Sample Supertransformer
+                    model.set_sample_config(global_config, drop_layers=True)
 
-                outputs = model(**batch)
-                loss = outputs.loss
+                    outputs = model(**batch)
+                    loss = outputs.loss
 
-                teacher_mlm_loss = loss
-                teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
-                accelerator.backward(teacher_mlm_loss)
+                    teacher_mlm_loss = loss
+                    teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
+                    accelerator.backward(teacher_mlm_loss)
 
-                if args.inplace_distillation:
+                    if args.inplace_distillation:
 
-                    teacher_hidden_states = outputs.hidden_states
-                    teacher_attention_maps = outputs.attentions
+                        teacher_info = {}
+                        if "hiddenlastlayer" in args.distillation_type:
+                            teacher_info["teacher_hidden_states"] = outputs.hidden_states
 
-                    # logits are of shape batch_size, sequence_length, config.vocab_size
-                    soft_logits = outputs.logits.detach()
+                        if "attentionlastlayer" in args.distillation_type:
+                            teacher_info["teacher_attention_maps"] = outputs.attentions
+                        
+                        if "logits" in args.distillation_type:
+                            teacher_info["teacher_logits"] = outputs.logits.detach()
 
-                    # replace the labels in our batch to soft_targets
-                    batch["labels"] = soft_logits
+                        # teacher_hidden_states = outputs.hidden_states
+                        # teacher_attention_maps = outputs.attentions
 
-                ## Sample Smallest Subtransformer
-                model.set_sample_config(super_config_small, drop_layers=True)
-                outputs = model(**batch, use_soft_loss=args.inplace_distillation)
-                loss = outputs.loss
+                        #if teacher_hidden_states:
+                        #    for i in range(len(teacher_hidden_states)):
+                        #        teacher_hidden_states[i].detach()
+                        
+                        #if teacher_attention_maps:
+                        #    for i in range(len(teacher_attention_maps)):
+                        #        teacher_attention_maps[i].detach()
 
-                if args.inplace_distillation:
+                        # logits are of shape batch_size, sequence_length, config.vocab_size
+                        # soft_logits = outputs.logits.detach()
 
-                    (
-                        smallest_student_loss,
-                        smallest_student_losses_dict,
-                    ) = compute_student_loss(
-                        outputs,
-                        teacher_hidden_states,
-                        teacher_attention_maps,
-                        args,
-                        track_layerwise_loss=track_loss,
-                    )
-                else:
-                    # TODO: Terminology consistency needs to be maintained - technically not a student!
-                    smallest_student_loss = loss
-                    smallest_student_loss = (
-                        smallest_student_loss / args.gradient_accumulation_steps
-                    )
+                        # replace the labels in our batch to soft_targets
+                        # batch["labels"] = soft_logits
 
-                accelerator.backward(smallest_student_loss)
+
+                if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "smallest":
+                    ## Sample Smallest Subtransformer
+                    
+                    model.set_sample_config(super_config_small, drop_layers=True)
+                    outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
+                    loss = outputs.loss
+
+                    if args.inplace_distillation:
+
+                        (
+                            smallest_student_loss,
+                            smallest_student_losses_dict,
+                        ) = compute_student_loss(
+                            outputs,
+                            teacher_info,
+                            args,
+                            track_layerwise_loss=track_loss,
+                        )
+                    else:
+                        # TODO: Terminology consistency needs to be maintained - technically not a student!
+                        smallest_student_loss = loss
+                        smallest_student_loss = (
+                            smallest_student_loss / args.gradient_accumulation_steps
+                        )
+                    accelerator.backward(smallest_student_loss)
 
             ## Sample "n" subtransformers based on sampling_type: random, biased-params, etc.
             ## This happens regardless of sandwich rule is applied or not! Allows for Conventional Sampling
 
-            for idx in range(args.pop_size):
+            if args.sample_one_arch == "none" or cur_sampling_one_arch_choice == "sample":
+                for idx in range(args.pop_size):
 
-                if args.sampling_type != "none":
-                    super_config = super_configs[idx]
-                    model.set_sample_config(super_config, drop_layers=True)
+                    if args.sampling_type != "none":
+                        super_config = super_configs[idx]
+                        
+                        model.set_sample_config(super_config, drop_layers=True)
 
-                    for layer_idx, hidden_size in enumerate(
-                        super_config.sample_hidden_size
-                    ):
-                        per_layer_sampled_counts[layer_idx][hidden_size] += 1
+                        for layer_idx, hidden_size in enumerate(
+                            super_config.sample_hidden_size
+                        ):
+                            per_layer_sampled_counts[layer_idx][hidden_size] += 1
 
-                outputs = model(**batch, use_soft_loss=args.inplace_distillation)
-                loss = outputs.loss
+                    outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
+                    loss = outputs.loss
 
-                if args.inplace_distillation:
+                    if args.inplace_distillation:
 
-                    (
-                        sampled_student_loss,
-                        sampled_student_losses_dict,
-                    ) = compute_student_loss(
-                        outputs,
-                        teacher_hidden_states,
-                        teacher_attention_maps,
-                        args,
-                        track_layerwise_loss=track_loss,
-                    )
-                else:
-                    sampled_student_loss = loss / args.gradient_accumulation_steps
+                        (
+                            sampled_student_loss,
+                            sampled_student_losses_dict,
+                        ) = compute_student_loss(
+                            outputs,
+                            teacher_info,
+                            args,
+                            track_layerwise_loss=track_loss,
+                        )
+                    else:
+                        sampled_student_loss = loss / args.gradient_accumulation_steps
 
-                accelerator.backward(sampled_student_loss)
+                    accelerator.backward(sampled_student_loss)
+            
+            # cleanup
+            if args.inplace_distillation or args.distillation_type:
+                del teacher_info
 
             if (
                 step % args.gradient_accumulation_steps == 0
@@ -1642,15 +1799,24 @@ def main():
                                 }
                             )
                         else:
-
                             wandb.log(
                                 {
                                     "Subtransformer mlm loss": sampled_student_loss.item(),
                                 }
                             )
                     else:
-
-                        if args.layerwise_distillation:
+                        log = {}
+                        log["Supertransformer Teacher mlm loss"] = teacher_mlm_loss.item()
+                        log["Smallest Student mlm loss"] =  smallest_student_losses_dict["student_mlm_loss"]
+                        if "logits" in args.distillation_type:
+                            log["Smallest Student distill loss"] = smallest_student_losses_dict["student_distill_loss"]
+                            log["Subtransformer Student distill loss"] = sampled_student_losses_dict["student_distill_loss"]
+                        if "hiddenlastlayer" in args.distillation_type:
+                            log["Smallest Student hidden loss"] = smallest_student_losses_dict["student_hidden_loss"]
+                            log["Subtransformer Student hidden loss"] = sampled_student_losses_dict["student_hidden_loss"]
+                        wandb.log(log)
+                        '''
+                        if args.layerwise_distillation or args.distillation_type:
                             wandb.log(
                                 {
                                     "Supertransformer Teacher mlm loss": teacher_mlm_loss.item(),
@@ -1719,6 +1885,7 @@ def main():
                                     ].item(),
                                 }
                             )
+                        '''
 
             if accelerator.is_main_process:
                 wandb.log({"epochs": epoch})
@@ -1743,6 +1910,35 @@ def main():
             eval_metric["val_loss"],
             eval_metric["perplexity"],
         )
+        wandb_log = {"SuperTransformer Val Accuracy": val_accuracy, "SuperTransformer Val loss": val_loss, "SuperTransformer Perplexity": perplexity}
+
+        if args.sampling_type != "none" or args.sample_one_arch != "none":
+            config_dict = sampler.sample_subtransformer(
+                randomize=True,
+                rand_seed=seed,
+                pop_size=args.pop_size,
+                sample_one_arch=args.sample_one_arch,
+                v1_small=True # todo: make this dynamic based on search space
+            )
+            super_config_small = config_dict["smallest_subtransformer"]
+                    
+            model.set_sample_config(super_config_small, drop_layers=False)
+            smallest_eval_metric = validate_subtransformer(
+                model,
+                eval_dataloader,
+                accelerator,
+                len(eval_dataset),
+                args.per_device_eval_batch_size,
+                args.pad_to_max_length,
+            )
+            smallest_val_accuracy, smallest_val_loss, smallest_perplexity = (
+                smallest_eval_metric["accuracy"] * 100,
+                smallest_eval_metric["val_loss"],
+                smallest_eval_metric["perplexity"],
+            )
+            wandb_log["SmallestTransformer Val Accuracy"] = smallest_val_accuracy
+            wandb_log["SmallestTransformer Val loss"] = smallest_val_loss
+            wandb_log["SmallestTransformer Perplexity"] = smallest_perplexity
 
         if args.layer_drop_prob > 0:
             layer_drop_counts = model.bert.encoder.layer_drop_counts
@@ -1795,13 +1991,8 @@ def main():
         #         }
         #     )
         if accelerator.is_main_process:
-            wandb.log(
-                {
-                    "SuperTransformer Val Accuracy": val_accuracy,
-                    "SuperTransformer Val loss": val_loss,
-                    "SuperTransformer Perplexity": perplexity,
-                }
-            )
+            print(wandb_log)
+            wandb.log(wandb_log)
             if args.layer_drop_prob > 0:
                 fig = go.Figure()
 

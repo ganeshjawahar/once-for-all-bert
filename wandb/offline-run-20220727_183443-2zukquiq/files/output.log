@@ -1,0 +1,133 @@
+pre-initialized with BERT weights
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+HyperNetDynamicLinear(
+  (base_Linear): Linear(in_features=768, out_features=768, bias=True)
+  (low_rank_weight_factor): Linear(in_features=768, out_features=50, bias=False)
+  (low_rank_hypernet): Sequential(
+    (0): Linear(in_features=12, out_features=64, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=64, out_features=38400, bias=True)
+  )
+)
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])
+torch.Size([50, 768])

@@ -1,0 +1,11 @@
+2022-07-27 18:07:49,903 INFO    MainThread:3888438 [internal.py:wandb_internal():90] W&B internal server running at pid: 3888438, started at: 2022-07-27 18:07:49.900362
+2022-07-27 18:07:49,941 INFO    WriterThread:3888438 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220727_180747-20c4nx3x/run-20c4nx3x.wandb
+2022-07-27 18:07:49,942 DEBUG   HandlerThread:3888438 [handler.py:handle_request():141] handle_request: run_start
+2022-07-27 18:07:49,965 DEBUG   HandlerThread:3888438 [meta.py:__init__():35] meta init
+2022-07-27 18:07:49,965 DEBUG   HandlerThread:3888438 [meta.py:__init__():49] meta init done
+2022-07-27 18:07:49,965 DEBUG   HandlerThread:3888438 [meta.py:probe():209] probe
+2022-07-27 18:07:49,991 DEBUG   HandlerThread:3888438 [meta.py:_setup_git():199] setup git
+2022-07-27 18:07:50,110 DEBUG   HandlerThread:3888438 [meta.py:_setup_git():206] setup git done
+2022-07-27 18:07:50,110 DEBUG   HandlerThread:3888438 [meta.py:_save_pip():53] save pip
+2022-07-27 18:07:50,114 DEBUG   HandlerThread:3888438 [meta.py:_save_pip():67] save pip done
+2022-07-27 18:07:50,115 DEBUG   HandlerThread:3888438 [meta.py:_save_conda():74] save conda

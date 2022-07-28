@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "train_mlm.py", line 2032, in <module>
+    main()
+  File "train_mlm.py", line 885, in main
+    tokenized_datasets = datasets.load_from_disk(args.tokenized_c4_dir)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/load.py", line 1741, in load_from_disk
+    return DatasetDict.load_from_disk(dataset_path, fs, keep_in_memory=keep_in_memory)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/dataset_dict.py", line 1120, in load_from_disk
+    dataset_dict[k] = Dataset.load_from_disk(dataset_dict_split_path, fs, keep_in_memory=keep_in_memory)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/arrow_dataset.py", line 1209, in load_from_disk
+    arrow_table = concat_tables(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/table.py", line 1642, in concat_tables
+    tables = list(tables)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/arrow_dataset.py", line 1210, in <genexpr>
+    table_cls.from_file(Path(dataset_path, data_file["filename"]).as_posix())
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/table.py", line 977, in from_file
+    table = _memory_mapped_arrow_table_from_file(filename)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/datasets/table.py", line 51, in _memory_mapped_arrow_table_from_file
+    pa_table = opened_stream.read_all()
+KeyboardInterrupt

@@ -1,0 +1,62 @@
+2022-07-18 20:10:48,224 INFO    MainThread:952566 [internal.py:wandb_internal():90] W&B internal server running at pid: 952566, started at: 2022-07-18 20:10:48.221814
+2022-07-18 20:10:48,262 DEBUG   SenderThread:952566 [sender.py:send():235] send: header
+2022-07-18 20:10:48,262 INFO    WriterThread:952566 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/run-k5korxrh.wandb
+2022-07-18 20:10:48,262 DEBUG   SenderThread:952566 [sender.py:send():235] send: run
+2022-07-18 20:10:48,413 DEBUG   HandlerThread:952566 [handler.py:handle_request():141] handle_request: check_version
+2022-07-18 20:10:48,462 INFO    SenderThread:952566 [dir_watcher.py:__init__():205] watching files in: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files
+2022-07-18 20:10:48,462 INFO    SenderThread:952566 [sender.py:_start_run_threads():812] run started: k5korxrh with start time 1658175045
+2022-07-18 20:10:48,462 DEBUG   SenderThread:952566 [sender.py:send():235] send: summary
+2022-07-18 20:10:48,465 INFO    SenderThread:952566 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-07-18 20:10:48,466 DEBUG   SenderThread:952566 [sender.py:send_request():249] send_request: check_version
+2022-07-18 20:10:48,515 DEBUG   HandlerThread:952566 [handler.py:handle_request():141] handle_request: run_start
+2022-07-18 20:10:48,534 DEBUG   HandlerThread:952566 [meta.py:__init__():35] meta init
+2022-07-18 20:10:48,534 DEBUG   HandlerThread:952566 [meta.py:__init__():49] meta init done
+2022-07-18 20:10:48,534 DEBUG   HandlerThread:952566 [meta.py:probe():209] probe
+2022-07-18 20:10:48,544 DEBUG   HandlerThread:952566 [meta.py:_setup_git():199] setup git
+2022-07-18 20:10:48,659 DEBUG   HandlerThread:952566 [meta.py:_setup_git():206] setup git done
+2022-07-18 20:10:48,659 DEBUG   HandlerThread:952566 [meta.py:_save_pip():53] save pip
+2022-07-18 20:10:48,662 DEBUG   HandlerThread:952566 [meta.py:_save_pip():67] save pip done
+2022-07-18 20:10:48,664 DEBUG   HandlerThread:952566 [meta.py:_save_conda():74] save conda
+2022-07-18 20:10:49,461 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/wandb-summary.json
+2022-07-18 20:10:49,462 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/conda-environment.yaml
+2022-07-18 20:10:49,462 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/requirements.txt
+2022-07-18 20:10:54,471 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/output.log
+2022-07-18 20:10:56,475 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/output.log
+2022-07-18 20:11:02,485 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/output.log
+2022-07-18 20:11:03,288 DEBUG   HandlerThread:952566 [meta.py:_save_conda():84] save conda done
+2022-07-18 20:11:03,288 DEBUG   HandlerThread:952566 [meta.py:probe():247] probe done
+2022-07-18 20:11:03,489 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/conda-environment.yaml
+2022-07-18 20:11:03,489 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/wandb-metadata.json
+2022-07-18 20:11:04,019 DEBUG   HandlerThread:952566 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-18 20:11:04,020 DEBUG   SenderThread:952566 [sender.py:send_request():249] send_request: stop_status
+2022-07-18 20:11:04,094 DEBUG   SenderThread:952566 [sender.py:send():235] send: telemetry
+2022-07-18 20:11:04,095 DEBUG   SenderThread:952566 [sender.py:send():235] send: files
+2022-07-18 20:11:04,095 INFO    SenderThread:952566 [sender.py:_save_file():949] saving file wandb-metadata.json with policy now
+2022-07-18 20:11:05,009 INFO    Thread-11 :952566 [upload_job.py:push():132] Uploaded file /tmp/tmpl9f1bsadwandb/207ryg0x-wandb-metadata.json
+2022-07-18 20:11:06,040 DEBUG   SenderThread:952566 [sender.py:send():235] send: telemetry
+2022-07-18 20:11:09,840 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/output.log
+2022-07-18 20:11:14,242 DEBUG   HandlerThread:952566 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-18 20:11:14,242 DEBUG   SenderThread:952566 [sender.py:send_request():249] send_request: stop_status
+2022-07-18 20:11:19,025 INFO    Thread-7  :952566 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/config.yaml
+2022-07-18 20:11:20,654 WARNING MainThread:952566 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-07-18 20:11:22,902 WARNING MainThread:952566 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-07-18 20:11:22,902 ERROR   MainThread:952566 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-07-18 20:11:23,019 INFO    WriterThread:952566 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/run-k5korxrh.wandb
+2022-07-18 20:11:23,038 INFO    HandlerThread:952566 [handler.py:finish():806] shutting down handler
+2022-07-18 20:11:23,038 INFO    SenderThread:952566 [sender.py:finish():1111] shutting down sender
+2022-07-18 20:11:23,038 INFO    SenderThread:952566 [dir_watcher.py:finish():336] shutting down directory watcher
+2022-07-18 20:11:24,028 INFO    SenderThread:952566 [dir_watcher.py:finish():366] scan: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/requirements.txt requirements.txt
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/output.log output.log
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/wandb-metadata.json wandb-metadata.json
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/config.yaml config.yaml
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/wandb-summary.json wandb-summary.json
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/conda-environment.yaml conda-environment.yaml
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [file_pusher.py:finish():145] shutting down file pusher
+2022-07-18 20:11:24,029 INFO    SenderThread:952566 [file_pusher.py:join():150] waiting for file pusher
+2022-07-18 20:11:24,634 INFO    Thread-13 :952566 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/output.log
+2022-07-18 20:11:24,666 INFO    Thread-14 :952566 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/config.yaml
+2022-07-18 20:11:24,680 INFO    Thread-12 :952566 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/requirements.txt
+2022-07-18 20:11:24,780 INFO    Thread-16 :952566 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/conda-environment.yaml
+2022-07-18 20:11:24,791 INFO    Thread-15 :952566 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220718_201045-k5korxrh/files/wandb-summary.json
+2022-07-18 20:11:25,084 INFO    MainThread:952566 [internal.py:handle_exit():80] Internal process exited

@@ -1,0 +1,20 @@
+2022-07-23 16:52:33,913 INFO    MainThread:265914 [internal.py:wandb_internal():90] W&B internal server running at pid: 265914, started at: 2022-07-23 16:52:33.910610
+2022-07-23 16:52:33,916 INFO    WriterThread:265914 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220723_165232-2myoi945/run-2myoi945.wandb
+2022-07-23 16:52:33,916 DEBUG   HandlerThread:265914 [handler.py:handle_request():141] handle_request: run_start
+2022-07-23 16:52:33,926 DEBUG   HandlerThread:265914 [meta.py:__init__():35] meta init
+2022-07-23 16:52:33,926 DEBUG   HandlerThread:265914 [meta.py:__init__():49] meta init done
+2022-07-23 16:52:33,926 DEBUG   HandlerThread:265914 [meta.py:probe():209] probe
+2022-07-23 16:52:33,936 DEBUG   HandlerThread:265914 [meta.py:_setup_git():199] setup git
+2022-07-23 16:52:33,999 DEBUG   HandlerThread:265914 [meta.py:_setup_git():206] setup git done
+2022-07-23 16:52:33,999 DEBUG   HandlerThread:265914 [meta.py:_save_pip():53] save pip
+2022-07-23 16:52:34,002 DEBUG   HandlerThread:265914 [meta.py:_save_pip():67] save pip done
+2022-07-23 16:52:34,003 DEBUG   HandlerThread:265914 [meta.py:_save_conda():74] save conda
+2022-07-23 16:52:44,649 DEBUG   HandlerThread:265914 [meta.py:_save_conda():84] save conda done
+2022-07-23 16:52:44,649 DEBUG   HandlerThread:265914 [meta.py:probe():247] probe done
+2022-07-23 16:52:45,558 WARNING MainThread:265914 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-07-23 16:52:45,904 WARNING MainThread:265914 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-07-23 16:52:45,905 ERROR   MainThread:265914 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-07-23 16:52:45,924 INFO    SenderThread:265914 [sender.py:finish():1111] shutting down sender
+2022-07-23 16:52:46,176 INFO    HandlerThread:265914 [handler.py:finish():806] shutting down handler
+2022-07-23 16:52:46,177 INFO    WriterThread:265914 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220723_165232-2myoi945/run-2myoi945.wandb
+2022-07-23 16:52:46,179 INFO    MainThread:265914 [internal.py:handle_exit():80] Internal process exited

@@ -1,0 +1,169 @@
+task labels =  ['not_equivalent', 'equivalent']
+BertConfig {
+  "additional_random_softmaxing": false,
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_drop_prob": 0.0,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "max_seq_length": 128,
+  "mixing": "bert-bottleneck",
+  "model_type": "bert",
+  "normalization_type": "layer_norm",
+  "num_attention_heads": 12,
+  "num_feedforward_networks": 1,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "random_layer_selection_probability": 0.1,
+  "rewire": 0,
+  "sample_hidden_size": [
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120
+  ],
+  "sample_intermediate_size": [
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072
+  ],
+  "sample_num_attention_heads": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "sample_num_hidden_layers": 12,
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 30522
+}
+mrpc epoch 0 best accuracy: 0.697265625
+mrpc epoch 1 best accuracy: 0.697265625
+mrpc epoch 2 best accuracy: 0.697265625
+mrpc epoch 3 best accuracy: 0.703125
+mrpc epoch 4 best accuracy: 0.70703125
+mrpc epoch 5 best accuracy: 0.716796875
+mrpc epoch 6 best accuracy: 0.716796875
+mrpc epoch 7 best accuracy: 0.716796875
+mrpc epoch 8 best accuracy: 0.716796875
+mrpc epoch 9 best accuracy: 0.716796875
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00, 309.75it/s]
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+07/20/2022 21:03:46 - INFO - __main__ -   ==================================================================
+07/20/2022 21:03:46 - INFO - __main__ -   Number of parameters in custom config is 34 Million
+07/20/2022 21:03:46 - INFO - __main__ -   ==================================================================
+Some weights of the model checkpoint at /fsx/ganayu/experiments/supershaper/jul19_v3_bertstandalone/12L_120H/epoch_13 were not used when initializing BertForSequenceClassification: ['cls.predictions.bias', 'cls.predictions.decoder.bias', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.decoder.weight', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at /fsx/ganayu/experiments/supershaper/jul19_v3_bertstandalone/12L_120H/epoch_13 and are newly initialized: ['bert.pooler.dense.weight', 'bert.pooler.dense.bias', 'classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+07/20/2022 21:03:48 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForSequenceClassification                                --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              8,269,056
+│    │    │    └─BertLayer: 4-2                              8,269,056
+│    │    │    └─BertLayer: 4-3                              8,269,056
+│    │    │    └─BertLayer: 4-4                              8,269,056
+│    │    │    └─BertLayer: 4-5                              8,269,056
+│    │    │    └─BertLayer: 4-6                              8,269,056
+│    │    │    └─BertLayer: 4-7                              8,269,056
+│    │    │    └─BertLayer: 4-8                              8,269,056
+│    │    │    └─BertLayer: 4-9                              8,269,056
+│    │    │    └─BertLayer: 4-10                             8,269,056
+│    │    │    └─BertLayer: 4-11                             8,269,056
+│    │    │    └─BertLayer: 4-12                             8,269,056
+│    └─BertPooler: 2-3                                       --
+│    │    └─CustomLinear: 3-7                                590,592
+│    │    └─Tanh: 3-8                                        --
+├─Dropout: 1-2                                               --
+├─CustomLinear: 1-3                                          1,538
+=====================================================================================
+Total params: 123,657,986
+Trainable params: 123,657,986
+Non-trainable params: 0
+=====================================================================================
+07/20/2022 21:03:48 - INFO - __main__ -   Label2Id:  None
+07/20/2022 21:03:48 - INFO - __main__ -   Sample 1126 of the training set: {'input_ids': [101, 107, 2563, 1708, 18874, 1144, 10887, 4441, 1115, 1103, 3000, 4612, 1104, 2563, 1708, 18874, 1105, 19265, 4876, 6432, 12638, 15308, 1105, 170, 2418, 17843, 1115, 1103, 13618, 1156, 1129, 11018, 119, 107, 102, 2563, 1708, 18874, 1144, 4491, 1115, 1126, 19265, 17748, 1156, 1339, 6432, 12638, 15308, 1105, 170, 2418, 17843, 1115, 1103, 13618, 1156, 1129, 11018, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 1}.
+07/20/2022 21:03:48 - INFO - __main__ -   Sample 1003 of the training set: {'input_ids': [101, 2907, 9170, 117, 1103, 5883, 12649, 112, 188, 2313, 1809, 1565, 1207, 6435, 118, 1210, 1664, 118, 2380, 6683, 1105, 1210, 2380, 6683, 119, 102, 2907, 9170, 117, 1103, 5883, 12649, 112, 188, 2313, 1809, 1565, 1207, 6435, 1106, 1103, 2313, 1105, 1231, 118, 1809, 1565, 1639, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 0}.
+07/20/2022 21:03:48 - INFO - __main__ -   Sample 914 of the training set: {'input_ids': [101, 107, 1284, 1294, 1185, 170, 27632, 1111, 4006, 1451, 2732, 1236, 1936, 1106, 3244, 1103, 1237, 1470, 1121, 1748, 9640, 2035, 117, 107, 5934, 3291, 4206, 15960, 1163, 119, 102, 107, 1284, 1294, 1185, 170, 27632, 1111, 4006, 1451, 2732, 1236, 1936, 1106, 3244, 1103, 1237, 1470, 1121, 1748, 9640, 3690, 117, 107, 1163, 5934, 3291, 4206, 15960, 117, 8603, 12012, 112, 188, 3181, 4848, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 1}.
+07/20/2022 21:03:52 - INFO - __main__ -   ***** Running training *****
+07/20/2022 21:03:52 - INFO - __main__ -     Num examples = 3668
+07/20/2022 21:03:52 - INFO - __main__ -     Num Epochs = 10
+07/20/2022 21:03:52 - INFO - __main__ -     Instantaneous batch size per device = 16
+07/20/2022 21:03:52 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 32
+07/20/2022 21:03:52 - INFO - __main__ -     Gradient Accumulation steps = 1
+07/20/2022 21:03:52 - INFO - __main__ -     Total optimization steps = 1150, 0 steps completed so far
+  0%|                                                                                                           | 0/1150 [00:00<?, ?it/s]07/20/2022 21:03:52 - INFO - __main__ -   =============================
+07/20/2022 21:03:52 - INFO - __main__ -   Starting training from epoch 0
+07/20/2022 21:03:52 - INFO - __main__ -   Training till epoch  10
+07/20/2022 21:03:52 - INFO - __main__ -   =============================
+[W reducer.cpp:1289] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+ 10%|█████████▋                                                                                       | 115/1150 [00:11<01:30, 11.38it/s]07/20/2022 21:04:05 - INFO - __main__ -   epoch 0: {'accuracy': 0.697265625, 'f1': 0.8148148148148148}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+ 20%|███████████████████▎                                                                             | 229/1150 [00:25<01:20, 11.41it/s]07/20/2022 21:04:20 - INFO - __main__ -   epoch 1: {'accuracy': 0.689453125, 'f1': 0.7800829875518672}
+ 30%|█████████████████████████████                                                                    | 345/1150 [00:37<01:11, 11.21it/s]07/20/2022 21:04:31 - INFO - __main__ -   epoch 2: {'accuracy': 0.693359375, 'f1': 0.7920529801324504}
+ 40%|██████████████████████████████████████▋                                                          | 459/1150 [00:48<01:00, 11.37it/s]07/20/2022 21:04:43 - INFO - __main__ -   epoch 3: {'accuracy': 0.703125, 'f1': 0.8132678132678132}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+ 50%|████████████████████████████████████████████████▌                                                | 575/1150 [01:02<00:44, 12.92it/s]07/20/2022 21:04:57 - INFO - __main__ -   epoch 4: {'accuracy': 0.70703125, 'f1': 0.8076923076923077}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+ 60%|██████████████████████████████████████████████████████████                                       | 689/1150 [01:16<00:35, 12.89it/s]07/20/2022 21:05:10 - INFO - __main__ -   epoch 5: {'accuracy': 0.716796875, 'f1': 0.8094612352168199}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+ 70%|███████████████████████████████████████████████████████████████████▉                             | 805/1150 [01:30<00:26, 12.86it/s]07/20/2022 21:05:24 - INFO - __main__ -   epoch 6: {'accuracy': 0.705078125, 'f1': 0.7922971114167814}
+ 80%|█████████████████████████████████████████████████████████████████████████████▌                   | 919/1150 [01:40<00:17, 12.89it/s]07/20/2022 21:05:34 - INFO - __main__ -   epoch 7: {'accuracy': 0.701171875, 'f1': 0.8010403120936281}
+ 90%|██████████████████████████████████████████████████████████████████████████████████████▍         | 1035/1150 [01:52<00:10, 11.29it/s]07/20/2022 21:05:46 - INFO - __main__ -   epoch 8: {'accuracy': 0.703125, 'f1': 0.7951482479784368}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████▉| 1149/1150 [02:03<00:00, 11.32it/s]07/20/2022 21:05:58 - INFO - __main__ -   epoch 9: {'accuracy': 0.70703125, 'f1': 0.7945205479452054}
+100%|████████████████████████████████████████████████████████████████████████████████████████████████| 1150/1150 [02:05<00:00,  9.18it/s]

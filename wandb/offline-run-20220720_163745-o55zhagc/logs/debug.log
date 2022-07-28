@@ -1,0 +1,16 @@
+2022-07-20 16:37:45,051 INFO    MainThread:1527520 [wandb_setup.py:_flush():76] Loading settings from /data/home/ganayu/.config/wandb/settings
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_setup.py:_flush():76] Loading settings from /fsx/ganayu/code/SuperShaper/wandb/settings
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train_glue.py', 'program': 'train_glue.py'}
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_init.py:_log_setup():428] Logging user logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220720_163745-o55zhagc/logs/debug.log
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_init.py:_log_setup():429] Logging internal logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220720_163745-o55zhagc/logs/debug-internal.log
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_init.py:init():462] calling init triggers
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_init.py:init():465] wandb.init called with sweep_config: {}
+config: {}
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [wandb_init.py:init():515] starting backend
+2022-07-20 16:37:45,053 INFO    MainThread:1527520 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-07-20 16:37:45,089 INFO    MainThread:1527520 [backend.py:ensure_launched():217] starting backend process...
+2022-07-20 16:37:45,102 INFO    MainThread:1527520 [backend.py:ensure_launched():222] started backend process with pid: 1527574
+2022-07-20 16:37:45,107 INFO    MainThread:1527520 [wandb_init.py:init():525] backend started and connected
+2022-07-20 16:37:45,129 INFO    MainThread:1527520 [wandb_init.py:init():596] updated telemetry
+2022-07-20 16:37:45,209 INFO    MainThread:1527520 [wandb_init.py:init():662] starting run threads in backend

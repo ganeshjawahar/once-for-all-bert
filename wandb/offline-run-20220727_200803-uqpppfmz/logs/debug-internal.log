@@ -1,0 +1,19 @@
+2022-07-27 20:08:05,695 INFO    MainThread:382013 [internal.py:wandb_internal():90] W&B internal server running at pid: 382013, started at: 2022-07-27 20:08:05.692384
+2022-07-27 20:08:05,720 INFO    WriterThread:382013 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220727_200803-uqpppfmz/run-uqpppfmz.wandb
+2022-07-27 20:08:05,720 DEBUG   HandlerThread:382013 [handler.py:handle_request():141] handle_request: run_start
+2022-07-27 20:08:05,752 DEBUG   HandlerThread:382013 [meta.py:__init__():35] meta init
+2022-07-27 20:08:05,752 DEBUG   HandlerThread:382013 [meta.py:__init__():49] meta init done
+2022-07-27 20:08:05,752 DEBUG   HandlerThread:382013 [meta.py:probe():209] probe
+2022-07-27 20:08:05,764 DEBUG   HandlerThread:382013 [meta.py:_setup_git():199] setup git
+2022-07-27 20:08:05,899 DEBUG   HandlerThread:382013 [meta.py:_setup_git():206] setup git done
+2022-07-27 20:08:05,899 DEBUG   HandlerThread:382013 [meta.py:_save_pip():53] save pip
+2022-07-27 20:08:05,903 DEBUG   HandlerThread:382013 [meta.py:_save_pip():67] save pip done
+2022-07-27 20:08:05,905 DEBUG   HandlerThread:382013 [meta.py:_save_conda():74] save conda
+2022-07-27 20:08:14,727 WARNING MainThread:382013 [internal.py:is_dead():387] Internal process exiting, parent pid 354196 disappeared
+2022-07-27 20:08:14,727 ERROR   MainThread:382013 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-07-27 20:08:14,761 INFO    SenderThread:382013 [sender.py:finish():1111] shutting down sender
+2022-07-27 20:08:14,761 INFO    WriterThread:382013 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220727_200803-uqpppfmz/run-uqpppfmz.wandb
+2022-07-27 20:08:17,605 DEBUG   HandlerThread:382013 [meta.py:_save_conda():84] save conda done
+2022-07-27 20:08:17,605 DEBUG   HandlerThread:382013 [meta.py:probe():247] probe done
+2022-07-27 20:08:18,163 INFO    HandlerThread:382013 [handler.py:finish():806] shutting down handler
+2022-07-27 20:08:18,164 INFO    MainThread:382013 [internal.py:handle_exit():80] Internal process exited

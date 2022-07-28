@@ -1,0 +1,66 @@
+stsb epoch 0 best spearmanr: 0.7595769830965686
+stsb epoch 1 best spearmanr: 0.7686383882389013
+stsb epoch 2 best spearmanr: 0.7686383882389013
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00, 49.77it/s]
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Some weights of the model checkpoint at bert-base-uncased were not used when initializing BertForSequenceClassification: ['cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.bias', 'cls.seq_relationship.bias', 'cls.predictions.decoder.weight', 'cls.predictions.transform.dense.weight', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+07/23/2022 17:00:49 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForSequenceClassification                                --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              7,087,872
+│    │    │    └─BertLayer: 4-2                              7,087,872
+│    │    │    └─BertLayer: 4-3                              7,087,872
+│    │    │    └─BertLayer: 4-4                              7,087,872
+│    │    │    └─BertLayer: 4-5                              7,087,872
+│    │    │    └─BertLayer: 4-6                              7,087,872
+│    │    │    └─BertLayer: 4-7                              7,087,872
+│    │    │    └─BertLayer: 4-8                              7,087,872
+│    │    │    └─BertLayer: 4-9                              7,087,872
+│    │    │    └─BertLayer: 4-10                             7,087,872
+│    │    │    └─BertLayer: 4-11                             7,087,872
+│    │    │    └─BertLayer: 4-12                             7,087,872
+│    └─BertPooler: 2-3                                       --
+│    │    └─CustomLinear: 3-7                                590,592
+│    │    └─Tanh: 3-8                                        --
+├─Dropout: 1-2                                               --
+├─CustomLinear: 1-3                                          769
+=====================================================================================
+Total params: 109,483,009
+Trainable params: 109,483,009
+Non-trainable params: 0
+=====================================================================================
+07/23/2022 17:00:49 - INFO - __main__ -   Label2Id:  None
+07/23/2022 17:00:49 - INFO - __main__ -   Sample 2253 of the training set: {'input_ids': [101, 1135, 2086, 1157, 23096, 5146, 119, 102, 17554, 1204, 1928, 1157, 170, 12465, 2137, 5146, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 1.600000023841858}.
+07/23/2022 17:00:49 - INFO - __main__ -   Sample 2006 of the training set: {'input_ids': [101, 146, 1821, 10899, 1114, 22157, 17243, 11356, 2162, 1329, 106, 102, 146, 6586, 10899, 160, 12150, 3048, 22157, 17243, 11356, 2162, 1646, 2036, 106, 106, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 5.0}.
+07/23/2022 17:00:49 - INFO - __main__ -   Sample 1828 of the training set: {'input_ids': [101, 1109, 1129, 8517, 1513, 1110, 3179, 1113, 1103, 4640, 1120, 1103, 1447, 2568, 119, 102, 138, 1129, 8517, 1513, 7104, 1373, 1103, 5017, 5781, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 4.400000095367432}.
+07/23/2022 17:00:54 - INFO - __main__ -   ***** Running training *****
+07/23/2022 17:00:54 - INFO - __main__ -     Num examples = 5749
+07/23/2022 17:00:54 - INFO - __main__ -     Num Epochs = 3
+07/23/2022 17:00:54 - INFO - __main__ -     Instantaneous batch size per device = 32
+07/23/2022 17:00:54 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 32
+07/23/2022 17:00:54 - INFO - __main__ -     Gradient Accumulation steps = 1
+07/23/2022 17:00:54 - INFO - __main__ -     Total optimization steps = 540, 0 steps completed so far
+  0%|                                                                                                              | 0/540 [00:00<?, ?it/s]07/23/2022 17:00:54 - INFO - __main__ -   =============================
+07/23/2022 17:00:54 - INFO - __main__ -   Starting training from epoch 0
+07/23/2022 17:00:54 - INFO - __main__ -   Training till epoch  3
+07/23/2022 17:00:54 - INFO - __main__ -   =============================
+[W reducer.cpp:1289] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+ 33%|█████████████████████████████████▏                                                                  | 179/540 [00:12<00:23, 15.35it/s]07/23/2022 17:01:08 - INFO - __main__ -   epoch 0: {'pearson': 0.7569679695081653, 'spearmanr': 0.7595769830965686}
+ 66%|██████████████████████████████████████████████████████████████████▍                                 | 359/540 [00:31<00:11, 15.46it/s]07/23/2022 17:01:26 - INFO - __main__ -   epoch 1: {'pearson': 0.7652790154303252, 'spearmanr': 0.7686383882389013}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████▊| 539/540 [00:49<00:00, 15.21it/s]07/23/2022 17:01:44 - INFO - __main__ -   epoch 2: {'pearson': 0.765086457489962, 'spearmanr': 0.7675586181052371}
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 540/540 [00:50<00:00, 10.72it/s]

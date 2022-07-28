@@ -1,0 +1,114 @@
+task labels =  ['unacceptable', 'acceptable']
+cola epoch 0 best matthews_correlation: 0.0
+cola epoch 1 best matthews_correlation: 0.09758197481255393
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00, 279.28it/s]
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Some weights of the model checkpoint at Graphcore/bert-base-uncased were not used when initializing BertForSequenceClassification: ['cls.predictions.bias', 'cls.predictions.decoder.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.decoder.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at Graphcore/bert-base-uncased and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+07/23/2022 16:56:38 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForSequenceClassification                                --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              7,087,872
+│    │    │    └─BertLayer: 4-2                              7,087,872
+│    │    │    └─BertLayer: 4-3                              7,087,872
+│    │    │    └─BertLayer: 4-4                              7,087,872
+│    │    │    └─BertLayer: 4-5                              7,087,872
+│    │    │    └─BertLayer: 4-6                              7,087,872
+│    │    │    └─BertLayer: 4-7                              7,087,872
+│    │    │    └─BertLayer: 4-8                              7,087,872
+│    │    │    └─BertLayer: 4-9                              7,087,872
+│    │    │    └─BertLayer: 4-10                             7,087,872
+│    │    │    └─BertLayer: 4-11                             7,087,872
+│    │    │    └─BertLayer: 4-12                             7,087,872
+│    └─BertPooler: 2-3                                       --
+│    │    └─CustomLinear: 3-7                                590,592
+│    │    └─Tanh: 3-8                                        --
+├─Dropout: 1-2                                               --
+├─CustomLinear: 1-3                                          1,538
+=====================================================================================
+Total params: 109,483,778
+Trainable params: 109,483,778
+Non-trainable params: 0
+=====================================================================================
+07/23/2022 16:56:38 - INFO - __main__ -   Label2Id:  None
+07/23/2022 16:56:38 - INFO - __main__ -   Sample 4506 of the training set: {'input_ids': [101, 2090, 6407, 170, 1461, 117, 1133, 2499, 1309, 1225, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 1}.
+07/23/2022 16:56:38 - INFO - __main__ -   Sample 4012 of the training set: {'input_ids': [101, 1287, 1189, 2090, 8739, 3947, 2094, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 0}.
+07/23/2022 16:56:38 - INFO - __main__ -   Sample 3657 of the training set: {'input_ids': [101, 1287, 4234, 1107, 1103, 2493, 119, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1], 'labels': 0}.
+07/23/2022 16:56:44 - INFO - __main__ -   ***** Running training *****
+07/23/2022 16:56:44 - INFO - __main__ -     Num examples = 8551
+07/23/2022 16:56:44 - INFO - __main__ -     Num Epochs = 3
+07/23/2022 16:56:44 - INFO - __main__ -     Instantaneous batch size per device = 32
+07/23/2022 16:56:44 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 32
+07/23/2022 16:56:44 - INFO - __main__ -     Gradient Accumulation steps = 1
+07/23/2022 16:56:44 - INFO - __main__ -     Total optimization steps = 804, 0 steps completed so far
+  0%|                                                                                                              | 0/804 [00:00<?, ?it/s]07/23/2022 16:56:44 - INFO - __main__ -   =============================
+07/23/2022 16:56:44 - INFO - __main__ -   Starting training from epoch 0
+07/23/2022 16:56:44 - INFO - __main__ -   Training till epoch  3
+07/23/2022 16:56:44 - INFO - __main__ -   =============================
+[W reducer.cpp:1289] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+ 33%|█████████████████████████████████▏                                                                  | 267/804 [00:17<00:32, 16.44it/s]07/23/2022 16:57:02 - INFO - __main__ -   epoch 0: {'matthews_correlation': 0.0}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+ 67%|██████████████████████████████████████████████████████████████████▌                                 | 535/804 [00:40<00:16, 16.20it/s]07/23/2022 16:57:25 - INFO - __main__ -   epoch 1: {'matthews_correlation': 0.09758197481255393}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+ 76%|███████████████████████████████████████████████████████████████████████████▋                        | 609/804 [00:50<00:11, 16.42it/s]Traceback (most recent call last):
+  File "train_glue.py", line 1246, in <module>
+    main()
+  File "train_glue.py", line 1151, in main
+    outputs = model(**batch)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/utils/module_proxy_wrapper.py", line 53, in forward
+    return self.module(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/utils/operations.py", line 487, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/autocast_mode.py", line 12, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 963, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2833, in forward
+    outputs = self.bert(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2130, in forward
+    encoder_outputs = self.encoder(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1622, in forward
+    layer_outputs = layer_module(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1384, in forward
+    self_attention_outputs = self.attention(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1177, in forward
+    self_outputs = self.self(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 439, in forward
+    key_layer = self.transpose_for_scores(self.key(hidden_states))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_linear.py", line 82, in forward
+    return F.linear(x, self.samples["weight"], self.samples["bias"])
+KeyboardInterrupt

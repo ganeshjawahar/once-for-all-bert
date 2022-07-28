@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## job name
-#SBATCH --job-name=512
+#SBATCH --job-name=datasets
 ## filename for job standard output (stdout)
 ## %j is the job id, %u is the user id
 #SBATCH --output=/fsx/ganayu/experiments/trial/sample-%j.out
@@ -11,7 +11,6 @@
 #SBATCH --partition=a100
 ## number of nodes
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:8
 ## time
 #SBATCH --time 10000
 

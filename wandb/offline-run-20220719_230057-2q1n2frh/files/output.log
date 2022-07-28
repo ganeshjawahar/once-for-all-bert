@@ -1,0 +1,19 @@
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+07/19/2022 23:01:04 - INFO - __main__ -   ==================================================================
+07/19/2022 23:01:04 - INFO - __main__ -   Number of parameters in custom config is 33 Million
+07/19/2022 23:01:04 - INFO - __main__ -   ==================================================================
+Traceback (most recent call last):
+  File "train_mlm.py", line 1910, in <module>
+    main()
+  File "train_mlm.py", line 1038, in main
+    model = custom_bert.BertForMaskedLM.from_pretrained(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1424, in from_pretrained
+    model, missing_keys, unexpected_keys, mismatched_keys, error_msgs = cls._load_state_dict_into_model(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1576, in _load_state_dict_into_model
+    raise RuntimeError(f"Error(s) in loading state_dict for {model.__class__.__name__}:\n\t{error_msg}")
+RuntimeError: Error(s) in loading state_dict for BertForMaskedLM:
+	size mismatch for bert.embeddings.word_embeddings.weight: copying a param with shape torch.Size([30522, 768]) from checkpoint, the shape in current model is torch.Size([28996, 768]).
+	size mismatch for cls.predictions.bias: copying a param with shape torch.Size([30522]) from checkpoint, the shape in current model is torch.Size([28996]).
+	size mismatch for cls.predictions.decoder.weight: copying a param with shape torch.Size([30522, 768]) from checkpoint, the shape in current model is torch.Size([28996, 768]).
+	size mismatch for cls.predictions.decoder.bias: copying a param with shape torch.Size([30522]) from checkpoint, the shape in current model is torch.Size([28996]).
