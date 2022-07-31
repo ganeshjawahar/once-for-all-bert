@@ -558,7 +558,7 @@ def parse_args():
         "--params_constraints",
         type=str,
         default=None,
-        help="Constraints on Parameters",
+        help="Constraints on Parameters: min,max",
     )
     parser.add_argument(
         "--latency_constraints",
@@ -620,6 +620,12 @@ def parse_args():
         default=128,
         help="Maximum sequence length of the model",
     )
+    parser.add_argument(
+        "--search_space_id",
+        type=str,
+        default=None,
+        help=f"change default search space: attn_elastic, ffn_intermediate_elastic",
+    )   
 
     args = parser.parse_args()
 

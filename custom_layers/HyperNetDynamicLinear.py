@@ -25,12 +25,14 @@ class HyperNetDynamicLinear(torch.nn.Module):
             torch.nn.Linear(hypernet_hidden_size, hypernet_output_size),
         )
 
-        self.register_buffer("active_arch_embed", torch.Tensor(arch_embeds))
+        self.register_buffer("active_arch_embed", torch.zeros(len(arch_embeds)))
         # self.register_parameter("low_rank_weight_factor", torch.nn.Parameter(torch.Tensor(self.low_rank, self.max_in_features)).data.normal_(mean=0.0, std=0.01))
 
-    def set_sample_config(self, active_in_features, active_out_features):
+    def set_sample_config(self, active_in_features, active_out_features, active_arch_embeds):
         self.active_in_features = active_in_features
         self.active_out_features = active_out_features
+        for i in range(len(active_arch_embeds)):
+            self.active_arch_embed[i] = active_arch_embeds[i]
 
     def forward(self, x):
         self.active_in_features = x.shape[-1]

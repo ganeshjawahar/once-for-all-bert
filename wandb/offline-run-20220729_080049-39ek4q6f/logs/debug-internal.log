@@ -1,0 +1,36 @@
+2022-07-29 08:00:50,909 INFO    MainThread:2808291 [internal.py:wandb_internal():90] W&B internal server running at pid: 2808291, started at: 2022-07-29 08:00:50.906529
+2022-07-29 08:00:50,951 INFO    WriterThread:2808291 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220729_080049-39ek4q6f/run-39ek4q6f.wandb
+2022-07-29 08:00:50,952 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: run_start
+2022-07-29 08:00:50,990 DEBUG   HandlerThread:2808291 [meta.py:__init__():35] meta init
+2022-07-29 08:00:50,990 DEBUG   HandlerThread:2808291 [meta.py:__init__():49] meta init done
+2022-07-29 08:00:50,990 DEBUG   HandlerThread:2808291 [meta.py:probe():209] probe
+2022-07-29 08:00:51,012 DEBUG   HandlerThread:2808291 [meta.py:_setup_git():199] setup git
+2022-07-29 08:00:51,155 DEBUG   HandlerThread:2808291 [meta.py:_setup_git():206] setup git done
+2022-07-29 08:00:51,155 DEBUG   HandlerThread:2808291 [meta.py:_save_pip():53] save pip
+2022-07-29 08:00:51,159 DEBUG   HandlerThread:2808291 [meta.py:_save_pip():67] save pip done
+2022-07-29 08:00:51,160 DEBUG   HandlerThread:2808291 [meta.py:_save_conda():74] save conda
+2022-07-29 08:01:08,619 DEBUG   HandlerThread:2808291 [meta.py:_save_conda():84] save conda done
+2022-07-29 08:01:08,621 DEBUG   HandlerThread:2808291 [meta.py:probe():247] probe done
+2022-07-29 08:01:25,187 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:25,914 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:26,618 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:28,170 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:28,904 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:29,694 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:31,463 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:32,270 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:33,009 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:34,050 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:35,605 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:36,346 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:37,645 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:38,434 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:39,286 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:41,098 DEBUG   HandlerThread:2808291 [handler.py:handle_request():141] handle_request: partial_history
+2022-07-29 08:01:41,768 WARNING MainThread:2808291 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-07-29 08:01:42,070 WARNING MainThread:2808291 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-07-29 08:01:42,070 ERROR   MainThread:2808291 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-07-29 08:01:42,100 INFO    HandlerThread:2808291 [handler.py:finish():806] shutting down handler
+2022-07-29 08:01:42,101 INFO    WriterThread:2808291 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220729_080049-39ek4q6f/run-39ek4q6f.wandb
+2022-07-29 08:01:42,207 INFO    SenderThread:2808291 [sender.py:finish():1111] shutting down sender
+2022-07-29 08:01:42,208 INFO    MainThread:2808291 [internal.py:handle_exit():80] Internal process exited

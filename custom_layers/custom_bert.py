@@ -114,6 +114,20 @@ BERT_PRETRAINED_MODEL_ARCHIVE_LIST = [
 
 NORM2FN = {"layer_norm": CustomLayerNorm, "no_norm": CustomNoNorm}
 
+def min_max_normalization(arr, min_val, max_val):
+    '''
+    min_val, max_val = 10000, -10000 # todo: set it based on search space
+    for item in arr:
+        item = float(item)
+        if item < min_val:
+            min_val = item
+        if item > max_val:
+            max_val = item
+    '''
+    new_arr = []
+    for i in range(len(arr)):
+        new_arr.append(0.01 + ((arr[i] - min_val)/(max_val - min_val) if (max_val-min_val) !=0 else 0))
+    return new_arr
 
 def load_tf_weights_in_bert(model, config, tf_checkpoint_path):
     """Load tf checkpoints in a pytorch model."""
@@ -1294,6 +1308,8 @@ class BertLayer(nn.Module):
             else:
                 self.input_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
                 self.output_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
+                self.max_hidden_size = float(768)  # max(config.sample_hidden_size))
+                self.min_hidden_size = float(120)  # min(config.sample_hidden_size))
 
         self.attention = BertAttention(config)
         self.is_decoder = config.is_decoder
@@ -1315,13 +1331,23 @@ class BertLayer(nn.Module):
         self.is_identity_layer = False
 
         if self.use_bottleneck:
-            self.input_bottleneck.set_sample_config(
-                config.hidden_size, config.sample_hidden_size
-            )
-            self.output_bottleneck.set_sample_config(
-                config.sample_hidden_size,
-                config.hidden_size,
-            )
+            if config.use_hypernet_w_low_rank == 0:
+                self.input_bottleneck.set_sample_config(
+                    config.hidden_size, config.sample_hidden_size
+                )
+                self.output_bottleneck.set_sample_config(
+                    config.sample_hidden_size,
+                    config.hidden_size,
+                )
+            else:
+                arch_embed = config.sample_hidden_size
+                self.input_bottleneck.set_sample_config(
+                    config.hidden_size, config.sample_hidden_size, min_max_normalization(config.master_sample_hidden_size, self.min_hidden_size, self.max_hidden_size) 
+                )
+                self.output_bottleneck.set_sample_config(
+                    config.sample_hidden_size, config.hidden_size, min_max_normalization(config.master_sample_hidden_size, self.min_hidden_size, self.max_hidden_size)
+                )
+            # todo: set arch_encoding
         self.attention.set_sample_config(config)
         if hasattr(self, "crossattention"):
             self.crossattention.set_sample_config(config)
@@ -1521,6 +1547,7 @@ class BertEncoder(nn.Module):
 
         for i, (drop, layer) in enumerate(zip(layers_to_drop, self.layer)):
             layer_config = deepcopy(config)
+            layer_config.master_sample_hidden_size = layer_config.sample_hidden_size
 
             if i < self.sample_num_hidden_layers:
                 layer_config.sample_intermediate_size = sample_intermediate_sizes[i]
