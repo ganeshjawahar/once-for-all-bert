@@ -553,7 +553,7 @@ def main():
     # str
     parser.add_argument(
         "--bert_model",
-        default="bert-large-uncased",
+        default="bert-base-uncased",
         type=str,
         required=False,
         help="Bert pre-trained model selected in the list: bert-base-uncased, "
@@ -571,7 +571,7 @@ def main():
     )
     parser.add_argument(
         "--dupe_factor",
-        default=10,
+        default=1,
         type=int,
         help="Number of times to duplicate the input data (with different masks).",
     )

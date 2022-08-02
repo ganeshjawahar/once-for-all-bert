@@ -45,11 +45,10 @@ if __name__ == "__main__":
         "--masked_lm_prob", type=float, help="Specify the probability for masked lm", default=0.15
     )
     parser.add_argument(
-        "--max_seq_length", type=int, help="Specify the maximum sequence length", default=512
-    )
+        "--max_seq_length", type=int, help="Specify the maximum sequence length", default=128)
     parser.add_argument(
         "--model_name",
-        type=str,
+        type="str",
         required=True,
         help="Pre-trained models name (HF format): bert-base-uncased, "
         "bert-large-uncased, bert-base-cased, roberta-base, roberta-large",

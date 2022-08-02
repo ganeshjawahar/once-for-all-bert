@@ -152,6 +152,12 @@ def parse_args():
         default="no",
         help="Skip saving checkpoint whatsover",
     )
+    parser.add_argument(
+        "--subtransformer_config_path",
+        type=str,
+        default=None,
+        help=f"The path to a subtransformer configration",
+    )
 
 
     args = parser.parse_args()
@@ -251,8 +257,8 @@ def main():
     #
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer)
+    config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
     model = AutoModelForSequenceClassification.from_pretrained(
         args.model_name_or_path,
         from_tf=bool(".ckpt" in args.model_name_or_path),

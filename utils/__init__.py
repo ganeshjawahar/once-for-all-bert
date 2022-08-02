@@ -11,6 +11,7 @@ from random import randrange
 
 import math
 import functools
+import copy
 
 millnames = ["", " Thousand", " Million", " Billion", " Trillion"]
 
@@ -180,8 +181,21 @@ def calculate_params_from_config(
     scaling_laws=False,
     add_output_emb_layer=False,
     merged_bottleneck=True,  # compose the bottlenecks and calculate the params count
+    ffn_expansion = True
 ):
     add_embs_dim = scaling_laws != True
+
+    # todo: do dynamically
+    if max(getattr(config, "sample_intermediate_size")) < 10:
+        new_config = copy.deepcopy(config)
+        sample_intermediate_size = getattr(new_config, "sample_intermediate_size")
+        sample_hidden_size = getattr(new_config, "sample_hidden_size")
+        new_sample_intermediate_size = []
+        for int_ratio, hid_size in zip(sample_intermediate_size, sample_hidden_size):
+            new_sample_intermediate_size.append(int(int_ratio * hid_size))
+        setattr(new_config, "sample_intermediate_size", new_sample_intermediate_size)
+        config = new_config
+
 
     depth_features = None
     if hasattr(config, "depth_features"):

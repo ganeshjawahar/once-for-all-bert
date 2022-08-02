@@ -10,10 +10,10 @@
 ## partition name
 #SBATCH --partition=a100
 ## number of nodes
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --gres=gpu:8
 ## time
-#SBATCH --time 100
+#SBATCH --time 1000
 
 ## number of tasks per node
 #SBATCH --ntasks-per-node=8

@@ -10,6 +10,7 @@
 # wget https://the-eye.eu/public/AI/pile_preliminary_components/books1.tar.gz
 # python academic-bert-dataset/process_data.py -f /fsx/ganayu/data/academic_bert_dataset/books_raw/books1/epubtxt -o /fsx/ganayu/data/academic_bert_dataset/booksproc --type bookcorpus
 # python academic-bert-dataset/shard_data.py --dir /fsx/ganayu/data/academic_bert_dataset/wikibooksproc -o /fsx/ganayu/data/academic_bert_dataset/shardoutput --num_train_shards 256 --num_test_shards 128 --frac_test 0.1
+python academic-bert-dataset/generate_samples.py --dir /fsx/ganayu/data/academic_bert_dataset/shardoutput -o /fsx/ganayu/data/academic_bert_dataset/final_samples --dup_factor 1 --seed 42 --vocab_file bert-base-uncased --do_lower_case 1 --masked_lm_prob 0.15 --max_seq_length 128 --model_name bert-base-uncased --max_predictions_per_seq 20 --n_processes 16
 
 # supernet pretrain
 # python aws/trial.py
