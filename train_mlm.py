@@ -1061,16 +1061,16 @@ def main():
         )
 
     if args.subtransformer_config_path is not None:
-        #subtransformer_config = read_json(args.subtransformer_config_path)
-        # df = pd.read_csv(args.subtransformer_config_path)
-        # df["configs"] = df["configs"].map(convert_to_dict)
-        # subtransformer_config = df.iloc[0]["configs"] # pick first row (outputted by evo search)
-        # subtransformer_config = subtransformer_config.to_dict()
-        # for key, value in subtransformer_config.items():
-        #    # update global_config with attributes of subtransformer_config
-        #    if key in ["rewire", "label2id", "id2label", "mixing"]:
-        #        continue
-        #    setattr(global_config, key, value)
+        df = pd.read_csv(args.subtransformer_config_path)
+        df["configs"] = df["configs"].map(convert_to_dict)
+        subtransformer_config = df.iloc[0]["configs"] # pick first row (outputted by evo search)
+        subtransformer_config = subtransformer_config.to_dict()
+        for key, value in subtransformer_config.items():
+            # update global_config with attributes of subtransformer_config
+            if key in ["rewire", "label2id", "id2label", "mixing"]:
+                continue
+            setattr(global_config, key, value)
+        '''
         rb = open_workbook(args.subtransformer_config_path, formatting_info=True)
         best_config_sheet = rb.sheet_by_name("best_config")
         print("Subnet info: Model-Size=%s, Val-PPL=%s"%(best_config_sheet.cell(2, 1).value, best_config_sheet.cell(3, 1).value))
@@ -1087,6 +1087,7 @@ def main():
         print("Subnet info: elastickey2ranges=", elastickey2ranges)
         for key in elastic_keys:
             setattr(global_config, key, getattr(subnet_config, key))
+        '''
 
         logger.info(
             "=================================================================="

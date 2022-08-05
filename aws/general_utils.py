@@ -63,7 +63,7 @@ def get_finetuning_results(folder):
 # get_finetuning_results("/fsx/ganayu/experiments/supershaper/jul12_wikibooks_lr5e-5_finetune_9tasks")
 # get_finetuning_results("/fsx/ganayu/experiments/supershaper/jul12_wikibooks_efficient_subnet_train_more_steps_100K_finetune_9tasks")
 
-def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_runids=None, every_x_steps=-1, inpl_kd=False):
+def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_runids=None, every_x_steps=-1, inpl_kd=None, ignore_first_x_steps=None):
     import wandb
     import numpy as np
     import matplotlib.pyplot as plt
@@ -90,10 +90,12 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             valloss_scores[name + "-big"] = [[],[]] # step, loss
             valloss_scores[name + "-small"] = [[],[]] # step, loss
             if inpl_kd:
-                distillloss_scores[name + "-small"] = [[],[]] # step, loss
-                distillloss_scores[name + "-rand"] = [[],[]] # step, loss
-                hiddenloss_scores[name + "-small"] = [[],[]] # step, loss
-                hiddenloss_scores[name + "-rand"] = [[],[]] # step, loss
+                if "logits" in inpl_kd:
+                    distillloss_scores[name + "-small"] = [[],[]] # step, loss
+                    distillloss_scores[name + "-rand"] = [[],[]] # step, loss
+                if "hidden" in inpl_kd:
+                    hiddenloss_scores[name + "-small"] = [[],[]] # step, loss
+                    hiddenloss_scores[name + "-rand"] = [[],[]] # step, loss
         for row in metrics:
             if 'Supertransformer mlm loss' in row  and row['Supertransformer mlm loss'] != 'NaN': # and not np.isnan(row['Supertransformer mlm loss']):
                 trainloss_scores[name + "-big"][0].append(row['_step'])
@@ -155,7 +157,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             scores_list.append(("hidden_loss", hiddenloss_scores))
     for name, scores in scores_list:
         fig = plt.figure(figsize=(13,7))
-        colors = ['b',  "springgreen", 'c', "gold", 'y', "indigo",  "violet", 'm', 'r', 'g', 'k',  "olive", "firebrick", ]
+        colors = ['b', "springgreen", "indigo", "olive", "firebrick", 'c', "gold", "violet", 'm', 'r', 'g', 'k', 'y']
         ei = 0
         for model in sorted(scores):
             if name == "val_loss" or every_x_steps == -1:
@@ -163,7 +165,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             else:
                 cur_x, cur_y = [], []
                 for j in range(len(scores[model][0])):
-                    if j % every_x_steps == 0:
+                    if j % every_x_steps == 0 and (ignore_first_x_steps is None or int(model[0][j]) >= ignore_first_x_steps):
                         cur_x.append(scores[model][0][j])
                         cur_y.append(scores[model][1][j])
                 sns.lineplot(x=cur_x, y=cur_y, color=colors[ei], label=model)
@@ -185,10 +187,11 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/jul28_2xtrainingbudget", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-2x", "ganayu/effbert/326b22dg")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/jul28_sandwch2rands", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-2rands", "ganayu/effbert/381rknsh")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/jul29_ffn_expan_ratio", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-ffnelastic", "ganayu/effbert/300iqwdt")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100)
-# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_inplkd_lossscaling", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-inkd-scale1.0", "ganayu/effbert/21i6ad9y"), ("supernet-inkd-scale1.5", "ganayu/effbert/3a6nwrht"), ("supernet-inkd-scale2.0", "ganayu/effbert/3e65ue8y")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100, inpl_kd=True)
-# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_inplkd_logits_hidden", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"),  ("supernet-inkd-logits=soft", "ganayu/effbert/21i6ad9y"), ("supernet-inkd-logits=hard+soft", "ganayu/effbert/1m7t4p8f"), ("supernet-inkd-logits=soft+hidden", "ganayu/effbert/1yh9dkl0")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100, inpl_kd=["logits", "hidden"])
-# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_hypernet", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-hypnet-rank32-hyphid16", "ganayu/effbert/283vgn33"), ("supernet-hypnet-rank64-hyphid16", "ganayu/effbert/1m37fnbo"), ("supernet-hypnet-rank64-hyphid50", "ganayu/effbert/jrmtzw1h") ], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_inplkd_lossscaling", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-inkd-scale1.0", "ganayu/effbert/21i6ad9y"), ("supernet-inkd-scale1.5", "ganayu/effbert/3a6nwrht"), ("supernet-inkd-scale2.0", "ganayu/effbert/3e65ue8y")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100, inpl_kd=["logits"], ignore_first_x_steps=50000)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_inplkd_logits_hidden", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"),  ("supernet-inkd-logits=soft", "ganayu/effbert/21i6ad9y"), ("supernet-inkd-logits=hard+soft", "ganayu/effbert/1m7t4p8f"), ("supernet-inkd-logits=soft+hidden", "ganayu/effbert/1yh9dkl0")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100, inpl_kd=["logits", "hidden"], ignore_first_x_steps=50000)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_hypernet", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-hypnet-rank32-hyphid16", "ganayu/effbert/283vgn33"), ("supernet-hypnet-rank64-hyphid16", "ganayu/effbert/1m37fnbo"), ("supernet-hypnet-rank64-hyphid50", "ganayu/effbert/jrmtzw1h") ], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100, ignore_first_x_steps=50000)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_nasbert_bsz_1024_250Ksteps", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-1024_250Ksteps", "ganayu/effbert/24lo78gh") ], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug2_continue_pretrain_100ksteps_schedule", supernet_runids=[], standalone_runids=[("stage1", "ganayu/effbert/oisadmiy"), ("5timeslowerlr", "ganayu/effbert/39p9dmtg"), ("nowarmup", "ganayu/effbert/2m79af3n")], every_x_steps=100)
 
 def wandb_locate_proj():
     import json
@@ -215,10 +218,102 @@ def get_best_ft_results():
             dev_acc = 0.0
             for folder in glob.glob("/fsx/ganayu/experiments/supershaper/jul24_v3_finetune_glueoriginal_sst2_cola_toktypecorrected/*%s*%s*/sys.err"%(model, task)):
                 cur_acc = None
-                print(folderdw)
+                print(folder)
                 for line in open(folder):
                     line = line.strip()
                     if "accuracy" in line and "epoch" in line:
                         print(line)
             sys.exit(0)
 # get_best_ft_results()
+
+def get_best_mnli_ft_results(experiments):
+    for exp in experiments:
+        best_mnli_dev_acc = None
+        for f in glob.glob("/fsx/ganayu/experiments/supershaper/%s/*/sys.out"%(exp)):
+            last_acc = None
+            for line in open(f):
+                line = line.strip()
+                if "accuracy" in line and "lr=" in line:
+                    last_acc = float(line.split("'accuracy': ")[1].split("}")[0])
+            if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
+                best_mnli_dev_acc = last_acc
+        print(exp, best_mnli_dev_acc)
+
+# get_best_mnli_ft_results(["aug2_v3_finetune_supershaper_60M_direct", "aug2_v3_finetune_supershaper_60M_100Ksteps", "aug2_v3_finetune_v2_60M_direct"])
+
+def get_best_ft_sweep_space():
+    target_model = "supershaper"
+    for fold in glob.glob("/fsx/ganayu/experiments/supershaper/aug2_supershaper_directfinetune_sweepcheck_*"):
+        best_dev_scores = {"cola": 0, "mrpc": 0}
+        prev_epoch, prev_score, prev_task = None, None, None
+        for l in open(fold + "/" + target_model + "/sys.out"):
+            l = l.strip()
+            if "epoch" in l and "lr=" in l and "bs=" in l and "ep=" in l:
+                epoch = int(l.split("epoch ")[-1].split(":")[0])
+                if epoch == 0:
+                    if prev_epoch is not None and prev_score > best_dev_scores[prev_task]:
+                        best_dev_scores[prev_task] = prev_score
+                    prev_epoch = epoch
+                    if "f1" in l:
+                        prev_score = float(l.split("'f1': ")[1].split("}")[0])
+                        prev_task = "mrpc"
+                    elif "matthews_correlation" in l:
+                        prev_score = float(l.split("'matthews_correlation': ")[1].split("}")[0])
+                        prev_task = "cola"
+                else:
+                    prev_epoch = epoch
+                    if "f1" in l:
+                        prev_score = float(l.split("'f1': ")[1].split("}")[0])
+                        prev_task = "mrpc"
+                    elif "matthews_correlation" in l:
+                        prev_score = float(l.split("'matthews_correlation': ")[1].split("}")[0])
+                        prev_task = "cola"
+
+        if prev_epoch and prev_score > best_dev_scores[prev_task]:
+            best_dev_scores[prev_task] = prev_score
+        print(fold.split("/")[-1], best_dev_scores)
+# get_best_ft_sweep_space()
+
+def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
+    os.makedirs(plot_output, exist_ok=True)
+
+    from xlrd import open_workbook
+    pareto_scores = {}
+    for exp in experiments:
+        for f in glob.glob("/fsx/ganayu/experiments/supershaper/%s/*/%s"%(exp, iteration)):
+            rb = open_workbook(f, formatting_info=True)
+            best_config_sheet = rb.sheet_by_name(sheet_name)
+            model_name = f.split("/")[-2]
+            pareto_scores[model_name] = [[], []]
+            ri = 1
+            while True:
+                try:
+                    cur_model_size = best_config_sheet.cell(ri, 2).value
+                except:
+                    break
+                cur_model_size = int(cur_model_size)
+                cur_valid_ppl = float(best_config_sheet.cell(ri, 3).value)
+                pareto_scores[model_name][0].append(cur_model_size)
+                pareto_scores[model_name][1].append(cur_valid_ppl)
+                ri += 1
+    print("loaded %d experiments"%(len(pareto_scores)))
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    sns.set_theme(style="darkgrid")
+    fig = plt.figure(figsize=(13,7))
+    colors = ["violet", 'r', 'b', "springgreen", "gold", 'c', 'y', "indigo", 'm',  'g', 'k', "olive", "firebrick"]
+    ei = 0
+    for model in sorted(pareto_scores):
+        sns.scatterplot(x=pareto_scores[model][0], y=pareto_scores[model][1], color=colors[ei], label=model)
+        ei += 1
+    plt.xlabel("Model Size", fontsize=15)
+    plt.ylabel("Valid. PPL", fontsize=15)
+    plt.legend(loc="upper left", ncol=2, fontsize=15)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
+    fig.savefig("%s/pareto-curve.png"%(plot_output))
+
+# get_pareto_curve(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug3_pareto_diff_search_spaces", iteration="evo_results_29.xls", sheet_name="iter_10", experiments=["aug1_v3_supernetbase_search_different_spaces"])
+# get_pareto_curve(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_v3_supernetbase_search_diff_configs", iteration="evo_results_29.xls", sheet_name="iter_10", experiments=["aug1_v3_supernetbase_search_diff_configs"])
+

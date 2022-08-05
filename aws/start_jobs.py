@@ -119,9 +119,10 @@ def config_factory(name):
     configs["supernetbasev3.standard.train_mlm"] = {"per_device_train_batch_size": 128, "per_device_eval_batch_size": 256, "gradient_accumulation_steps": 2, "fp16": 1, "max_seq_length": 128, "mixing": "bert-bottleneck", "max_train_steps": 125000, "tokenized_c4_dir": dataset_factory("wikibooks_graphcore_128len_next_sentence_label_removed_w_splits"), "model_name_or_path": "bert-base-uncased", "sampling_type": "random", "sampling_rule": "sandwich", "learning_rate": 5e-4, "weight_decay": 0.01, "num_warmup_steps": 10000, "eval_random_subtransformers": 0, "output_dir": "<<OUTPUT_DIR>>", "preprocessing_num_workers": 1, "betas_2": 0.98, "tokenizer_name": "Graphcore/bert-base-uncased"}
     configs["bertbasev3.standard.train_mlm"] = {"per_device_train_batch_size": 128, "per_device_eval_batch_size": 256, "gradient_accumulation_steps": 2, "fp16": 1, "max_seq_length": 128, "mixing": "bert-bottleneck", "max_train_steps": 125000, "tokenized_c4_dir": dataset_factory("wikibooks_graphcore_128len_next_sentence_label_removed_w_splits"), "model_name_or_path": "bert-base-uncased", "sampling_type": "none", "sampling_rule": "none", "learning_rate": 5e-4, "weight_decay": 0.01, "num_warmup_steps": 10000, "eval_random_subtransformers": 0, "output_dir": "<<OUTPUT_DIR>>", "preprocessing_num_workers": 1, "betas_2": 0.98, "tokenizer_name": "Graphcore/bert-base-uncased"}
     configs["supernetbasev3.standard.train_glue"] = {"learning_rate": 5e-05, "mixing": "bert-bottleneck", "model_name_or_path": "", "num_train_epochs": 10, "per_device_train_batch_size": 4, "sampling_type": "none", "task_name": "", "output_dir": "<<OUTPUT_DIR>>", "tokenizer_name": "Graphcore/bert-base-uncased", "skip_saving_checkpoints": "yes"} # "subtransformer_config_path": ""
-    configs["supernetbasev3.standard.train_glue_original"] = {"learning_rate": 5e-05, "model_name_or_path": "", "num_train_epochs": 10, "per_device_train_batch_size": 4, "task_name": "", "output_dir": "<<OUTPUT_DIR>>", "tokenizer_name": "Graphcore/bert-base-uncased"} 
-    configs["supernetbasev3.standard.nockptsavings.train_glue_original"] =  modify_config(configs["supernetbasev3.standard.train_glue_original"], {"skip_saving_checkpoints" : "yes"})
+    # configs["supernetbasev3.standard.train_glue_original"] = {"learning_rate": 5e-05, "model_name_or_path": "", "num_train_epochs": 10, "per_device_train_batch_size": 4, "task_name": "", "output_dir": "<<OUTPUT_DIR>>", "tokenizer_name": "Graphcore/bert-base-uncased"} 
+    # configs["supernetbasev3.standard.nockptsavings.train_glue_original"] =  modify_config(configs["supernetbasev3.standard.train_glue_original"], {"skip_saving_checkpoints" : "yes"})
     configs["supernetbasev3.evosearch"] =  {"output_dir": "<<OUTPUT_DIR>>", "mixing": "bert-bottleneck", "supernet_ckpt_dir": "", "data_dir": dataset_factory("wikibooks_graphcore_128len_next_sentence_label_removed_w_splits")}
+    configs["supernetbasev3.standard.train_glue_original"] = {"learning_rate": "", "model_name_or_path": "", "num_train_epochs": 10, "per_device_train_batch_size": "", "task_name": "", "output_dir": "<<OUTPUT_DIR>>", "tokenizer_name": "Graphcore/bert-base-uncased",  "skip_saving_checkpoints": "yes", "seed": "333"} 
 
     return configs[name]
 
@@ -158,14 +159,13 @@ def get_model_configs(model_name):
 
 def get_finetuning_sweeps(method):
     sweeps = {}
-
-    sweeps["roberta"] = {"ft_lrs":["1e-5", "2e-5", "3e-5"], "ft_bsz":["16", "32"], "ft_epochs":["10"]}
+    sweeps["roberta"] = {"ft_lrs":["1e-5", "2e-5", "3e-5"], "ft_bsz":["16", "32"], "ft_epochs":["10"], "warmup_ratio": 0.06}
     sweeps["wellreadstudents"] = {"ft_lrs":["3e-4", "1e-4", "5e-5", "3e-5"], "ft_bsz":["8", "16", "32", "64", "128"], "ft_epochs":["4"]}
     sweeps["supershaper"] = {"ft_lrs":["5e-5"], "ft_bsz":["32"], "ft_epochs":["10"]}
-    # sweeps["summer"] 
-
+    sweeps["summer"] = {"ft_lrs": [
+    "1e-6", "2e-6", "5e-6", "1e-5", "2e-5", "5e-5", "1e-4", "2e-4", "5e-4", "1e-3", "2e-3", "5e-3"], "ft_bsz":["8", "16", "32"], "ft_epochs":["10"]}
+    sweeps["bert"] = {"ft_lrs":["5e-5", "3e-5", "2e-5"], "ft_bsz":["16", "32"], "ft_epochs":["2", "3", "4"]}
     return sweeps[method]
-
 
 '''
 phase-1 slide upto 27
@@ -279,10 +279,14 @@ def create_finetuning_experiments_standalone_vs_supernet_v2(models=[ ("graphcore
                             if model_config != "none":
                                 run_config["subtransformer_config_path"] = get_model_configs(model_config)
                         elif glue_config.endswith("train_glue_original"):
-                            run_config = {"exp_name": cur_exp_name, "experiment_name": cur_exp_name, "runs": [{"pyfile": "train_glue_original.py", "params": modify_config_and_to_string(config_factory(glue_config), {"model_name_or_path": model_name_or_path, "task_name": task, "tokenizer_name": tokenizer_name, "learning_rate": lr, "per_device_train_batch_size": int(bsz) // num_gpus, "num_train_epochs": epoch})}]}
+                            if model_config == "none":
+                                run_config = {"exp_name": cur_exp_name, "experiment_name": cur_exp_name, "runs": [{"pyfile": "train_glue_original.py", "params": modify_config_and_to_string(config_factory(glue_config), {"model_name_or_path": model_name_or_path, "task_name": task, "tokenizer_name": tokenizer_name, "learning_rate": lr, "per_device_train_batch_size": int(bsz) // num_gpus, "num_train_epochs": epoch})}]}
+                            else:
+                                run_config = {"exp_name": cur_exp_name, "experiment_name": cur_exp_name, "runs": [{"pyfile": "train_glue_original.py", "params": modify_config_and_to_string(config_factory(glue_config), {"model_name_or_path": model_name_or_path, "task_name": task, "tokenizer_name": tokenizer_name, "learning_rate": lr, "subtransformer_config_path": model_config, "per_device_train_batch_size": int(bsz) // num_gpus, "num_train_epochs": epoch})}]}
                         assert(run_config!=None)
                         experiments.append(run_config)
     return experiments
+
 # script_creator(get_experiments_dir() + "/jul21_v3_finetune_mnli_graphcore_vs_ourbert-w-initbottle", create_finetuning_experiments_standalone_vs_supernet_v2(num_gpus=1), time_in_mins=1000, wandb="offline", num_gpus=1, generate_port=True)
 # script_creator(get_experiments_dir() + "/jul21_v3_8gpu1setting_finetune_mnli_graphcore_vs_ourbert-w-initbottle", create_finetuning_experiments_standalone_vs_supernet_v2(sweep={"ft_lrs":["5e-5"], "ft_bsz":["32"], "ft_epochs":["10"]}, num_gpus=8), time_in_mins=1000, wandb="offline", num_gpus=8)
 #script_creator(get_experiments_dir() + "/jul22_v3_finetune_mnli_ourbert-no-initbottle", create_finetuning_experiments_standalone_vs_supernet_v2(num_gpus=1, models=[ ("ourbert-no-initbottle", "/fsx/ganayu/experiments/supershaper/jul21_v3_bertstandalone_noinit_nobottleneck/12L_768H_5e-4/best_model", "Graphcore/bert-base-uncased", "attention", "bertuncased.nobottleneck.12L_768H") ]), time_in_mins=1000, wandb="offline", num_gpus=1, generate_port=True)
@@ -341,5 +345,46 @@ def create_finetuning_experiments_standalone_vs_supernet_v2(models=[ ("graphcore
 # script_creator(get_experiments_dir() + "/aug1_v3_evosearch_hiddenlayeronly_subnet_train_more_steps", [ {"exp_name": "stage1", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "aug1_v3_evosearch_hiddenlayeronly_subnet_train_more_steps_stage1", "max_train_steps": 100000, "sampling_type": "none", "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/jul23_v3_supernetbase_toktypecorrected/base/best_model", "subtransformer_config_path": get_experiments_dir() + "/aug1_v3_supernetbase_search_different_spaces/hiddenonly/evo_results_29.xls" })}]},  {"exp_name": "nowarmup", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "aug1_v3_evosearch_hiddenlayeronly_subnet_train_more_steps_nowarmup", "max_train_steps": 100000, "num_warmup_steps": 0, "sampling_type": "none", "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/jul23_v3_supernetbase_toktypecorrected/base/best_model", "subtransformer_config_path": get_experiments_dir() + "/aug1_v3_supernetbase_search_different_spaces/hiddenonly/evo_results_29.xls" })}]},   {"exp_name": "5timeslowerlr", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "aug1_v3_evosearch_hiddenlayeronly_subnet_train_more_steps_5timeslowerlr", "max_train_steps": 100000, "learning_rate": 1e-05, "sampling_type": "none", "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/jul23_v3_supernetbase_toktypecorrected/base/best_model", "subtransformer_config_path": get_experiments_dir() + "/aug1_v3_supernetbase_search_different_spaces/hiddenonly/evo_results_29.xls" })}]}  ], time_in_mins=8000, wandb="online") 
 
 # direct finetuning
+def create_finetuning_experiments_standalone_vs_supernet_v3(models=None, tasks=["mnli"], sweep=None, glue_config=None, num_gpus=4):
+    experiments = []
+    for exp_name, model_name_or_path, subtransformer_config_path, tokenizer_name in models:
+        run_config = {"exp_name": exp_name, "runs": []}
+        for task in tasks:
+            for lr in sweep["ft_lrs"]:
+                for bsz in sweep["ft_bsz"]:
+                    for epoch in sweep["ft_epochs"]:
+                        updated_params_config = {"model_name_or_path": model_name_or_path, "task_name": task, "tokenizer_name": tokenizer_name, "learning_rate": lr, "per_device_train_batch_size": int(bsz) // num_gpus, "num_train_epochs": epoch}
+                        if subtransformer_config_path:
+                            updated_params_config["subtransformer_config_path"] = subtransformer_config_path
+                        for param in sweep:
+                            if not param.startswith("ft"):
+                                updated_params_config[param] = sweep[param]
+                        run_info = {"pyfile": "train_glue_original.py", "params": modify_config_and_to_string(config_factory(glue_config), updated_params_config) }
+                        run_config["runs"].append(run_info)
+        experiments.append(run_config)
+    return experiments
+models = []
+# exp_name, model_name_or_path, subtransformer_config_path, tokenizer_name
+models.append(("supershaper", "/fsx/ganayu/experiments/supershaper/jul23_v3_supernetbase_toktypecorrected/base/best_model", "/fsx/ganayu/experiments/supershaper/aug1_v3_supernetbase_search_different_spaces/hiddenonly/evo_results_29.xls", "Graphcore/bert-base-uncased"))
+models.append(("2xtrainbudget", "/fsx/ganayu/experiments/supershaper/jul23_v3_supernetbase_toktypecorrected_2xtrainbudget/base/best_model", "/fsx/ganayu/experiments/supershaper/aug1_v3_supernetbase_search_diff_configs/2xtrainbudget/evo_results_29.xls", "Graphcore/bert-base-uncased"))
+models.append(("sandwch_2random", "/fsx/ganayu/experiments/supershaper/jul25_v3_supernetbase_sandwch_2random/base/best_model", "/fsx/ganayu/experiments/supershaper/aug1_v3_supernetbase_search_diff_configs/sandwch_2random/evo_results_29.xls", "Graphcore/bert-base-uncased"))
+# for sweep in ["roberta", "bert", "wellreadstudents", "supershaper", "summer"]:
+#    experiments = create_finetuning_experiments_standalone_vs_supernet_v3(models=[models[0]], sweep=get_finetuning_sweeps(sweep), glue_config="supernetbasev3.standard.train_glue_original", tasks=["mrpc", "cola"], num_gpus=4)
+#    script_creator(get_experiments_dir() + "/aug2_supershaper_directfinetune_sweepcheck_%s_mrpc_cola"%(sweep), experiments, time_in_mins=10000, wandb="no", num_gpus=4, generate_port=True, part_size=25)
+# experiments = create_finetuning_experiments_standalone_vs_supernet_v3(models=models, sweep=get_finetuning_sweeps("bert"), glue_config="supernetbasev3.standard.train_glue_original", tasks=["mnli", "cola", "mrpc", "sst2"], num_gpus=8)
+# script_creator(get_experiments_dir() + "/aug2_directfinetune_mnli_supershaper_2xtrainbudget_sandwch_2random", experiments, time_in_mins=10000, wandb="no", num_gpus=8, generate_port=True, part_size=25)
 
+# directfinetuning - one
+# script_creator(get_experiments_dir() + "/aug2_v3_finetune_supershaper_60M_direct", create_finetuning_experiments_standalone_vs_supernet_v2(num_gpus=4, tasks=["mnli"], glue_config="supernetbasev3.standard.train_glue_original", sweep=get_finetuning_sweeps("bert"), models=[ ("supershaper-60M-direct", "/fsx/ganayu/experiments/supershaper/jul23_v3_supernetbase_toktypecorrected/base/best_model", "Graphcore/bert-base-uncased", None, "/fsx/ganayu/experiments/supershaper/aug1_v3_supernetbase_search_different_spaces/hiddenonly/evo_results_29.xls")]), time_in_mins=1000, wandb="no", num_gpus=4, generate_port=True, part_size=5)
+# script_creator(get_experiments_dir() + "/aug2_v3_finetune_v2_60M_direct", create_finetuning_experiments_standalone_vs_supernet_v2(num_gpus=4, tasks=["mnli"], glue_config="supernetbasev3.standard.train_glue_original", sweep=get_finetuning_sweeps("bert"), models=[ ("v2-60M-direct", get_experiments_dir() + "/jul27_v3_supernetbase_search_space_ffn_v2_hidlayer/v2/best_model", "Graphcore/bert-base-uncased", None, get_experiments_dir() + "/aug1_v3_supernetbase_search_different_spaces/v2/evo_results_29.xls")]), time_in_mins=1000, wandb="no", num_gpus=4, generate_port=True, part_size=5)
+# 100Kfinetuning - one
+# script_creator(get_experiments_dir() + "/aug2_v3_finetune_supershaper_60M_100Ksteps", create_finetuning_experiments_standalone_vs_supernet_v2(num_gpus=4, tasks=["mnli"], glue_config="supernetbasev3.standard.train_glue_original", sweep=get_finetuning_sweeps("bert"), models=[ ("supershaper-60M-100Ksteps", "/fsx/ganayu/experiments/supershaper/aug1_v3_evosearch_hiddenlayeronly_subnet_train_more_steps/nowarmup/best_model", "Graphcore/bert-base-uncased", None, "/fsx/ganayu/experiments/supershaper/aug1_v3_supernetbase_search_different_spaces/hiddenonly/evo_results_29.xls")]), time_in_mins=1000, wandb="no", num_gpus=4, generate_port=True, part_size=5)
+
+# continue pretraining - 2xtrainbudget, v2
+# script_creator(get_experiments_dir() + "/aug1_v3_evosearch_v2_2xbudget_subnet_train_more_steps", [ {"exp_name": "v2", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "aug1_v3_evosearch_v2_2xbudget_subnet_train_more_steps_v2", "max_train_steps": 100000, "sampling_type": "none", "num_warmup_steps": 0, "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/jul27_v3_supernetbase_search_space_ffn_v2_hidlayer/v2/best_model", "subtransformer_config_path": get_experiments_dir() + "/aug1_v3_supernetbase_search_different_spaces/v2/evo_results_29.xls" })}]},  {"exp_name": "2xbudget", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "aug1_v3_evosearch_hiddenlayeronly_subnet_train_more_steps_2xbudget", "max_train_steps": 100000, "num_warmup_steps": 0, "sampling_type": "none", "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/jul23_v3_supernetbase_toktypecorrected_2xtrainbudget/base/best_model", "subtransformer_config_path": get_experiments_dir() + "/aug1_v3_supernetbase_search_diff_configs/2xtrainbudget/evo_results_29.xls" })}]}  ], time_in_mins=8000, wandb="online") 
+# finetune the above two
+# script_creator(get_experiments_dir() + "/aug4_v3_finetune_v2_2xbudget_60M_100Ksteps", create_finetuning_experiments_standalone_vs_supernet_v2(num_gpus=4, tasks=["mnli"], glue_config="supernetbasev3.standard.train_glue_original", sweep=get_finetuning_sweeps("bert"), models=[ ("v2", get_experiments_dir() + "/aug1_v3_evosearch_v2_2xbudget_subnet_train_more_steps/v2/best_model", "Graphcore/bert-base-uncased", None, get_experiments_dir() + "/aug1_v3_supernetbase_search_different_spaces/v2/evo_results_29.xls"), ("2xbudget", get_experiments_dir() + "/aug1_v3_evosearch_v2_2xbudget_subnet_train_more_steps/2xbudget/best_model", "Graphcore/bert-base-uncased", None, get_experiments_dir() + "/aug1_v3_supernetbase_search_diff_configs/2xtrainbudget/evo_results_29.xls")]), time_in_mins=1000, wandb="no", num_gpus=4, generate_port=True, part_size=5)
+
+# continue pretraining - sandwich2rand
+# script_creator(get_experiments_dir() + "/aug4_v3_sandwch_2rand_subnet_train_more_steps", [ {"exp_name": "sandwch_2rand", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "aug4_v3_sandwch_2rand_subnet_train_more_steps_sandwch_2rand", "max_train_steps": 100000, "sampling_type": "none", "num_warmup_steps": 0, "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/jul25_v3_supernetbase_sandwch_2random/base/best_model", "subtransformer_config_path": get_experiments_dir() + "/aug1_v3_supernetbase_search_diff_configs/sandwch_2random/evo_results_29.xls" })}]}], time_in_mins=8000, wandb="online")
 

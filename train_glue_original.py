@@ -16,13 +16,16 @@
 import argparse
 import logging
 import math
-import os
+import os, sys
 import random
+import json
 
+from xlrd import open_workbook
 import datasets
 from datasets import load_dataset, load_metric
 from torch.utils.data.dataloader import DataLoader
 from tqdm.auto import tqdm
+from utils import (calculate_params_from_config, millify)
 
 import transformers
 from accelerate import Accelerator
@@ -37,9 +40,10 @@ from transformers import (
     default_data_collator,
     get_scheduler,
     set_seed,
+    BertConfig
 )
 from transformers.utils.versions import require_version
-
+from custom_layers import custom_bert
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +61,11 @@ task_to_keys = {
     "wnli": ("sentence1", "sentence2"),
 }
 
+def convert_to_dict(string):
+    _dict = json.loads(
+        string.replace("BertConfig ", "").replace("\n", "").replace('""', '"')
+    )
+    return BertConfig(**_dict)
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Finetune a transformers model on a text classification task")
@@ -158,6 +167,9 @@ def parse_args():
         default=None,
         help=f"The path to a subtransformer configration",
     )
+    parser.add_argument(
+        "--warmup_ratio", type=float, default=0, help="Warump ratio in the lr scheduler."
+    )
 
 
     args = parser.parse_args()
@@ -258,12 +270,33 @@ def main():
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer)
-    config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
-    model = AutoModelForSequenceClassification.from_pretrained(
-        args.model_name_or_path,
-        from_tf=bool(".ckpt" in args.model_name_or_path),
-        config=config,
-    )
+    if not args.subtransformer_config_path:
+        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.model_name_or_path,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
+    else:
+        rb = open_workbook(args.subtransformer_config_path, formatting_info=True)
+        best_config_sheet = rb.sheet_by_name("best_config")
+        print("Subnet info: Model-Size=%s, Val-PPL=%s"%(best_config_sheet.cell(2, 1).value, best_config_sheet.cell(3, 1).value))
+        print("Subnet info: Gene=%s"%(best_config_sheet.cell(1, 1).value))
+        subnet_config = convert_to_dict(best_config_sheet.cell(4, 1).value)
+        elastic_keys = eval(best_config_sheet.cell(7, 1).value)
+        gene_choices = eval(best_config_sheet.cell(8, 1).value)
+        gene_names = eval(best_config_sheet.cell(9, 1).value)
+        elastickey2ranges = eval(best_config_sheet.cell(10, 1).value)
+        print("Subnet info: Search_space_id=%s"%(best_config_sheet.cell(6, 1).value))
+        print("Subnet info: elastic_keys=", elastic_keys)
+        print("Subnet info: gene_choices=", gene_choices)
+        print("Subnet info: gene_names=", gene_names)
+        print("Subnet info: elastickey2ranges=", elastickey2ranges)
+        subnet_config.num_labels = num_labels
+        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config)
+        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
+        # config.hidden_dropout_prob = 0.1
 
     # Preprocessing the datasets
     if args.task_name is not None:
@@ -375,6 +408,11 @@ def main():
         model, optimizer, train_dataloader, eval_dataloader
     )
 
+    if args.subtransformer_config_path is not None:
+        print('setting the subnet...')
+        print(subnet_config)
+        model.module.set_sample_config(subnet_config)
+
     # Note -> the training dataloader needs to be prepared before we grab his length below (cause its length will be
     # shorter in multiprocess)
 
@@ -388,7 +426,7 @@ def main():
     lr_scheduler = get_scheduler(
         name=args.lr_scheduler_type,
         optimizer=optimizer,
-        num_warmup_steps=args.num_warmup_steps,
+        num_warmup_steps=int(args.warmup_ratio*args.max_train_steps),  # args.num_warmup_steps, convert as ratio
         num_training_steps=args.max_train_steps,
     )
 
@@ -439,7 +477,8 @@ def main():
             )
 
         eval_metric = metric.compute()
-        logger.info(f"epoch {epoch}: {eval_metric}")
+        logger.info(f"epoch {epoch}: {eval_metric} lr={args.learning_rate}, bs={args.per_device_train_batch_size}, ep={args.num_train_epochs}")
+        print(f"epoch {epoch}: {eval_metric} lr={args.learning_rate}, bs={args.per_device_train_batch_size}, ep={args.num_train_epochs}")
 
     if args.skip_saving_checkpoints != "yes" and args.output_dir is not None:
         accelerator.wait_for_everyone()
@@ -447,7 +486,7 @@ def main():
         unwrapped_model.save_pretrained(args.output_dir, save_function=accelerator.save)
 
     if args.task_name == "mnli":
-        # Final evaluation on mismatched validation set
+        # Final evaluation on mismatched validation set # changed to matched
         eval_dataset = processed_datasets["validation_mismatched"]
         eval_dataloader = DataLoader(
             eval_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size
@@ -465,7 +504,7 @@ def main():
 
         eval_metric = metric.compute()
         logger.info(f"mnli-mm: {eval_metric}")
-
+        print(f"mnli-mm: {eval_metric}", args.learning_rate, args.per_device_train_batch_size, args.num_train_epochs)
 
 if __name__ == "__main__":
     main()

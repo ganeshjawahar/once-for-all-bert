@@ -1506,7 +1506,7 @@ class BertEncoder(nn.Module):
         self.use_bottleneck = config.mixing == "bert-bottleneck"
 
         self.layer = nn.ModuleList(
-            [layer_function(config) for _ in range(config.num_hidden_layers)]
+            [layer_function(config) for _ in range(config.sample_num_hidden_layers)] # changed to sample_num_hidden_layers (finetuning bug)
         )
         self.sample_num_hidden_layers = config.num_hidden_layers
         # to count the amount of times a layer is dropped
@@ -1542,7 +1542,7 @@ class BertEncoder(nn.Module):
             layers_to_drop = drop_vector
         else:
             layers_to_drop = dropout_layers(
-                self.sample_num_hidden_layers, config.layer_drop_prob
+                config.sample_num_hidden_layers, config.layer_drop_prob
             )
 
         for i, (drop, layer) in enumerate(zip(layers_to_drop, self.layer)):
@@ -1625,7 +1625,7 @@ class BertEncoder(nn.Module):
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            layer_head_mask = head_mask[i] if head_mask is not None else None
+            layer_head_mask = head_mask[i] if head_mask is not None and i < len(head_mask) else None # changed for variable num layers during finetuning
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
             if getattr(self.config, "gradient_checkpointing", False) and self.training:

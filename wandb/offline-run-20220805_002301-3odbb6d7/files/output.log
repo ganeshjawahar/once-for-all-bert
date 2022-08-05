@@ -1,0 +1,18 @@
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "train_mlm.py", line 2108, in <module>
+    main()
+  File "train_mlm.py", line 1064, in main
+    subtransformer_config = read_json(args.subtransformer_config_path)
+  File "/fsx/ganayu/code/SuperShaper/utils/__init__.py", line 229, in read_json
+    return json.load(f)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
