@@ -1,0 +1,35 @@
+2022-08-06 23:51:48,659 INFO    MainThread:1710730 [internal.py:wandb_internal():90] W&B internal server running at pid: 1710730, started at: 2022-08-06 23:51:48.656697
+2022-08-06 23:51:48,685 INFO    WriterThread:1710730 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220806_235146-2234nni7/run-2234nni7.wandb
+2022-08-06 23:51:48,686 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: run_start
+2022-08-06 23:51:48,721 DEBUG   HandlerThread:1710730 [meta.py:__init__():35] meta init
+2022-08-06 23:51:48,721 DEBUG   HandlerThread:1710730 [meta.py:__init__():49] meta init done
+2022-08-06 23:51:48,721 DEBUG   HandlerThread:1710730 [meta.py:probe():209] probe
+2022-08-06 23:51:48,757 DEBUG   HandlerThread:1710730 [meta.py:_setup_git():199] setup git
+2022-08-06 23:51:48,845 DEBUG   HandlerThread:1710730 [meta.py:_setup_git():206] setup git done
+2022-08-06 23:51:48,845 DEBUG   HandlerThread:1710730 [meta.py:_save_pip():53] save pip
+2022-08-06 23:51:48,850 DEBUG   HandlerThread:1710730 [meta.py:_save_pip():67] save pip done
+2022-08-06 23:51:48,851 DEBUG   HandlerThread:1710730 [meta.py:_save_conda():74] save conda
+2022-08-06 23:52:04,690 DEBUG   HandlerThread:1710730 [meta.py:_save_conda():84] save conda done
+2022-08-06 23:52:04,690 DEBUG   HandlerThread:1710730 [meta.py:probe():247] probe done
+2022-08-06 23:52:16,193 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:16,921 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:17,626 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:18,261 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:18,971 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:19,641 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:20,345 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:21,005 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:21,858 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:22,514 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:23,212 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:23,913 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:24,587 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:25,245 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:25,963 DEBUG   HandlerThread:1710730 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-06 23:52:26,305 WARNING MainThread:1710730 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-08-06 23:52:26,658 WARNING MainThread:1710730 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-08-06 23:52:26,658 ERROR   MainThread:1710730 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-08-06 23:52:26,701 INFO    SenderThread:1710730 [sender.py:finish():1111] shutting down sender
+2022-08-06 23:52:26,964 INFO    WriterThread:1710730 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220806_235146-2234nni7/run-2234nni7.wandb
+2022-08-06 23:52:26,965 INFO    HandlerThread:1710730 [handler.py:finish():806] shutting down handler
+2022-08-06 23:52:26,967 INFO    MainThread:1710730 [internal.py:handle_exit():80] Internal process exited

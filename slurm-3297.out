@@ -1,0 +1,16 @@
+39101471 2967796
+new splits  37146398 1955073 2967796
+DatasetDict({
+    train: Dataset({
+        features: ['input_ids', 'attention_mask', 'token_type_ids'],
+        num_rows: 4923161
+    })
+    test: Dataset({
+        features: ['input_ids', 'attention_mask', 'token_type_ids'],
+        num_rows: 2636672
+    })
+    validation: Dataset({
+        features: ['input_ids', 'attention_mask', 'token_type_ids'],
+        num_rows: 350183
+    })
+})

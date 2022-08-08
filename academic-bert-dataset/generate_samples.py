@@ -48,7 +48,7 @@ if __name__ == "__main__":
         "--max_seq_length", type=int, help="Specify the maximum sequence length", default=128)
     parser.add_argument(
         "--model_name",
-        type="str",
+        type=str,
         required=True,
         help="Pre-trained models name (HF format): bert-base-uncased, "
         "bert-large-uncased, bert-base-cased, roberta-base, roberta-large",
@@ -74,16 +74,18 @@ if __name__ == "__main__":
     logger.info("Creating new hdf5 files ...")
 
     def create_shard(f_path, shard_idx, set_group, args):
-        output_filename = os.path.join(new_shards_output, f"{set_group}_shard_{shard_idx}.hdf5")
+        # output_filename = os.path.join(new_shards_output, f"{set_group}_shard_{shard_idx}.hdf5")
+        output_filename = os.path.join(new_shards_output, f_path.split("/")[-1].split(".txt")[0] + ".hdf5")
         if "roberta" in args.model_name:
             hdf5_preprocessing_cmd = "python data/create_pretraining_data_roberta.py"
         else:
             hdf5_preprocessing_cmd = "python data/create_pretraining_data.py"
         hdf5_preprocessing_cmd += f" --input_file={f_path}"
         hdf5_preprocessing_cmd += f" --output_file={output_filename}"
-        hdf5_preprocessing_cmd += (
-            f" --vocab_file={args.vocab_file}" if args.vocab_file is not None else ""
-        )
+        if "roberta" not in args.model_name:
+            hdf5_preprocessing_cmd += (
+                f" --vocab_file={args.vocab_file}" if args.vocab_file is not None else ""
+            )
         hdf5_preprocessing_cmd += (
             f" --bert_model={args.model_name}" if args.model_name is not None else ""
         )
@@ -105,11 +107,24 @@ if __name__ == "__main__":
         return last_process
 
     last_process = None
-    shard_idx = {"train": 0, "test": 0}
+    # shard_idx = {"train": 0, "test": 0}
+    new_shard_files = []
+    for f in shard_files:
+        if not os.path.exists(os.path.join(new_shards_output, f.split("/")[-1].split(".txt")[0] + ".hdf5")):
+            new_shard_files.append(f)
+        elif "roberta" in args.model_name and ("training94." in f):
+            new_shard_files.append(f)
+
+    shard_files = new_shard_files
+    shard_files.sort()
     for dup_idx in range(args.dup_factor):
-        for f in shard_files:
+        for fi, f in enumerate(shard_files):
             file_name = os.path.basename(f)
             set_group = "train" if "train" in file_name else "test"
-            last_process = create_shard(f, shard_idx[set_group], set_group, args)
-            shard_idx[set_group] += 1
+            # last_process = create_shard(f, shard_idx[set_group], set_group, args)
+            last_process = create_shard(f, fi, set_group, args)
+            # shard_idx[set_group] += 1
     last_process.wait()
+
+
+

@@ -359,12 +359,14 @@ class EvoSearch:
                 else:
                     crossover_gene["feat_config"][gi] = cur_genes[1]["feat_config"][gi]
             crossover_gene = self.feature2arch(crossover_gene)
-            if self.satisfy_constraint(crossover_gene["arch_config"]):
+            if self.satisfy_constraint(crossover_gene["arch_config"]) and self.notduplicategene(crossover_gene["feat_config"], crossover_genes, another_population=genes):
                 crossover_genes.append(crossover_gene)
                 k += 1
         return crossover_genes
 
     def mutate(self, genes):
+        if len(genes) == 0:
+            return []
         mutated_genes = []
         k = 0
         while k < self.mutation_size:
@@ -375,7 +377,7 @@ class EvoSearch:
                 if np.random.uniform() < self.mutation_prob:
                     mutated_gene["feat_config"][gi] = random.choice(self.gene_choices[gi])
             mutated_gene = self.feature2arch(mutated_gene)
-            if self.satisfy_constraint(mutated_gene["arch_config"]):
+            if self.satisfy_constraint(mutated_gene["arch_config"]) and self.notduplicategene(mutated_gene["feat_config"], mutated_genes, another_population=genes):
                 mutated_genes.append(mutated_gene)
                 k += 1
         return mutated_genes
@@ -384,6 +386,10 @@ class EvoSearch:
         temp_genes = []
         for gene in genes:
             temp_genes.append((gene["metrics"][self.fitness_metric], gene ))
+        scores = []
+        for gene in temp_genes:
+            scores.append(gene[0])
+        # print(scores)
         temp_genes.sort()
         parents = []
         for gene in temp_genes[0:self.parent_size]:
@@ -408,10 +414,20 @@ class EvoSearch:
         self.seed_count += 1
         for arch_config in cand_archs:
             feat_config = self.arch2feature(arch_config)
-            if self.satisfy_constraint(arch_config):
+            if self.satisfy_constraint(arch_config) and self.notduplicategene(feat_config, population):
                 population.append({"arch_config": arch_config, "feat_config": feat_config})
         print('initial population size = %d/%d'%(len(population), self.population_size))
         return population
+    
+    def notduplicategene(self, potential_gene_feat_config, cur_population, another_population=None):
+        for cand in cur_population:
+            if str(potential_gene_feat_config) == str(cand["feat_config"]):
+                return False
+        if another_population is not None:
+            for cand in another_population:
+                if str(potential_gene_feat_config) == str(cand["feat_config"]):
+                    return False
+        return True
 
     def get_elastic_keys(self):
         elastic_keys = []

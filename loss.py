@@ -92,19 +92,44 @@ def compute_student_loss(
 
         cross_entropy_loss = -torch.bmm(real_output_soft, model_output_log_prob)
         cross_entropy_loss = cross_entropy_loss.mean()
-        overall_loss = cross_entropy_loss * args.inplace_kd_distill_loss_weights
-        losses["student_distill_loss"] = cross_entropy_loss.item()
+        # overall_loss = cross_entropy_loss * args.inplace_kd_distill_loss_weights
+        student_distill_loss = 0.0
         if "hard" in args.distillation_type:
-            overall_loss = overall_loss + student_mlm_loss
+            student_distill_loss = 0.5 * student_mlm_loss + 0.5 * cross_entropy_loss.item()
+        else:
+            student_distill_loss = cross_entropy_loss
+        student_distill_loss = student_distill_loss / args.gradient_accumulation_steps
+        overall_loss = overall_loss + student_distill_loss
+        losses["student_distill_loss"] = student_distill_loss.item()
     
     if "hiddenlastlayer" in args.distillation_type:
         non_trainable_layernorm = nn.LayerNorm(teacher_info["teacher_hidden_states"][-1].shape[1:], elementwise_affine=False)
-        for teacher_hidden, student_hidden in zip(teacher_info["teacher_hidden_states"][-1:], outputs.hidden_states[-1:]):
-            teacher_hidden = non_trainable_layernorm(teacher_hidden.detach()) 
-            student_hidden = non_trainable_layernorm(student_hidden)
-            fkt = nn.MSELoss()(teacher_hidden, student_hidden)
-            losses["student_hidden_loss"] = fkt.item()
-            overall_loss = overall_loss + fkt
+        teacher_hidden, student_hidden  = teacher_info["teacher_hidden_states"][-1], outputs.hidden_states[-1]
+        teacher_hidden = non_trainable_layernorm(teacher_hidden.detach()) 
+        student_hidden = non_trainable_layernorm(student_hidden)
+        fkt = nn.MSELoss()(teacher_hidden, student_hidden)
+        student_hidden_loss = 0.0
+        if "hard" in args.distillation_type:
+            student_hidden_loss = 0.5 * student_mlm_loss + 0.5 * fkt.item()
+        else:
+            student_hidden_loss = fkt
+        student_hidden_loss = student_hidden_loss / args.gradient_accumulation_steps
+        overall_loss = overall_loss + student_hidden_loss
+        losses["student_hidden_loss"] = student_hidden_loss.item()
+    
+    if "attentionlastlayer" in args.distillation_type:
+        teacher_attention, student_attention = teacher_info["teacher_attention_maps"][-1], outputs.attentions[-1]
+        student_attention = student_attention.clamp(min=1e-4).log()
+        student_kl = -(teacher_attention.detach() * student_attention)
+        akt = torch.mean(torch.sum(student_kl, axis=-1))
+        student_attention_loss = 0.0
+        if "hard" in args.distillation_type:
+            student_attention_loss = 0.5 * student_mlm_loss + 0.5 * akt.item()
+        else:
+            student_attention_loss = akt
+        student_attention_loss = student_attention_loss / args.gradient_accumulation_steps
+        overall_loss = overall_loss + student_attention_loss
+        losses["student_attention_loss"] = student_attention_loss.item()
 
     losses["overall_loss"] = overall_loss.item()
 

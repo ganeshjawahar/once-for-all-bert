@@ -703,6 +703,20 @@ def parse_args():
         help=f"only useful if inplace_distillation is set",
     )
 
+    parser.add_argument(
+        "--freeze_largest_model",
+        type=str,
+        default="no",
+        help=f"set yes to do turn off largest transformer (teacher) updates",
+    )
+
+    parser.add_argument(
+        "--freeze_smallest_model",
+        type=str,
+        default="no",
+        help=f"set yes to do turn off smallest transformer updates",
+    )
+
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
     # )
@@ -723,10 +737,11 @@ def parse_args():
     if args.alpha_divergence:
         assert args.inplace_distillation
 
-    if args.inplace_distillation == 1:
-        assert (
-            args.sampling_rule == "sandwich"
-        ), "Sampling rule needs to be sandwich if using inplace distillation"
+    # commented to do inplace kd during subnet pretraining
+    #if args.inplace_distillation == 1:
+    #    assert (
+    #        args.sampling_rule == "sandwich"
+    #    ), "Sampling rule needs to be sandwich if using inplace distillation"
 
     if (
         args.dataset_name is None
@@ -976,7 +991,8 @@ def main():
             additional_random_softmaxing=args.additional_random_softmaxing,
             random_layer_selection_probability=args.random_layer_selection_probability, 
             use_hypernet_w_low_rank=args.use_hypernet_w_low_rank, bottleneck_rank=args.bottleneck_rank,
-            hypernet_hidden_size=args.hypernet_hidden_size
+            hypernet_hidden_size=args.hypernet_hidden_size,
+            search_space_id=args.search_space_id
         )
     else:
         global_config = get_supertransformer_config(
@@ -1061,33 +1077,33 @@ def main():
         )
 
     if args.subtransformer_config_path is not None:
-        df = pd.read_csv(args.subtransformer_config_path)
-        df["configs"] = df["configs"].map(convert_to_dict)
-        subtransformer_config = df.iloc[0]["configs"] # pick first row (outputted by evo search)
-        subtransformer_config = subtransformer_config.to_dict()
-        for key, value in subtransformer_config.items():
-            # update global_config with attributes of subtransformer_config
-            if key in ["rewire", "label2id", "id2label", "mixing"]:
-                continue
-            setattr(global_config, key, value)
-        '''
-        rb = open_workbook(args.subtransformer_config_path, formatting_info=True)
-        best_config_sheet = rb.sheet_by_name("best_config")
-        print("Subnet info: Model-Size=%s, Val-PPL=%s"%(best_config_sheet.cell(2, 1).value, best_config_sheet.cell(3, 1).value))
-        print("Subnet info: Gene=%s"%(best_config_sheet.cell(1, 1).value))
-        subnet_config = convert_to_dict(best_config_sheet.cell(4, 1).value)
-        elastic_keys = eval(best_config_sheet.cell(7, 1).value)
-        gene_choices = eval(best_config_sheet.cell(8, 1).value)
-        gene_names = eval(best_config_sheet.cell(9, 1).value)
-        elastickey2ranges = eval(best_config_sheet.cell(10, 1).value)
-        print("Subnet info: Search_space_id=%s"%(best_config_sheet.cell(6, 1).value))
-        print("Subnet info: elastic_keys=", elastic_keys)
-        print("Subnet info: gene_choices=", gene_choices)
-        print("Subnet info: gene_names=", gene_names)
-        print("Subnet info: elastickey2ranges=", elastickey2ranges)
-        for key in elastic_keys:
-            setattr(global_config, key, getattr(subnet_config, key))
-        '''
+        if args.subtransformer_config_path.endswith(".csv"):
+            df = pd.read_csv(args.subtransformer_config_path)
+            df["configs"] = df["configs"].map(convert_to_dict)
+            subtransformer_config = df.iloc[0]["configs"] # pick first row (outputted by evo search)
+            subtransformer_config = subtransformer_config.to_dict()
+            for key, value in subtransformer_config.items():
+                # update global_config with attributes of subtransformer_config
+                if key in ["rewire", "label2id", "id2label", "mixing"]:
+                    continue
+                setattr(global_config, key, value)
+        else:
+            rb = open_workbook(args.subtransformer_config_path, formatting_info=True)
+            best_config_sheet = rb.sheet_by_name("best_config")
+            print("Subnet info: Model-Size=%s, Val-PPL=%s"%(best_config_sheet.cell(2, 1).value, best_config_sheet.cell(3, 1).value))
+            print("Subnet info: Gene=%s"%(best_config_sheet.cell(1, 1).value))
+            subnet_config = convert_to_dict(best_config_sheet.cell(4, 1).value)
+            elastic_keys = eval(best_config_sheet.cell(7, 1).value)
+            gene_choices = eval(best_config_sheet.cell(8, 1).value)
+            gene_names = eval(best_config_sheet.cell(9, 1).value)
+            elastickey2ranges = eval(best_config_sheet.cell(10, 1).value)
+            print("Subnet info: Search_space_id=%s"%(best_config_sheet.cell(6, 1).value))
+            print("Subnet info: elastic_keys=", elastic_keys)
+            print("Subnet info: gene_choices=", gene_choices)
+            print("Subnet info: gene_names=", gene_names)
+            print("Subnet info: elastickey2ranges=", elastickey2ranges)
+            for key in elastic_keys:
+                setattr(global_config, key, getattr(subnet_config, key))
 
         logger.info(
             "=================================================================="
@@ -1171,6 +1187,7 @@ def main():
             model = custom_bert.BertForMaskedLM.from_pretrained(args.model_name_or_path, config=global_config)
         else:
             print('initialized with random BERT weights')
+            print(global_config)
             model = custom_bert.BertForMaskedLM(global_config)
 
     # if rewiring and resuming from checkpoint, we will load the rewiring weights seperately
@@ -1671,7 +1688,6 @@ def main():
                     sample_one_arch=args.sample_one_arch,
                 )
                 # k_count = 0
-
                 super_config_small = config_dict["smallest_subtransformer"]
                 # list of random subtransformers with len pop_size
                 super_configs = config_dict["random_subtransformers"]
@@ -1683,11 +1699,10 @@ def main():
                                 "additional layer to be softmaxed": next_layer,
                             }
                         )
-
             track_loss = step % args.logging_steps == 0 and step > 0
 
             ### Applying Sandwich Rule ###
-            if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice in ["smallest", "biggest"]:
+            if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice in ["smallest", "biggest"] or args.inplace_distillation:
 
                 if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "biggest":
                     ## Sample Supertransformer
@@ -1728,7 +1743,20 @@ def main():
 
                         # replace the labels in our batch to soft_targets
                         # batch["labels"] = soft_logits
-
+                elif args.inplace_distillation and args.freeze_largest_model == "yes" and args.freeze_smallest_model == "yes":
+                    # need teacher logits
+                    model.eval()
+                    model.set_sample_config(global_config, drop_layers=True)
+                    outputs = model(**batch)
+                    teacher_info = {}
+                    if "hiddenlastlayer" in args.distillation_type:
+                        teacher_info["teacher_hidden_states"] = outputs.hidden_states
+                    if "attentionlastlayer" in args.distillation_type:
+                        teacher_info["teacher_attention_maps"] = outputs.attentions
+                    if "logits" in args.distillation_type:
+                        teacher_info["teacher_logits"] = outputs.logits.detach()
+                    model.train()
+                    # freeze_largest_model and freeze_smallest_model automatically works
 
                 if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "smallest":
                     ## Sample Smallest Subtransformer
@@ -1767,10 +1795,10 @@ def main():
                         
                         model.set_sample_config(super_config, drop_layers=True)
 
-                        for layer_idx, hidden_size in enumerate(
-                            super_config.sample_hidden_size
-                        ):
-                            per_layer_sampled_counts[layer_idx][hidden_size] += 1
+                        #for layer_idx, hidden_size in enumerate(
+                        #    super_config.sample_hidden_size
+                        #):
+                        #    per_layer_sampled_counts[layer_idx][hidden_size] += 1
 
                     outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
                     loss = outputs.loss
@@ -1794,8 +1822,7 @@ def main():
             # cleanup
             if args.inplace_distillation or args.distillation_type:
                 del teacher_info
-                
-
+            
             if (
                 step % args.gradient_accumulation_steps == 0
                 or step == len(train_dataloader) - 1
@@ -1825,14 +1852,24 @@ def main():
                             )
                     else:
                         log = {}
-                        log["Supertransformer Teacher mlm loss"] = teacher_mlm_loss.item()
-                        log["Smallest Student mlm loss"] =  smallest_student_losses_dict["student_mlm_loss"]
+                        if args.freeze_largest_model == "no":
+                            log["Supertransformer Teacher mlm loss"] = teacher_mlm_loss.item()
+                        if args.freeze_smallest_model == "no":
+                            log["Smallest Student mlm loss"] =  smallest_student_losses_dict["student_mlm_loss"]
+                        if args.freeze_largest_model == "yes" and args.freeze_smallest_model == "yes":
+                            log["Subtransformer mlm loss"] = sampled_student_losses_dict["student_mlm_loss"]
                         if "logits" in args.distillation_type:
-                            log["Smallest Student distill loss"] = smallest_student_losses_dict["student_distill_loss"]
+                            if args.freeze_smallest_model == "no":
+                                log["Smallest Student distill loss"] = smallest_student_losses_dict["student_distill_loss"]
                             log["Subtransformer Student distill loss"] = sampled_student_losses_dict["student_distill_loss"]
                         if "hiddenlastlayer" in args.distillation_type:
-                            log["Smallest Student hidden loss"] = smallest_student_losses_dict["student_hidden_loss"]
+                            if args.freeze_smallest_model == "no":
+                                log["Smallest Student hidden loss"] = smallest_student_losses_dict["student_hidden_loss"]
                             log["Subtransformer Student hidden loss"] = sampled_student_losses_dict["student_hidden_loss"]
+                        if "attentionlastlayer" in args.distillation_type:
+                            if args.freeze_smallest_model == "no":
+                                log["Smallest Student attention loss"] = smallest_student_losses_dict["student_attention_loss"]
+                            log["Subtransformer Student attention loss"] = sampled_student_losses_dict["student_attention_loss"]
                         wandb.log(log)
                         '''
                         if args.layerwise_distillation or args.distillation_type:

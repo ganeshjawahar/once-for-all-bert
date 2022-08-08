@@ -1,0 +1,7 @@
+Subnet info: Model-Size=66712608, Val-PPL=5.837431735772962
+Subnet info: Gene=[360, 240, 240, 240, 480, 360, 480, 480, 480, 480, 600, 540]
+Subnet info: Search_space_id=
+Subnet info: elastic_keys= ['sample_hidden_size']
+Subnet info: gene_choices= [[120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768]]
+Subnet info: gene_names= ['sample_hidden_size_0', 'sample_hidden_size_1', 'sample_hidden_size_2', 'sample_hidden_size_3', 'sample_hidden_size_4', 'sample_hidden_size_5', 'sample_hidden_size_6', 'sample_hidden_size_7', 'sample_hidden_size_8', 'sample_hidden_size_9', 'sample_hidden_size_10', 'sample_hidden_size_11']
+Subnet info: elastickey2ranges= {'sample_hidden_size': [0, 12]}

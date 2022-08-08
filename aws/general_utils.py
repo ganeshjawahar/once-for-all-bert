@@ -227,19 +227,83 @@ def get_best_ft_results():
 # get_best_ft_results()
 
 def get_best_mnli_ft_results(experiments):
-    for exp in experiments:
-        best_mnli_dev_acc = None
-        for f in glob.glob("/fsx/ganayu/experiments/supershaper/%s/*/sys.out"%(exp)):
-            last_acc = None
-            for line in open(f):
-                line = line.strip()
-                if "accuracy" in line and "lr=" in line:
-                    last_acc = float(line.split("'accuracy': ")[1].split("}")[0])
-            if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
-                best_mnli_dev_acc = last_acc
-        print(exp, best_mnli_dev_acc)
+    for model in [ "2xtrainbudget"]: #"v2", "2xbudget", "sandwch_2rand",]:
+        for task in ["cola", "mrpc", "sst2"]:
+            for exp in experiments:
+                best_mnli_dev_acc = None
+                for f in glob.glob("/fsx/ganayu/experiments/supershaper/%s/*%s*%s*/sys.out"%(exp, model, task)):
+                    last_acc = None
+                    for line in open(f):
+                        line = line.strip()
+                        if "accuracy" in line and "lr=" in line:
+                            if "'f1'" in line:
+                                last_acc = 100.0*float(line.split("'accuracy': ")[1].split(",")[0])
+                            else:
+                                last_acc = 100.0*float(line.split("'accuracy': ")[1].split("}")[0])
+                        elif "matthews_correlation" in line:
+                            last_acc = 100.0*float(line.split("'matthews_correlation': ")[1].split("}")[0])
+                    if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
+                        best_mnli_dev_acc = last_acc
+                print(model, task, best_mnli_dev_acc)
 
 # get_best_mnli_ft_results(["aug2_v3_finetune_supershaper_60M_direct", "aug2_v3_finetune_supershaper_60M_100Ksteps", "aug2_v3_finetune_v2_60M_direct"])
+# get_best_mnli_ft_results(["aug5_v3_finetune_sandwch_2rand_60M_100Ksteps"])
+# get_best_mnli_ft_results(["aug5_v3_finetune_v1_60M_100Ksteps_cola_mrpc_sst2"])
+# get_best_mnli_ft_results(["aug5_v3_finetune_2xbudget_60M_100Ksteps_cola_mrpc_sst2"])
+
+def get_best_ft_results_for_more_tasks(master_folder):
+    '''
+    for exp in glob.glob(master_folder + "/*/sys.out"):
+        imp_lines = []
+        for line in open(exp):
+            line = line.strip()
+            if "epoch" in line and "lr=" in line and "bs=" in line and "ep=" in line:
+                imp_lines.append(line)
+        li = 0
+        for task in ["mnli", "cola", "mrpc", "sst2"]:
+            cur_task_scores = []
+            for lr in ["5e-05", "3e-05", "2e-05"]:
+                for bsz in ["16", "32"]:
+                    for epoch in ["2", "3", "4"]:
+                        for j in range(int(epoch)):
+                            for i in range(8): # gpus
+                                print(li)
+                                pattern = "lr=%s, bs=%d, ep=%s"%(lr, int(bsz)//8, epoch)
+                                print(imp_lines[li], pattern)
+                                assert(pattern in imp_lines[li])
+                                cur_task_scores.append(imp_lines[li])
+                                li += 1
+            print(len(cur_task_scores))
+        for line in open(exp):
+            line = line.strip()
+            print(line)
+        sys.exit(0)
+    '''
+    import codecs
+    for exp in glob.glob(master_folder + "/*/sys.err"):
+        best_accuracies = {"mnli": 0, "sst2": 0, "cola": 0, "mrpc": 0}
+        last_acc, last_task = None, None
+        for line in codecs.open(exp, errors="ignore", encoding = "ISO-8859-1"):
+            if "/data/home/ganayu/.cache/huggingface/datasets/glue" in line:
+                if last_acc:
+                    if best_accuracies[last_task] < last_acc:
+                        best_accuracies[last_task] = last_acc
+                last_task = line.split("/data/home/ganayu/.cache/huggingface/datasets/glue/")[1].split("/")[0]
+                last_acc = None
+            if "lr=" in line and "bs=" in line:
+                if "accuracy" in line:
+                    if "'f1'" in line:
+                        last_acc = 100.0*float(line.split("'accuracy': ")[1].split(",")[0])
+                    else:
+                        last_acc = 100.0*float(line.split("'accuracy': ")[1].split("}")[0])
+                elif "matthews_correlation" in line:
+                    last_acc = 100.0*float(line.split("'matthews_correlation': ")[1].split("}")[0])
+        if last_acc:
+            if best_accuracies[last_task] < last_acc:
+                best_accuracies[last_task] = last_acc
+        print(exp, best_accuracies)
+# get_best_ft_results_for_more_tasks("/fsx/ganayu/experiments/supershaper/aug2_directfinetune_mnli_supershaper_2xtrainbudget_sandwch_2random")
+
 
 def get_best_ft_sweep_space():
     target_model = "supershaper"

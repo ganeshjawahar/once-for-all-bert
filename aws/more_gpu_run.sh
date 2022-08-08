@@ -11,12 +11,11 @@
 #SBATCH --partition=a100
 ## number of nodes
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:8
 ## time
-#SBATCH --time 1000
+#SBATCH --time 5000
 
 ## number of tasks per node
-#SBATCH --ntasks-per-node=8
+#SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=10
 
 export NCCL_NSOCKS_PERTHREAD=4

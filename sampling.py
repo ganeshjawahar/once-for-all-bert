@@ -2,6 +2,7 @@ import argparse
 import os
 import random
 from pprint import pprint
+from tkinter import E
 
 import datasets
 import numpy as np
@@ -179,6 +180,15 @@ class Sampler:
                     "sample_intermediate_size": [3072],
                     "sample_num_hidden_layers": [12],
                 }
+        elif self.mixing == "attention":
+            if self.search_space_id:
+                if self.search_space_id == "v3" or self.search_space_id == "v4":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [6, 12],
+                        "sample_intermediate_size": [2, 3, 4],
+                        "sample_num_hidden_layers": [12],
+                    }
 
         return choices
 
@@ -371,6 +381,9 @@ class Sampler:
             config_dict["sample_true_hidden_size"] = min(
                 choices["sample_true_hidden_size"]
             )
+        elif self.mixing == "attention":
+            config_dict["sample_num_attention_heads"] = [min(choices["sample_num_attention_heads"])] * config_dict["sample_num_hidden_layers"] if not v1_small else [12] * config_dict["sample_num_hidden_layers"]
+            config_dict["sample_intermediate_size"] =[min(choices["sample_intermediate_size"])] * config_dict["sample_num_hidden_layers"] if not v1_small else [12] * config_dict["sample_num_hidden_layers"]
         else:
             # 2 is selected as any even hidden size, or other dimensions we
             # choose will be divisible
@@ -383,6 +396,7 @@ class Sampler:
             "sample_num_attention_heads",
             "sample_hidden_size",
             "sample_true_hidden_size",
+            "sample_intermediate_size"
         ]
 
         for choice in choices.keys():
@@ -495,7 +509,8 @@ def get_supertransformer_config(
     mixing="attention",
     additional_random_softmaxing=False,
     random_layer_selection_probability=0.1,
-    use_hypernet_w_low_rank=0, bottleneck_rank=50, hypernet_hidden_size=64
+    use_hypernet_w_low_rank=0, bottleneck_rank=50, hypernet_hidden_size=64,
+    search_space_id=None
 ):
     config = AutoConfig.from_pretrained(model_name_or_path)
 
@@ -514,6 +529,7 @@ def get_supertransformer_config(
         ] * config.sample_num_hidden_layers
     config.use_hypernet_w_low_rank = use_hypernet_w_low_rank
     config.bottleneck_rank = bottleneck_rank
+    config.search_space_id = search_space_id
 
     # for all networks we use layernorm and feedforwardnetworks 1
     config.normalization_type = "layer_norm"

@@ -10,7 +10,10 @@
 # wget https://the-eye.eu/public/AI/pile_preliminary_components/books1.tar.gz
 # python academic-bert-dataset/process_data.py -f /fsx/ganayu/data/academic_bert_dataset/books_raw/books1/epubtxt -o /fsx/ganayu/data/academic_bert_dataset/booksproc --type bookcorpus
 # python academic-bert-dataset/shard_data.py --dir /fsx/ganayu/data/academic_bert_dataset/wikibooksproc -o /fsx/ganayu/data/academic_bert_dataset/shardoutput --num_train_shards 256 --num_test_shards 128 --frac_test 0.1
-python academic-bert-dataset/generate_samples.py --dir /fsx/ganayu/data/academic_bert_dataset/shardoutput -o /fsx/ganayu/data/academic_bert_dataset/final_samples --dup_factor 1 --seed 42 --vocab_file bert-base-uncased --do_lower_case 1 --masked_lm_prob 0.15 --max_seq_length 128 --model_name bert-base-uncased --max_predictions_per_seq 20 --n_processes 16
+# cd /fsx/ganayu/code/SuperShaper/academic-bert-dataset
+# python generate_samples.py --dir /fsx/ganayu/data/academic_bert_dataset/shardoutput -o /fsx/ganayu/data/academic_bert_dataset/final_samples --dup_factor 1 --seed 42 --vocab_file bert-base-uncased --do_lower_case 1 --masked_lm_prob 0.15 --max_seq_length 128 --model_name bert-base-uncased --max_predictions_per_seq 20 --n_processes 4
+# python create_pretraining_data.py --input_file=/fsx/ganayu/data/academic_bert_dataset/shardoutput --output_file=/fsx/ganayu/data/academic_bert_dataset/final_samples --vocab_file=bert-base-uncased --bert_model=bert-base-uncased --do_lower_case --max_seq_length=128 --max_predictions_per_seq=20 --masked_lm_prob=0.15 --random_seed=42 --dupe_factor=1 --no_nsp
+python aws/prepare_wikibooks.py /fsx/ganayu/data/academic_bert_dataset/final_samples /fsx/ganayu/data/academic_bert_dataset/bert_preproc_128
 
 # supernet pretrain
 # python aws/trial.py
@@ -24,6 +27,7 @@ python academic-bert-dataset/generate_samples.py --dir /fsx/ganayu/data/academic
 # accelerate launch --config_file /fsx/ganayu/code/SuperShaper/default_config.yaml evolution.py --params_constraints 60000000 --device_type gpu --output_dir /fsx/ganayu/experiments/supershaper/jul10_search_results_512seqlen --per_device_eval_batch_size 400  --max_seq_length 512 --supernet_ckpt_dir /fsx/ganayu/experiments/supershaper/jul6_bertdata_bertbottleneck_512seqlen/c4_realnews_bert-bottleneck_random_K=1_pretraining_512seqlen_08-07-2022-06-48-14/best_model
 
 # accelerate launch --config_file /fsx/ganayu/code/SuperShaper/default_config.yaml train_mlm.py --per_device_train_batch_size 32 --per_device_eval_batch_size 128 --gradient_accumulation_steps 8 --fp16 1 --max_seq_length 512 --mixing bert-bottleneck --Ωc4_dir /fsx/ganayu/data/bert_pretraining_data/wikibooks_datasets_dummy --model_name_or_path bert-base-cased --sampling_type random --sampling_rule sandwich --learning_rate 0.0001 --weight_decay 0.01 --num_warmup_steps 10000 --eval_random_subtransformers 0 --output_dir /fsx/ganayu/experiments/supershaper/jul14_supernetbase_initial/base --preprocessing_num_workers 16 --betas_2 0.98 --experiment_name jul14_supernetbase_initial_base --wandb_suffix base --wandb_entity ganayu --wandb_project effbert
+
 
 
 

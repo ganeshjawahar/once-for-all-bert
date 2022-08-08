@@ -1,4 +1,4 @@
-import sys, os, re, json
+import sys, os, re, json, glob
 import datasets
 from datasets import load_dataset, load_metric
 import random
@@ -257,4 +257,164 @@ def check_dataset_stats():
     dataset = datasets.load_from_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128_next_sentence_label_removed_w_splits")
     print(len(dataset["train"]), len(dataset["validation"]), len(dataset["test"]))
 
-check_dataset_stats()
+# check_dataset_stats()
+
+def check_cls_sep_issue():
+    from datasets import load_dataset, DatasetDict
+    dataset = datasets.load_from_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128_next_sentence_label_removed_w_splits")
+    train_data = dataset['train']
+    sample = train_data[0]
+    print(sample)
+    print(len(sample["input_ids"]))
+    print(len(sample["token_type_ids"]))
+    print(len(sample["labels"]))
+    
+    from transformers import AutoTokenizer
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased", use_fast=True)
+    vocab_words = list(tokenizer.vocab.keys())
+    example = "This is a tokenization example"
+    print(tokenizer.encode(example))
+    print(tokenizer.encode("[CLS]"))
+    print(tokenizer.encode("[SEP]"))
+
+    # check if there is a small sentence less than 128
+    print(len(train_data))
+    for i in range(len(train_data)):
+        if 0 in train_data[i]["attention_mask"]:
+            print(i, "caught")
+            print(train_data[i])
+            sys.exit(0)
+
+# check_cls_sep_issue()
+
+def check_shard_output():
+    import h5py
+    hdf = "/fsx/ganayu/data/academic_bert_dataset/final_samples/test_shard_0.hdf5"
+    h5 = h5py.File(hdf,'r')
+    print(len(h5["input_ids"]))
+    print(len(h5["attention_mask"]))
+    print(len(h5["token_type_ids"]))
+# check_shard_output()
+
+def find_missing_wikibooks_files():
+    downfnames = {}
+    for f in glob.glob("/fsx/ganayu/data/academic_bert_dataset/final_samples/*.hdf5"):
+        downfnames[f.split("/")[-1].split(".hdf5")[0].replace("_shard_", "")] = True
+    # print(downfnames)
+    for f in glob.glob("/fsx/ganayu/data/academic_bert_dataset/shardoutput/*.txt"):
+        if f.split("/")[-1].split(".txt")[0].replace("training", "train") not in downfnames:
+            print(f)
+    print(len(glob.glob("/fsx/ganayu/data/academic_bert_dataset/final_samples/*.hdf5")))
+    print(len(glob.glob("/fsx/ganayu/data/academic_bert_dataset/shardoutput/*.txt")))
+    print(glob.glob("/fsx/ganayu/data/academic_bert_dataset/final_samples/*.hdf5")[0:3])
+    print(glob.glob("/fsx/ganayu/data/academic_bert_dataset/shardoutput/*.txt")[0:3])
+
+# find_missing_wikibooks_files()
+
+def check_roberta_sep_issue():
+    from transformers import AutoTokenizer
+    tokenizer = AutoTokenizer.from_pretrained("roberta-base", use_fast=True)
+    vocab_words = list(tokenizer.vocab.keys())
+    example = "This is a tokenization example"
+    print(tokenizer.encode(example))
+    print(tokenizer.encode("<s>"))
+    print(tokenizer.encode("</s>"))
+
+    import h5py
+    hdf = "/fsx/ganayu/data/academic_bert_dataset/roberta_final_samples/test0.hdf5"
+    h5 = h5py.File(hdf,'r')
+    print(len(h5["input_ids"]))
+    print(len(h5["attention_mask"]))
+    print(len(h5["token_type_ids"]))
+    print(h5["input_ids"][0])
+    print(h5["input_ids"][13])
+    
+# check_roberta_sep_issue()
+
+def convert_academic_dataset_into_datasets_format(src_dir, dest_dir):
+    from datasets import load_dataset, DatasetDict, Dataset
+    import h5py
+    import random
+    random.seed(123)
+    '''
+    dataset = datasets.load_from_disk("/fsx/ganayu/data/bert_pretraining_data/wikibooks_graphcore_128_next_sentence_label_removed_w_splits")
+    train_data = dataset['train']
+    print(dataset)
+    print(type(train_data))
+    my_dict = {"a": [1, 2, 3], "b": [4, 5, 6]}
+    dataset = Dataset.from_dict(my_dict)
+    new_dataset = DatasetDict({'train': dataset})
+    print(new_dataset)
+    print(type(new_dataset))
+    print(new_dataset['train'][0])
+    '''
+    train_files = glob.glob(src_dir + "/training*.hdf5")
+    test_files = glob.glob(src_dir + "/test*.hdf5")
+    # print stats
+    num_train = 0
+    for f in train_files:
+        try:
+            h5f = h5py.File(f,'r')
+            num_train += len(h5f["input_ids"])
+        except:
+            print(f)
+    num_test = 0
+    for f in test_files:
+        h5f = h5py.File(f,'r')
+        num_test += len(h5f["input_ids"])
+    print(num_train, num_test)
+    # split
+    num_valid = int(0.05*float(num_train))
+    num_train = num_train - num_valid
+    print("new splits ", num_train, num_valid, num_test)
+    # create ids
+    train_ori_ids = [i for i in range(num_train+num_valid)]
+    random.shuffle(train_ori_ids)
+    train_ids = {i: True for i in train_ori_ids[0:num_train]}
+    val_ids = {i: True for i in train_ori_ids[num_train:]}
+    train_dataset = {"input_ids": [], "attention_mask": [], "token_type_ids": []}
+    validation_dataset = {"input_ids": [], "attention_mask": [], "token_type_ids": []}
+    test_dataset = {"input_ids": [], "attention_mask": [], "token_type_ids": []}
+    # fill train and valid
+    train_files.sort()
+    random.shuffle(train_files)
+    c = 0
+    for tf in train_files:
+        h5f = h5py.File(tf,'r')
+        if c in train_ids:
+            train_dataset["input_ids"].extend(h5f["input_ids"])
+            train_dataset["attention_mask"].extend(h5f["attention_mask"])
+            train_dataset["token_type_ids"].extend(h5f["token_type_ids"])
+        else:
+            assert(c in val_ids)
+            validation_dataset["input_ids"].extend(h5f["input_ids"])
+            validation_dataset["attention_mask"].extend(h5f["attention_mask"])
+            validation_dataset["token_type_ids"].extend(h5f["token_type_ids"])
+        c += 1
+        #if len(train_dataset["input_ids"]) > 10 and len(validation_dataset["input_ids"]) > 10:
+        #    break
+    for tf in test_files:
+        h5f = h5py.File(tf,'r')
+        test_dataset["input_ids"].extend(h5f["input_ids"])
+        test_dataset["attention_mask"].extend(h5f["attention_mask"])
+        test_dataset["token_type_ids"].extend(h5f["token_type_ids"])
+        #break
+    # save into disk
+    datadict = {"train": Dataset.from_dict(train_dataset), "test": Dataset.from_dict(test_dataset), "validation": Dataset.from_dict(validation_dataset)}
+    new_dataset = DatasetDict(datadict)
+    print(new_dataset)
+    new_dataset.save_to_disk(dest_dir)
+
+# roberta original splits train=39101471 test=2967796
+# roberta new splits  train=36949101 val=1944689 (0.05% train) test=3040664
+# src_dir = "/fsx/ganayu/data/academic_bert_dataset/roberta_final_samples"
+# dest_dir = "/fsx/ganayu/data/academic_bert_dataset/roberta_preproc_128"
+
+# bert original splits train=38893790 test=3040664
+# bert new splits  train=37146398 val=1955073 (0.05% train) test=2967796
+# src_dir = "/fsx/ganayu/data/academic_bert_dataset/final_samples"
+# dest_dir = "/fsx/ganayu/data/academic_bert_dataset/bert_preproc_128"
+
+src_dir = sys.argv[1]
+dest_dir = sys.argv[2]
+convert_academic_dataset_into_datasets_format(src_dir, dest_dir)

@@ -57,6 +57,11 @@ class TrainingInstance(object):
     # def __repr__(self):
     #   return self.__str__()
 
+class OFABERTTrainingInstance(object):
+    """A single training instance."""
+    def __init__(self, tokens, segment_ids):
+        self.tokens = tokens
+        self.segment_ids = segment_ids
 
 def write_instance_to_example_file(
     instances, tokenizer, max_seq_length, max_predictions_per_seq, output_file, no_nsp
@@ -150,6 +155,47 @@ def write_instance_to_example_file(
     f.flush()
     f.close()
 
+def write_ofainstance_to_example_file(
+    instances, tokenizer, max_seq_length, max_predictions_per_seq, output_file, no_nsp
+):
+    """Create TF example files from `TrainingInstance`s."""
+
+    total_written = 0
+    features = collections.OrderedDict()
+
+    num_instances = len(instances)
+    features["input_ids"] = np.zeros([num_instances, max_seq_length], dtype="int32")
+    features["attention_mask"] = np.zeros([num_instances, max_seq_length], dtype="int32")
+    features["token_type_ids"] = np.zeros([num_instances, max_seq_length], dtype="int32")
+
+    for inst_index, instance in enumerate(tqdm(instances)):
+        input_ids = tokenizer.convert_tokens_to_ids(instance.tokens)
+        input_mask = [1] * len(input_ids)
+        segment_ids = list(instance.segment_ids)
+        assert len(input_ids) <= max_seq_length
+
+        while len(input_ids) < max_seq_length:
+            input_ids.append(0)
+            input_mask.append(0)
+            segment_ids.append(0)
+
+        assert len(input_ids) == max_seq_length
+        assert len(input_mask) == max_seq_length
+        assert len(segment_ids) == max_seq_length
+
+        features["input_ids"][inst_index] = input_ids
+        features["attention_mask"][inst_index] = input_mask
+        features["token_type_ids"][inst_index] = segment_ids
+
+        total_written += 1
+
+    print("saving data")
+    f = h5py.File(output_file, "w")
+    f.create_dataset("input_ids", data=features["input_ids"], dtype="i4", compression="gzip")
+    f.create_dataset("attention_mask", data=features["attention_mask"], dtype="i1", compression="gzip")
+    f.create_dataset("token_type_ids", data=features["token_type_ids"], dtype="i1", compression="gzip")
+    f.flush()
+    f.close()
 
 def create_training_instances(
     input_files,
@@ -197,7 +243,7 @@ def create_training_instances(
         for document_index in range(len(all_documents)):
             if no_nsp:
                 instances.extend(
-                    create_instances_from_document_no_nsp(
+                    create_ofainstances_from_document_no_nsp(
                         all_documents,
                         document_index,
                         max_seq_length,
@@ -294,6 +340,78 @@ def create_instances_from_document_no_nsp(
                     masked_lm_positions=masked_lm_positions,
                     masked_lm_labels=masked_lm_labels,
                 )
+                instances.append(instance)
+            current_chunk = []
+            current_length = 0
+        i += 1
+
+    return instances
+
+def create_ofainstances_from_document_no_nsp(
+    all_documents,
+    document_index,
+    max_seq_length,
+    short_seq_prob,
+    masked_lm_prob,
+    max_predictions_per_seq,
+    vocab_words,
+    rng,
+):
+    """Creates `TrainingInstance`s for a single document."""
+    """Generate single sentences (NO 2nd segment for NSP task)"""
+    document = all_documents[document_index]
+
+    # Account for <s>, </s>
+    max_num_tokens = max_seq_length - 2
+
+    # We *usually* want to fill up the entire sequence since we are padding
+    # to `max_seq_length` anyways, so short sequences are generally wasted
+    # computation. However, we *sometimes*
+    # (i.e., short_seq_prob == 0.1 == 10% of the time) want to use shorter
+    # sequences to minimize the mismatch between pre-training and fine-tuning.
+    # The `target_seq_length` is just a rough target however, whereas
+    # `max_seq_length` is a hard limit.
+    target_seq_length = max_num_tokens
+    if rng.random() < short_seq_prob:
+        target_seq_length = rng.randint(2, max_num_tokens)
+
+    # We DON'T just concatenate all of the tokens from a document into a long
+    # sequence and choose an arbitrary split point because this would make the
+    # next sentence prediction task too easy. Instead, we split the input into
+    # segments "A" and "B" based on the actual "sentences" provided by the user
+    # input.
+    instances = []
+    current_chunk = []
+    current_length = 0
+    i = 0
+    while i < len(document):
+        segment = document[i]
+        current_chunk.append(segment)
+        current_length += len(segment)
+        if i == len(document) - 1 or current_length >= target_seq_length:
+            if current_chunk:
+                tokens_a = []
+                for j in range(len(current_chunk)):
+                    tokens_a.extend(current_chunk[j])
+
+                truncate_single_seq(tokens_a, max_num_tokens, rng)
+
+                assert len(tokens_a) >= 1
+
+                tokens = []
+                segment_ids = []
+                tokens.append("<s>")
+                segment_ids.append(0)
+                for token in tokens_a:
+                    tokens.append(token)
+                    segment_ids.append(0)
+
+                tokens.append("</s>")
+                segment_ids.append(0)
+
+                assert len(tokens) <= max_seq_length
+                
+                instance = OFABERTTrainingInstance(tokens=tokens, segment_ids=segment_ids)
                 instances.append(instance)
             current_chunk = []
             current_length = 0
@@ -427,6 +545,7 @@ def create_instances_from_document(
         i += 1
 
     return instances
+
 
 
 MaskedLmInstance = collections.namedtuple("MaskedLmInstance", ["index", "label"])
@@ -624,7 +743,7 @@ def main():
 
     output_file = args.output_file
 
-    write_instance_to_example_file(
+    write_ofainstance_to_example_file(
         instances,
         tokenizer,
         args.max_seq_length,

@@ -71,6 +71,7 @@ import torch.nn.functional as F
 from custom_layers.custom_embedding import CustomEmbedding
 from custom_layers.custom_linear import CustomLinear
 from custom_layers.custom_layernorm import CustomLayerNorm, CustomNoNorm
+from custom_layers.DynamicSeparableConv2d import DynamicSeparableConv1d
 from copy import deepcopy
 from loss import CrossEntropyLossSoft
 from loss import *
@@ -1233,6 +1234,19 @@ class BertIntermediate(nn.Module):
         hidden_states = self.intermediate_act_fn(hidden_states)
         return hidden_states
 
+class BertConv1d(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.conv1d = DynamicSeparableConv1d(config.hidden_size, [7])
+        if isinstance(config.hidden_act, str):
+            self.intermediate_act_fn = ACT2FN[config.hidden_act]
+        else:
+            self.intermediate_act_fn = config.hidden_act
+
+    def forward(self, hidden_states):
+        hidden_states = self.conv1d(hidden_states)
+        hidden_states = self.intermediate_act_fn(hidden_states)
+        return hidden_states
 
 class BertOutput(nn.Module):
     def __init__(self, config):
@@ -1243,6 +1257,8 @@ class BertOutput(nn.Module):
             config.hidden_size, eps=config.layer_norm_eps
         )
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        if config.search_space_id == "v4":
+            self.conv1d = BertConv1d(config)
 
     def set_sample_config(self, config, prev_layer_importance_order=None):
         sample_intermediate_size = config.sample_intermediate_size if config.sample_intermediate_size > 10 else int(config.sample_intermediate_size * config.sample_hidden_size) # todo: make it dynamic
@@ -1286,6 +1302,8 @@ class BertOutput(nn.Module):
             if hasattr(self.dense, "sample_importance_order"):
                 importance_order = self.dense.sample_importance_order
                 input_tensor = input_tensor[:, :, importance_order]
+        if hasattr(self, "conv1d"):
+            hidden_states = self.conv1d(hidden_states)
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
 
         return hidden_states
