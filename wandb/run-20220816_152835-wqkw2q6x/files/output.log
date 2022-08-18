@@ -1,0 +1,305 @@
+loading configuration file /fsx/ganayu/experiments/supershaper/aug9_acadbertdata_supernet_v1/acav1/best_model/config.json
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Model config BertConfig {
+  "_name_or_path": "bert-base-uncased",
+  "additional_random_softmaxing": false,
+  "alpha_divergence": 0,
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bottleneck_rank": 50,
+  "classifier_dropout": null,
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0,
+  "hidden_size": 768,
+  "hypernet_hidden_size": 64,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_drop_prob": 0.0,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "max_seq_length": 128,
+  "mixing": "bert-bottleneck",
+  "model_type": "bert",
+  "normalization_type": "layer_norm",
+  "num_attention_heads": 12,
+  "num_feedforward_networks": 1,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "random_layer_selection_probability": 0.1,
+  "rewire": 0,
+  "sample_hidden_size": [
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768
+  ],
+  "sample_intermediate_size": [
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072
+  ],
+  "sample_num_attention_heads": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "sample_num_hidden_layers": 12,
+  "search_space_id": null,
+  "torch_dtype": "float32",
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "use_hypernet_w_low_rank": 0,
+  "vocab_size": 30522
+}
+loading configuration file https://huggingface.co/bert-base-uncased/resolve/main/config.json from cache at /data/home/ganayu/.cache/huggingface/transformers/3c61d016573b14f7f008c02c4e51a366c67ab274726fe2910691e2a761acf43e.37395cee442ab11005bcd270f3c34464dc1704b715b5d7d52b1a461abe3b9e4e
+Model config BertConfig {
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "bert",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 30522
+}
+loading file https://huggingface.co/bert-base-uncased/resolve/main/vocab.txt from cache at /data/home/ganayu/.cache/huggingface/transformers/45c3f7a79a80e1cf0a489e5c62b43f173c15db47864303a55d623bb3c96f72a5.d789d64ebfe299b0e416afc4a169632f903f693095b4629a7ea271d5a0cf2c99
+loading file https://huggingface.co/bert-base-uncased/resolve/main/tokenizer.json from cache at /data/home/ganayu/.cache/huggingface/transformers/534479488c54aeaf9c3406f647aa2ec13648c06771ffe269edabebd4c412da1d.7f2721073f19841be16f41b0a70b600ca6b880c8f3df6f3535cbc704371bdfa4
+loading file https://huggingface.co/bert-base-uncased/resolve/main/added_tokens.json from cache at None
+loading file https://huggingface.co/bert-base-uncased/resolve/main/special_tokens_map.json from cache at None
+loading file https://huggingface.co/bert-base-uncased/resolve/main/tokenizer_config.json from cache at /data/home/ganayu/.cache/huggingface/transformers/c1d7f0a763fb63861cc08553866f1fc3e5a6f4f07621be277452d26d71303b7e.20430bd8e10ef77a7d2977accefe796051e01bc2fc4aa146bc862997a1a15e79
+loading configuration file https://huggingface.co/bert-base-uncased/resolve/main/config.json from cache at /data/home/ganayu/.cache/huggingface/transformers/3c61d016573b14f7f008c02c4e51a366c67ab274726fe2910691e2a761acf43e.37395cee442ab11005bcd270f3c34464dc1704b715b5d7d52b1a461abe3b9e4e
+Model config BertConfig {
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "bert",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 30522
+}
+loading configuration file /fsx/ganayu/experiments/supershaper/aug9_acadbertdata_supernet_v1/acav1/best_model/config.json
+Model config BertConfig {
+  "_name_or_path": "bert-base-uncased",
+  "additional_random_softmaxing": false,
+  "alpha_divergence": 0,
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bottleneck_rank": 50,
+  "classifier_dropout": null,
+  "finetuning_task": "mnli",
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0,
+  "hidden_size": 768,
+  "hypernet_hidden_size": 64,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "layer_drop_prob": 0.0,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "max_seq_length": 128,
+  "mixing": "bert-bottleneck",
+  "model_type": "bert",
+  "normalization_type": "layer_norm",
+  "num_attention_heads": 12,
+  "num_feedforward_networks": 1,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "random_layer_selection_probability": 0.1,
+  "rewire": 0,
+  "sample_hidden_size": [
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768
+  ],
+  "sample_intermediate_size": [
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072
+  ],
+  "sample_num_attention_heads": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "sample_num_hidden_layers": 12,
+  "search_space_id": null,
+  "torch_dtype": "float32",
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "use_hypernet_w_low_rank": 0,
+  "vocab_size": 30522
+}
+loading weights file /fsx/ganayu/experiments/supershaper/aug9_acadbertdata_supernet_v1/acav1/best_model/pytorch_model.bin
+=====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForSequenceClassification                                --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              7,087,872
+│    │    │    └─BertLayer: 4-2                              7,087,872
+│    │    │    └─BertLayer: 4-3                              7,087,872
+│    │    │    └─BertLayer: 4-4                              7,087,872
+│    │    │    └─BertLayer: 4-5                              7,087,872
+│    │    │    └─BertLayer: 4-6                              7,087,872
+│    │    │    └─BertLayer: 4-7                              7,087,872
+│    │    │    └─BertLayer: 4-8                              7,087,872
+│    │    │    └─BertLayer: 4-9                              7,087,872
+│    │    │    └─BertLayer: 4-10                             7,087,872
+│    │    │    └─BertLayer: 4-11                             7,087,872
+│    │    │    └─BertLayer: 4-12                             7,087,872
+│    └─BertPooler: 2-3                                       --
+│    │    └─CustomLinear: 3-7                                590,592
+│    │    └─Tanh: 3-8                                        --
+├─Dropout: 1-2                                               --
+├─CustomLinear: 1-3                                          2,307
+=====================================================================================
+Total params: 109,484,547
+Trainable params: 109,484,547
+Non-trainable params: 0
+=====================================================================================
+Some weights of the model checkpoint at /fsx/ganayu/experiments/supershaper/aug9_acadbertdata_supernet_v1/acav1/best_model were not used when initializing BertForSequenceClassification: ['bert.encoder.layer.10.input_bottleneck.bias', 'bert.encoder.layer.11.output_bottleneck.bias', 'bert.encoder.layer.2.input_bottleneck.bias', 'bert.encoder.layer.7.input_bottleneck.bias', 'bert.encoder.layer.4.output_bottleneck.bias', 'bert.encoder.layer.10.output_bottleneck.bias', 'bert.encoder.layer.10.input_bottleneck.weight', 'bert.encoder.layer.8.output_bottleneck.bias', 'bert.encoder.layer.6.input_bottleneck.bias', 'cls.predictions.decoder.bias', 'bert.encoder.layer.4.input_bottleneck.bias', 'bert.encoder.layer.2.output_bottleneck.weight', 'bert.encoder.layer.10.output_bottleneck.weight', 'bert.encoder.layer.11.input_bottleneck.bias', 'bert.encoder.layer.7.output_bottleneck.bias', 'cls.predictions.bias', 'bert.encoder.layer.1.input_bottleneck.bias', 'bert.encoder.layer.8.input_bottleneck.weight', 'bert.encoder.layer.9.input_bottleneck.bias', 'bert.encoder.layer.0.input_bottleneck.weight', 'bert.encoder.layer.0.output_bottleneck.weight', 'bert.encoder.layer.4.output_bottleneck.weight', 'bert.encoder.layer.9.output_bottleneck.bias', 'bert.encoder.layer.9.output_bottleneck.weight', 'bert.encoder.layer.11.output_bottleneck.weight', 'cls.predictions.transform.dense.bias', 'bert.encoder.layer.8.output_bottleneck.weight', 'bert.encoder.layer.4.input_bottleneck.weight', 'cls.predictions.transform.LayerNorm.bias', 'bert.encoder.layer.3.input_bottleneck.bias', 'cls.predictions.transform.dense.weight', 'bert.encoder.layer.0.output_bottleneck.bias', 'bert.encoder.layer.5.output_bottleneck.bias', 'bert.encoder.layer.1.output_bottleneck.bias', 'bert.encoder.layer.7.output_bottleneck.weight', 'cls.predictions.decoder.weight', 'bert.encoder.layer.5.input_bottleneck.weight', 'bert.encoder.layer.0.input_bottleneck.bias', 'bert.encoder.layer.6.output_bottleneck.bias', 'bert.encoder.layer.5.input_bottleneck.bias', 'bert.encoder.layer.8.input_bottleneck.bias', 'bert.encoder.layer.1.input_bottleneck.weight', 'bert.encoder.layer.9.input_bottleneck.weight', 'bert.encoder.layer.6.input_bottleneck.weight', 'bert.encoder.layer.3.input_bottleneck.weight', 'bert.encoder.layer.7.input_bottleneck.weight', 'cls.predictions.transform.LayerNorm.weight', 'bert.encoder.layer.3.output_bottleneck.weight', 'bert.encoder.layer.5.output_bottleneck.weight', 'bert.encoder.layer.2.input_bottleneck.weight', 'bert.encoder.layer.3.output_bottleneck.bias', 'bert.encoder.layer.1.output_bottleneck.weight', 'bert.encoder.layer.2.output_bottleneck.bias', 'bert.encoder.layer.11.input_bottleneck.weight', 'bert.encoder.layer.6.output_bottleneck.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at /fsx/ganayu/experiments/supershaper/aug9_acadbertdata_supernet_v1/acav1/best_model and are newly initialized: ['classifier.weight', 'bert.pooler.dense.weight', 'bert.pooler.dense.bias', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+08/16/2022 15:28:48 - WARNING - datasets.fingerprint -   Parameter 'function'=<function main.<locals>.preprocess_function at 0x7feba803baf0> of the transform datasets.arrow_dataset.Dataset._map_single couldn't be hashed properly, a random hash was used instead. Make sure your transforms and parameters are serializable with pickle or dill for the dataset fingerprinting and caching to work. If you reuse this transform, the caching mechanism will consider it to be different from the previous calls and recompute everything. This warning is only showed once. Subsequent hashing failures won't be showed.
+08/16/2022 15:28:48 - WARNING - datasets.arrow_dataset -   Loading cached processed dataset at /data/home/ganayu/.cache/huggingface/datasets/glue/mnli/1.0.0/dacbe3125aa31d7f70367a07a8a9e72a5a0bfeb5fc42e75c9db75b96da6053ad/cache-59ce8cfd8e09b24c.arrow
+08/16/2022 15:28:48 - WARNING - datasets.arrow_dataset -   Loading cached processed dataset at /data/home/ganayu/.cache/huggingface/datasets/glue/mnli/1.0.0/dacbe3125aa31d7f70367a07a8a9e72a5a0bfeb5fc42e75c9db75b96da6053ad/cache-373bf2215a6709ea.arrow
+08/16/2022 15:28:48 - WARNING - datasets.arrow_dataset -   Loading cached processed dataset at /data/home/ganayu/.cache/huggingface/datasets/glue/mnli/1.0.0/dacbe3125aa31d7f70367a07a8a9e72a5a0bfeb5fc42e75c9db75b96da6053ad/cache-6786bf68fba9f210.arrow
+08/16/2022 15:28:48 - WARNING - datasets.arrow_dataset -   Loading cached processed dataset at /data/home/ganayu/.cache/huggingface/datasets/glue/mnli/1.0.0/dacbe3125aa31d7f70367a07a8a9e72a5a0bfeb5fc42e75c9db75b96da6053ad/cache-4840ed221502d9ab.arrow
+08/16/2022 15:28:48 - WARNING - datasets.arrow_dataset -   Loading cached processed dataset at /data/home/ganayu/.cache/huggingface/datasets/glue/mnli/1.0.0/dacbe3125aa31d7f70367a07a8a9e72a5a0bfeb5fc42e75c9db75b96da6053ad/cache-89981d2189a6daea.arrow
+08/16/2022 15:28:48 - INFO - __main__ -   Sample 178863 of the training set: {'input_ids': [101, 2129, 2129, 2172, 2017, 2064, 4933, 1999, 2115, 4167, 102, 2129, 2116, 2477, 2017, 2064, 3342, 1012, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 1}.
+08/16/2022 15:28:48 - INFO - __main__ -   Sample 220045 of the training set: {'input_ids': [101, 1045, 2228, 2061, 2092, 2009, 2001, 2428, 2204, 4994, 2013, 2017, 1998, 1045, 3246, 2017, 2131, 2067, 2046, 13215, 2153, 1998, 2079, 1037, 2210, 2062, 1997, 2009, 102, 2204, 2000, 2963, 2013, 2017, 1998, 1045, 3246, 2000, 3409, 2153, 2574, 1012, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 0}.
+08/16/2022 15:28:48 - INFO - __main__ -   Sample 132204 of the training set: {'input_ids': [101, 4223, 4565, 2058, 1996, 4306, 1012, 102, 1996, 4306, 2253, 4333, 1999, 5213, 1012, 102], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'labels': 1}.
+08/16/2022 15:28:55 - INFO - __main__ -   ***** Running training *****
+08/16/2022 15:28:55 - INFO - __main__ -     Num examples = 392702
+08/16/2022 15:28:55 - INFO - __main__ -     Num Epochs = 2
+08/16/2022 15:28:55 - INFO - __main__ -     Instantaneous batch size per device = 4
+08/16/2022 15:28:55 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 8
+08/16/2022 15:28:55 - INFO - __main__ -     Gradient Accumulation steps = 1
+08/16/2022 15:28:55 - INFO - __main__ -     Total optimization steps = 98176
+  0%|                                                                                                               | 0/98176 [00:00<?, ?it/s]08/16/2022 15:28:57 - INFO - root -   Reducer buckets have been rebuilt in this iteration.
+
+  0%|                                                                                                    | 14/98176 [00:06<9:59:05,  2.73it/s]Traceback (most recent call last):
+  File "supernet_finetune.py", line 867, in <module>
+    main()
+  File "supernet_finetune.py", line 759, in main
+    accelerator.backward(sampled_student_loss)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/accelerator.py", line 734, in backward
+    self.scaler.scale(loss).backward(**kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/_tensor.py", line 363, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/autograd/__init__.py", line 173, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

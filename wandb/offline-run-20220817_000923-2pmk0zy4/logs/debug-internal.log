@@ -1,0 +1,19 @@
+2022-08-17 00:09:25,659 INFO    MainThread:63748 [internal.py:wandb_internal():90] W&B internal server running at pid: 63748, started at: 2022-08-17 00:09:25.656514
+2022-08-17 00:09:25,693 INFO    WriterThread:63748 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220817_000923-2pmk0zy4/run-2pmk0zy4.wandb
+2022-08-17 00:09:25,694 DEBUG   HandlerThread:63748 [handler.py:handle_request():141] handle_request: run_start
+2022-08-17 00:09:25,722 DEBUG   HandlerThread:63748 [meta.py:__init__():35] meta init
+2022-08-17 00:09:25,722 DEBUG   HandlerThread:63748 [meta.py:__init__():49] meta init done
+2022-08-17 00:09:25,722 DEBUG   HandlerThread:63748 [meta.py:probe():209] probe
+2022-08-17 00:09:25,733 DEBUG   HandlerThread:63748 [meta.py:_setup_git():199] setup git
+2022-08-17 00:09:25,852 DEBUG   HandlerThread:63748 [meta.py:_setup_git():206] setup git done
+2022-08-17 00:09:25,852 DEBUG   HandlerThread:63748 [meta.py:_save_pip():53] save pip
+2022-08-17 00:09:25,856 DEBUG   HandlerThread:63748 [meta.py:_save_pip():67] save pip done
+2022-08-17 00:09:25,857 DEBUG   HandlerThread:63748 [meta.py:_save_conda():74] save conda
+2022-08-17 00:09:58,430 DEBUG   HandlerThread:63748 [meta.py:_save_conda():84] save conda done
+2022-08-17 00:09:58,431 DEBUG   HandlerThread:63748 [meta.py:probe():247] probe done
+2022-08-17 00:10:23,530 WARNING MainThread:63748 [internal.py:is_dead():387] Internal process exiting, parent pid 63647 disappeared
+2022-08-17 00:10:23,530 ERROR   MainThread:63748 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-08-17 00:10:23,706 INFO    SenderThread:63748 [sender.py:finish():1111] shutting down sender
+2022-08-17 00:10:23,753 INFO    HandlerThread:63748 [handler.py:finish():806] shutting down handler
+2022-08-17 00:10:23,754 INFO    WriterThread:63748 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220817_000923-2pmk0zy4/run-2pmk0zy4.wandb
+2022-08-17 00:10:23,756 INFO    MainThread:63748 [internal.py:handle_exit():80] Internal process exited

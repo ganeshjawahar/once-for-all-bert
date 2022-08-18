@@ -1,0 +1,20 @@
+2022-08-13 09:37:11,660 INFO    MainThread:2287143 [internal.py:wandb_internal():90] W&B internal server running at pid: 2287143, started at: 2022-08-13 09:37:11.657391
+2022-08-13 09:37:11,664 INFO    WriterThread:2287143 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220813_093709-3ppcps9o/run-3ppcps9o.wandb
+2022-08-13 09:37:11,664 DEBUG   HandlerThread:2287143 [handler.py:handle_request():141] handle_request: run_start
+2022-08-13 09:37:11,675 DEBUG   HandlerThread:2287143 [meta.py:__init__():35] meta init
+2022-08-13 09:37:11,676 DEBUG   HandlerThread:2287143 [meta.py:__init__():49] meta init done
+2022-08-13 09:37:11,676 DEBUG   HandlerThread:2287143 [meta.py:probe():209] probe
+2022-08-13 09:37:11,684 DEBUG   HandlerThread:2287143 [meta.py:_setup_git():199] setup git
+2022-08-13 09:37:11,750 DEBUG   HandlerThread:2287143 [meta.py:_setup_git():206] setup git done
+2022-08-13 09:37:11,750 DEBUG   HandlerThread:2287143 [meta.py:_save_pip():53] save pip
+2022-08-13 09:37:11,754 DEBUG   HandlerThread:2287143 [meta.py:_save_pip():67] save pip done
+2022-08-13 09:37:11,755 DEBUG   HandlerThread:2287143 [meta.py:_save_conda():74] save conda
+2022-08-13 09:37:23,957 DEBUG   HandlerThread:2287143 [meta.py:_save_conda():84] save conda done
+2022-08-13 09:37:23,957 DEBUG   HandlerThread:2287143 [meta.py:probe():247] probe done
+2022-08-13 09:38:09,386 WARNING MainThread:2287143 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-08-13 09:38:41,421 WARNING MainThread:2287143 [internal.py:is_dead():387] Internal process exiting, parent pid 2287111 disappeared
+2022-08-13 09:38:41,421 ERROR   MainThread:2287143 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-08-13 09:38:41,521 INFO    WriterThread:2287143 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220813_093709-3ppcps9o/run-3ppcps9o.wandb
+2022-08-13 09:38:41,529 INFO    HandlerThread:2287143 [handler.py:finish():806] shutting down handler
+2022-08-13 09:38:41,680 INFO    SenderThread:2287143 [sender.py:finish():1111] shutting down sender
+2022-08-13 09:38:41,681 INFO    MainThread:2287143 [internal.py:handle_exit():80] Internal process exited

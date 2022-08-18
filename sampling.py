@@ -182,7 +182,7 @@ class Sampler:
                 }
         elif self.mixing == "attention":
             if self.search_space_id:
-                if self.search_space_id == "v3" or self.search_space_id == "v4":
+                if self.search_space_id == "v3" or self.search_space_id.startswith("v4"):
                     choices = {
                         "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
                         "sample_num_attention_heads": [6, 12],

@@ -1,0 +1,34 @@
+=====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForSequenceClassification                                --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              7,087,872
+│    │    │    └─BertLayer: 4-2                              7,087,872
+│    │    │    └─BertLayer: 4-3                              7,087,872
+│    │    │    └─BertLayer: 4-4                              7,087,872
+│    │    │    └─BertLayer: 4-5                              7,087,872
+│    │    │    └─BertLayer: 4-6                              7,087,872
+│    │    │    └─BertLayer: 4-7                              7,087,872
+│    │    │    └─BertLayer: 4-8                              7,087,872
+│    │    │    └─BertLayer: 4-9                              7,087,872
+│    │    │    └─BertLayer: 4-10                             7,087,872
+│    │    │    └─BertLayer: 4-11                             7,087,872
+│    │    │    └─BertLayer: 4-12                             7,087,872
+│    └─BertPooler: 2-3                                       --
+│    │    └─CustomLinear: 3-7                                590,592
+│    │    └─Tanh: 3-8                                        --
+├─Dropout: 1-2                                               --
+├─CustomLinear: 1-3                                          1,538
+=====================================================================================
+Total params: 109,483,778
+Trainable params: 109,483,778
+Non-trainable params: 0

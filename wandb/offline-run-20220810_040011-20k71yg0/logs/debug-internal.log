@@ -1,0 +1,20 @@
+2022-08-10 04:00:12,974 INFO    MainThread:3264362 [internal.py:wandb_internal():90] W&B internal server running at pid: 3264362, started at: 2022-08-10 04:00:12.970975
+2022-08-10 04:00:12,999 INFO    WriterThread:3264362 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220810_040011-20k71yg0/run-20k71yg0.wandb
+2022-08-10 04:00:13,000 DEBUG   HandlerThread:3264362 [handler.py:handle_request():141] handle_request: run_start
+2022-08-10 04:00:13,031 DEBUG   HandlerThread:3264362 [meta.py:__init__():35] meta init
+2022-08-10 04:00:13,031 DEBUG   HandlerThread:3264362 [meta.py:__init__():49] meta init done
+2022-08-10 04:00:13,031 DEBUG   HandlerThread:3264362 [meta.py:probe():209] probe
+2022-08-10 04:00:13,056 DEBUG   HandlerThread:3264362 [meta.py:_setup_git():199] setup git
+2022-08-10 04:00:13,159 DEBUG   HandlerThread:3264362 [meta.py:_setup_git():206] setup git done
+2022-08-10 04:00:13,160 DEBUG   HandlerThread:3264362 [meta.py:_save_pip():53] save pip
+2022-08-10 04:00:13,162 DEBUG   HandlerThread:3264362 [meta.py:_save_pip():67] save pip done
+2022-08-10 04:00:13,162 DEBUG   HandlerThread:3264362 [meta.py:_save_conda():74] save conda
+2022-08-10 04:00:28,618 DEBUG   HandlerThread:3264362 [meta.py:_save_conda():84] save conda done
+2022-08-10 04:00:28,618 DEBUG   HandlerThread:3264362 [meta.py:probe():247] probe done
+2022-08-10 04:01:15,425 WARNING MainThread:3264362 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-08-10 04:01:15,754 WARNING MainThread:3264362 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-08-10 04:01:15,754 ERROR   MainThread:3264362 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-08-10 04:01:16,031 INFO    SenderThread:3264362 [sender.py:finish():1111] shutting down sender
+2022-08-10 04:01:16,607 INFO    WriterThread:3264362 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220810_040011-20k71yg0/run-20k71yg0.wandb
+2022-08-10 04:01:16,608 INFO    HandlerThread:3264362 [handler.py:finish():806] shutting down handler
+2022-08-10 04:01:16,610 INFO    MainThread:3264362 [internal.py:handle_exit():80] Internal process exited

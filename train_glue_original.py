@@ -170,6 +170,12 @@ def parse_args():
     parser.add_argument(
         "--warmup_ratio", type=float, default=0, help="Warump ratio in the lr scheduler."
     )
+    parser.add_argument(
+        "--is_mnli_checkpoint",
+        type=int,
+        default=0,
+        help=f"if model path is a pretrained mnli checkpoint",
+    )
 
 
     args = parser.parse_args()
@@ -293,7 +299,7 @@ def main():
         print("Subnet info: gene_names=", gene_names)
         print("Subnet info: elastickey2ranges=", elastickey2ranges)
         subnet_config.num_labels = num_labels
-        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config)
+        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
         # config.hidden_dropout_prob = 0.1

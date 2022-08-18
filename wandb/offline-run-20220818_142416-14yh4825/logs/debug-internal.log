@@ -1,0 +1,24 @@
+2022-08-18 14:24:18,565 INFO    MainThread:965127 [internal.py:wandb_internal():90] W&B internal server running at pid: 965127, started at: 2022-08-18 14:24:18.562698
+2022-08-18 14:24:18,568 INFO    WriterThread:965127 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220818_142416-14yh4825/run-14yh4825.wandb
+2022-08-18 14:24:18,568 DEBUG   HandlerThread:965127 [handler.py:handle_request():141] handle_request: run_start
+2022-08-18 14:24:18,580 DEBUG   HandlerThread:965127 [meta.py:__init__():35] meta init
+2022-08-18 14:24:18,580 DEBUG   HandlerThread:965127 [meta.py:__init__():49] meta init done
+2022-08-18 14:24:18,580 DEBUG   HandlerThread:965127 [meta.py:probe():209] probe
+2022-08-18 14:24:18,589 DEBUG   HandlerThread:965127 [meta.py:_setup_git():199] setup git
+2022-08-18 14:24:18,655 DEBUG   HandlerThread:965127 [meta.py:_setup_git():206] setup git done
+2022-08-18 14:24:18,655 DEBUG   HandlerThread:965127 [meta.py:_save_pip():53] save pip
+2022-08-18 14:24:18,658 DEBUG   HandlerThread:965127 [meta.py:_save_pip():67] save pip done
+2022-08-18 14:24:18,659 DEBUG   HandlerThread:965127 [meta.py:_save_conda():74] save conda
+2022-08-18 14:24:34,988 DEBUG   HandlerThread:965127 [meta.py:_save_conda():84] save conda done
+2022-08-18 14:24:34,988 DEBUG   HandlerThread:965127 [meta.py:probe():247] probe done
+2022-08-18 14:24:57,670 DEBUG   HandlerThread:965127 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-18 14:24:58,225 DEBUG   HandlerThread:965127 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-18 14:24:58,797 DEBUG   HandlerThread:965127 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-18 14:24:59,366 DEBUG   HandlerThread:965127 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-18 14:25:01,074 WARNING MainThread:965127 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-08-18 14:25:32,105 WARNING MainThread:965127 [internal.py:is_dead():387] Internal process exiting, parent pid 965027 disappeared
+2022-08-18 14:25:32,105 ERROR   MainThread:965127 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-08-18 14:25:32,637 INFO    SenderThread:965127 [sender.py:finish():1111] shutting down sender
+2022-08-18 14:25:33,038 INFO    WriterThread:965127 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220818_142416-14yh4825/run-14yh4825.wandb
+2022-08-18 14:25:33,046 INFO    HandlerThread:965127 [handler.py:finish():806] shutting down handler
+2022-08-18 14:25:33,047 INFO    MainThread:965127 [internal.py:handle_exit():80] Internal process exited

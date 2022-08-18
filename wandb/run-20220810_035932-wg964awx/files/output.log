@@ -1,0 +1,30 @@
+
+pre-initialized with BERT weights
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "train_mlm.py", line 2149, in <module>
+    main()
+  File "train_mlm.py", line 1192, in main
+    model = custom_bert.BertForMaskedLM.from_pretrained(args.model_name_or_path, config=global_config)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1385, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2524, in __init__
+    self.bert = BertModel(config, add_pooling_layer=False)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2012, in __init__
+    self.embeddings = BertEmbeddings(config)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 226, in __init__
+    self.word_embeddings = CustomEmbedding(
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_embedding.py", line 16, in __init__
+    super().__init__(vocab_size, super_hidden_size, padding_idx, *args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/sparse.py", line 140, in __init__
+    self.reset_parameters()
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_embedding.py", line 37, in reset_parameters
+    super().reset_parameters()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/sparse.py", line 149, in reset_parameters
+    init.normal_(self.weight)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/init.py", line 155, in normal_
+    return _no_grad_normal_(tensor, mean, std)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/init.py", line 19, in _no_grad_normal_
+    return tensor.normal_(mean, std)
+KeyboardInterrupt

@@ -7,11 +7,13 @@ our evolutionary search
 import time, sys, os, datasets, random, copy, xlwt
 import argparse
 from sampling import get_supertransformer_config
-from transformers import AutoTokenizer, DataCollatorForLanguageModeling, set_seed
+import transformers
+from transformers import DataCollatorWithPadding
+from transformers import AutoTokenizer, DataCollatorForLanguageModeling, set_seed, AutoConfig, PretrainedConfig
 from custom_layers import custom_bert
 import torch
 from torch.utils.data.dataloader import DataLoader
-from datasets import load_metric
+from datasets import load_metric, load_dataset
 import math
 from accelerate import Accelerator, DistributedDataParallelKwargs, DistributedType
 from tqdm.auto import tqdm
@@ -32,11 +34,12 @@ class EvoSearch:
         self.evo_iter = args.evo_iter
         self.seed = args.seed
         self.trial_run = args.trial_run
+        self.finetune = args.finetune
         if self.trial_run == "yes":
-            self.population_size = 10
-            self.parent_size = 5
-            self.mutation_size = 5
-            self.crossover_size = 5
+            # self.population_size = 50
+            # self.parent_size = 5
+            # self.mutation_size = 5
+            # self.crossover_size = 5
             self.evo_iter = 3
             
         # model hyperparams
@@ -51,6 +54,7 @@ class EvoSearch:
         self.bert_backbone = args.bert_backbone
         self.pad_to_max_length = False
         self.fitness_metric = args.fitness_metric
+        
 
         # data
         self.data_dir = args.data_dir
@@ -66,7 +70,7 @@ class EvoSearch:
         os.makedirs(self.output_dir, exist_ok=True)
 
         # prepare fitness function
-        self.prepare_fitness_fn()
+        self.prepare_fitness_fn_helper()
 
         # check fitness score of supernet
         global_metrics = self.fitness_score(self.global_config, track_progress=True)
@@ -80,7 +84,126 @@ class EvoSearch:
         self.gene_choices, self.gene_names, self.elastickey2ranges = self.get_gene_choices()
         self.sample_keys = ["sample_hidden_size", "sample_intermediate_size", "sample_num_attention_heads", "sample_num_hidden_layers"]
     
-    def prepare_fitness_fn(self):
+    def prepare_fitness_fn_helper(self):
+        if self.finetune:
+            self.prepare_finetune_fitness_fn()
+        else:
+            self.prepare_pretrain_fitness_fn()
+    
+    def prepare_finetune_fitness_fn(self):
+        # set seed
+        set_seed(self.seed)
+
+        # Initialize the accelerator. We will let the accelerator handle device placement for us in this example.
+        param = DistributedDataParallelKwargs(find_unused_parameters=True, check_reduction=False)
+        self.accelerator = Accelerator(fp16=True, kwargs_handlers=[param])
+
+        raw_datasets = load_dataset("glue", self.finetune)
+        is_regression = self.finetune == "stsb"
+        if not is_regression:
+            label_list = raw_datasets["train"].features["label"].names
+            num_labels = len(label_list)
+        else:
+            num_labels = 1
+
+        task_to_keys = {
+            "cola": ("sentence", None),
+            "mnli": ("premise", "hypothesis"),
+            "mrpc": ("sentence1", "sentence2"),
+            "qnli": ("question", "sentence"),
+            "qqp": ("question1", "question2"),
+            "rte": ("sentence1", "sentence2"),
+            "sst2": ("sentence", None),
+            "stsb": ("sentence1", "sentence2"),
+            "wnli": ("sentence1", "sentence2"),
+        }
+        sentence1_key, sentence2_key = task_to_keys[self.finetune]
+
+        # load supernet config
+        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id)
+        # set defaults like max_seq_length
+        self.global_config.max_seq_length = self.max_seq_length
+        self.global_config.alpha_divergence = 0
+        self.global_config.rewire = 0
+        self.global_config.layer_drop_prob = 0.0
+        self.global_config.hidden_dropout_prob = 0
+
+        # Load pretrained model and tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(self.bert_backbone, use_fast=True)
+        self.config = AutoConfig.from_pretrained(self.bert_backbone, num_labels=num_labels, finetuning_task=self.finetune)
+        self.global_config.num_labels = num_labels
+        self.model = custom_bert.BertForSequenceClassification.from_pretrained(self.supernet_ckpt_dir, config=self.global_config)
+
+        # Some models have set the order of the labels to use, so let's make sure we do use it.
+        label_to_id = None
+        if (
+            self.model.config.label2id != PretrainedConfig(num_labels=num_labels).label2id
+            and not is_regression
+        ):
+            # Some have all caps in their config, some don't.
+            label_name_to_id = {k.lower(): v for k, v in self.model.config.label2id.items()}
+            if list(sorted(label_name_to_id.keys())) == list(sorted(label_list)):
+                print(
+                    f"The configuration of the model provided the following label correspondence: {label_name_to_id}. "
+                    "Using it!"
+                )
+                label_to_id = {i: label_name_to_id[label_list[i]] for i in range(num_labels)}
+            else:
+                print(
+                    "Your model seems to have been trained with labels, but they don't match the dataset: ",
+                    f"model labels: {list(sorted(label_name_to_id.keys()))}, dataset labels: {list(sorted(label_list))}."
+                    "\nIgnoring the model labels as a result.",
+                )
+        
+        if label_to_id is not None:
+            self.model.config.label2id = label_to_id
+            self.model.config.id2label = {id: label for label, id in self.config.label2id.items()}
+        padding = False
+
+        def preprocess_function(examples):
+            # Tokenize the texts
+            texts = (
+                (examples[sentence1_key],) if sentence2_key is None else (examples[sentence1_key], examples[sentence2_key])
+            )
+            result = self.tokenizer(*texts, padding=padding, max_length=self.max_seq_length, truncation=True)
+
+            if "label" in examples:
+                if label_to_id is not None:
+                    # Map labels to IDs (not necessary for GLUE tasks)
+                    result["labels"] = [label_to_id[l] for l in examples["label"]]
+                else:
+                    # In all cases, rename the column to labels because the model will expect that.
+                    result["labels"] = examples["label"]
+            return result
+
+        processed_datasets = raw_datasets.map(
+            preprocess_function,
+            batched=True,
+            remove_columns=raw_datasets["train"].column_names,
+            desc="Running tokenizer on dataset",
+        )
+        
+        eval_dataset = processed_datasets["validation_matched" if self.finetune == "mnli" else "validation"]
+
+        # Log a few random samples from the eval set:
+        for index in random.sample(range(len(eval_dataset)), 3):
+            print(f"Sample {index} of the training set: {eval_dataset[index]}.")
+        
+        data_collator = DataCollatorWithPadding(self.tokenizer, pad_to_multiple_of=(8 if self.accelerator.use_fp16 else None))
+        self.eval_dataloader = DataLoader(eval_dataset, collate_fn=data_collator, batch_size=self.per_device_eval_batch_size)
+
+        self.model, self.eval_dataloader = self.accelerator.prepare(self.model, self.eval_dataloader)
+        if (self.accelerator.distributed_type == DistributedType.MULTI_GPU or self.accelerator.distributed_type == DistributedType.TPU):
+            # forward missing getattr and state_dict/load_state_dict to orig model
+            self.model = ModuleProxyWrapper(self.model)
+        
+        # set metric
+        self.metric = load_metric("glue", self.finetune)
+
+        # cache for evaluations
+        self.config_cache = {}
+
+    def prepare_pretrain_fitness_fn(self):
         # set seed
         set_seed(self.seed)
 
@@ -100,7 +223,7 @@ class EvoSearch:
             print(f"Sample {index} of the training set: {eval_dataset[index]}.")
 
         # load supernet config
-        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing)
+        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id)
         # set defaults like max_seq_length
         self.global_config.max_seq_length = self.max_seq_length
         self.global_config.alpha_divergence = 0
@@ -126,6 +249,36 @@ class EvoSearch:
         self.config_cache = {}
     
     def fitness_score(self, bert_config, hashcode=None, track_progress=False):
+        if self.finetune:
+            return self.fitness_finetune_score(bert_config, hashcode=hashcode, track_progress=track_progress)
+        else:
+            return self.fitness_pretrain_score(bert_config, hashcode=hashcode, track_progress=track_progress)
+
+    def fitness_finetune_score(self, bert_config, hashcode=None, track_progress=False):
+        if hashcode and hashcode in self.config_cache:
+            return self.config_cache[hashcode]
+            
+        self.model.set_sample_config(bert_config, drop_layers=False)
+
+        self.model.eval()
+
+        # valid acc for supernet
+        for step, batch in enumerate(self.eval_dataloader):
+            outputs = self.model(**batch)
+            predictions = outputs.logits.argmax(dim=-1) if not self.finetune == "stsb" else outputs.logits.squeeze()
+            self.metric.add_batch(
+                predictions=self.accelerator.gather(predictions),
+                references=self.accelerator.gather(batch["labels"]),
+            )
+        eval_metric  = self.metric.compute()
+        if "accuracy" in eval_metric:
+            eval_metric["accuracy"] = 100.0*eval_metric["accuracy"]
+        if hashcode:
+            self.config_cache[hashcode] = eval_metric
+
+        return eval_metric
+    
+    def fitness_pretrain_score(self, bert_config, hashcode=None, track_progress=False):
         if hashcode and hashcode in self.config_cache:
             return self.config_cache[hashcode]
             
@@ -279,7 +432,7 @@ class EvoSearch:
             best_config = parents_popu[0]
             if self.accelerator.is_main_process:
                 print("iteration %d, best gene: "%(it), best_config["feat_config"])
-                print("iteration %d, best gene: model size = %d, fitness score (%s) = %.2f"%(it, calculate_params_from_config(best_config["arch_config"]), self.fitness_metric, best_config["metrics"][self.fitness_metric]))
+                print("iteration %d, best gene: model size = %d, fitness score (%s) = %.2f"%(it, calculate_params_from_config(best_config["arch_config"], search_space_id=self.search_space_id), self.fitness_metric, best_config["metrics"][self.fitness_metric]))
 
                 # write the best config and pareto front at each iteration
                 self.write_to_workbook(it, best_config, all_iter_parents)
@@ -297,7 +450,7 @@ class EvoSearch:
             # note down best config
             print("Completed. best gene: ", best_config["arch_config"])
             print("Completed. best gene: ", best_config["feat_config"])
-            print("Completed. best gene: model size = %d, fitness score (%s) = %.2f"%(calculate_params_from_config(best_config["arch_config"]), self.fitness_metric, best_config["metrics"][self.fitness_metric]))
+            print("Completed. best gene: model size = %d, fitness score (%s) = %.2f"%(calculate_params_from_config(best_config["arch_config"], search_space_id=self.search_space_id), self.fitness_metric, best_config["metrics"][self.fitness_metric]))
 
     def write_to_workbook(self, cur_iter, best_config, all_iter_parents):
         # create workbook
@@ -309,7 +462,7 @@ class EvoSearch:
         cur_sheet.write(1, 0, "gene")
         cur_sheet.write(1, 1, str(best_config["feat_config"]))
         cur_sheet.write(2, 0, "model size")
-        cur_sheet.write(2, 1, str(calculate_params_from_config(best_config["arch_config"])))
+        cur_sheet.write(2, 1, str(calculate_params_from_config(best_config["arch_config"], search_space_id=self.search_space_id)))
         cur_sheet.write(3, 0, self.fitness_metric)
         cur_sheet.write(3, 1, str(best_config["metrics"][self.fitness_metric]))
         cur_sheet.write(4, 0, "config.json")
@@ -338,7 +491,7 @@ class EvoSearch:
             for ci, child in enumerate(all_iter_parents[si]):
                 cur_sheet.write(ci+1, 0, ci)
                 cur_sheet.write(ci+1, 1, str(child["feat_config"]))
-                cur_sheet.write(ci+1, 2, str(calculate_params_from_config(child["arch_config"])))
+                cur_sheet.write(ci+1, 2, str(calculate_params_from_config(child["arch_config"], search_space_id=self.search_space_id)))
                 cur_sheet.write(ci+1, 3, str(child["metrics"][self.fitness_metric]))
                 cur_sheet.write(ci+1, 4, str(child["arch_config"]))
 
@@ -352,16 +505,21 @@ class EvoSearch:
         k = 0
         while k < self.crossover_size:
             cur_genes = random.sample(genes, 2)
-            crossover_gene = copy.deepcopy(cur_genes[0])
-            for gi in range(len(crossover_gene["feat_config"])):
+            crossover_gene = []
+            for gi in range(len(cur_genes[0]["feat_config"])):
                 if np.random.uniform() < 0.5:
-                    crossover_gene["feat_config"][gi] = cur_genes[0]["feat_config"][gi]
+                    crossover_gene.append(cur_genes[0]["feat_config"][gi])
                 else:
-                    crossover_gene["feat_config"][gi] = cur_genes[1]["feat_config"][gi]
-            crossover_gene = self.feature2arch(crossover_gene)
-            if self.satisfy_constraint(crossover_gene["arch_config"]) and self.notduplicategene(crossover_gene["feat_config"], crossover_genes, another_population=genes):
-                crossover_genes.append(crossover_gene)
+                    crossover_gene.append(cur_genes[1]["feat_config"][gi])
+            new_gene = {"feat_config": crossover_gene, "arch_config": self.feature2arch(crossover_gene)}
+            if self.satisfy_constraint(new_gene["arch_config"]) and self.notduplicategene(new_gene["feat_config"], crossover_genes, another_population=genes):
+                assert(len(new_gene)==2)
+                assert(isinstance(new_gene["arch_config"],  transformers.models.bert.configuration_bert.BertConfig))
+                assert(isinstance(new_gene["feat_config"], list))
+                crossover_genes.append(new_gene)
                 k += 1
+            else:
+                del new_gene
         return crossover_genes
 
     def mutate(self, genes):
@@ -372,29 +530,35 @@ class EvoSearch:
         while k < self.mutation_size:
             cur_gene = random.choice(genes)
             # mutate this gene
-            mutated_gene = copy.deepcopy(cur_gene)
-            for gi in range(len(mutated_gene["feat_config"])):
+            mutated_gene = []
+            for gi in range(len(cur_gene["feat_config"])):
                 if np.random.uniform() < self.mutation_prob:
-                    mutated_gene["feat_config"][gi] = random.choice(self.gene_choices[gi])
-            mutated_gene = self.feature2arch(mutated_gene)
-            if self.satisfy_constraint(mutated_gene["arch_config"]) and self.notduplicategene(mutated_gene["feat_config"], mutated_genes, another_population=genes):
-                mutated_genes.append(mutated_gene)
+                    mutated_gene.append(random.choice(self.gene_choices[gi]))
+                else:
+                    mutated_gene.append(cur_gene["feat_config"][gi])
+            new_gene = {"feat_config": mutated_gene, "arch_config": self.feature2arch(mutated_gene)}
+            if self.satisfy_constraint(new_gene["arch_config"]) and self.notduplicategene(new_gene["feat_config"], mutated_genes, another_population=genes):
+                assert(len(new_gene)==2)
+                assert(isinstance(new_gene["arch_config"],  transformers.models.bert.configuration_bert.BertConfig))
+                assert(isinstance(new_gene["feat_config"], list))
+                mutated_genes.append(new_gene)
                 k += 1
+            else:
+                del new_gene
         return mutated_genes
 
     def identify_parents(self, genes):
-        temp_genes = []
-        for gene in genes:
-            temp_genes.append((gene["metrics"][self.fitness_metric], gene ))
-        scores = []
-        for gene in temp_genes:
-            scores.append(gene[0])
-        # print(scores)
-        temp_genes.sort()
-        parents = []
-        for gene in temp_genes[0:self.parent_size]:
-            parents.append(gene[1])
-        return parents
+        #temp_genes = []
+        #for gene in genes:
+        #    assert(len(gene.keys())==3)
+        #    assert isinstance(gene["metrics"][self.fitness_metric], float), f"{gene['metrics'][self.fitness_metric]} is not float"
+        #    temp_genes.append((gene["metrics"][self.fitness_metric], gene ))
+        #temp_genes.sort()
+        reverse = False
+        if self.fitness_metric == "accuracy":
+            reverse = True
+        genes.sort(key=lambda x: x["metrics"][self.fitness_metric], reverse=reverse)
+        return genes[0:self.parent_size]
 
     def get_scores(self, genes):
         scores = []
@@ -403,6 +567,10 @@ class EvoSearch:
             metrics = self.fitness_score(gene["arch_config"], hashcode=str(gene["feat_config"]), track_progress=False)
             gene['metrics'] = metrics
             scores.append(gene)
+            assert(len(gene)==3)
+            assert(isinstance(gene["metrics"], dict))
+            assert(isinstance(gene["arch_config"],  transformers.models.bert.configuration_bert.BertConfig))
+            assert(isinstance(gene["feat_config"], list))
             progress_bar.update(1)
         progress_bar.close()
         return scores
@@ -414,6 +582,8 @@ class EvoSearch:
         self.seed_count += 1
         for arch_config in cand_archs:
             feat_config = self.arch2feature(arch_config)
+            assert(isinstance(feat_config, list))
+            assert(isinstance(arch_config, transformers.models.bert.configuration_bert.BertConfig))
             if self.satisfy_constraint(arch_config) and self.notduplicategene(feat_config, population):
                 population.append({"arch_config": arch_config, "feat_config": feat_config})
         print('initial population size = %d/%d'%(len(population), self.population_size))
@@ -439,6 +609,8 @@ class EvoSearch:
             elastic_keys = ["sample_hidden_size", "sample_intermediate_size"] # inter_ratio
         elif self.search_space_id == "v2":
             elastic_keys = ["sample_hidden_size", "sample_intermediate_size", "sample_num_hidden_layers"]
+        elif self.search_space_id in ["v3"] or self.search_space_id.startswith("v4"):
+            elastic_keys = ["sample_hidden_size", "sample_intermediate_size", "sample_num_attention_heads"]
         return elastic_keys
     
     def get_gene_choices(self):
@@ -449,10 +621,15 @@ class EvoSearch:
         elastickey2ranges = {}
         for key in self.elastic_keys:
             if key in ["sample_hidden_size", "sample_intermediate_size", "sample_num_attention_heads"]:
-                elastickey2ranges[key] = [len(gene_names), len(gene_names)+num_hidden_layers]
-                for layer_id in range(num_hidden_layers):
-                    gene_names.append(key + "_" + str(layer_id))
+                if self.search_space_id is not None and key == "sample_hidden_size" and (self.search_space_id in ["v3"] or self.search_space_id.startswith("v4")):
+                    elastickey2ranges[key] = [len(gene_names), len(gene_names)+1]
+                    gene_names.append(key + "_0")
                     gene_choices.append(sampler_choices[key])
+                else:
+                    elastickey2ranges[key] = [len(gene_names), len(gene_names)+num_hidden_layers]
+                    for layer_id in range(num_hidden_layers):
+                        gene_names.append(key + "_" + str(layer_id))
+                        gene_choices.append(sampler_choices[key])
             elif key == "sample_num_hidden_layers":
                 elastickey2ranges[key] = [len(gene_names), len(gene_names)+1]
                 gene_names.append(key + "_0")
@@ -464,30 +641,36 @@ class EvoSearch:
         for key in self.elastic_keys:
             if key in ["sample_hidden_size", "sample_intermediate_size", "sample_num_attention_heads"]:
                 cur_choices = self.gene_choices[len(feature_config)]
-                values = getattr(arch_config, key) + [max(cur_choices)] * (getattr(arch_config, "num_hidden_layers") - len(getattr(arch_config, key)))
-                feature_config.extend(values)
+                if self.search_space_id is not None and key == "sample_hidden_size" and (self.search_space_id in ["v3"] or self.search_space_id.startswith("v4")):
+                    assert(not isinstance(getattr(arch_config, key), list))
+                    feature_config.append(getattr(arch_config, key))   
+                else:
+                    values = getattr(arch_config, key) + [max(cur_choices)] * (getattr(arch_config, "num_hidden_layers") - len(getattr(arch_config, key)))
+                    feature_config.extend(values)
             elif key == "sample_num_hidden_layers":
                 feature_config.append(getattr(arch_config, key))
         return feature_config
     
-    def feature2arch(self, gene):
-        gene["arch_config"] = copy.deepcopy(self.global_config)
+    def feature2arch(self, feat_config):
+        arch_config = copy.deepcopy(self.global_config)
         for key in self.elastic_keys:
             start_idx = self.elastickey2ranges[key][0]
             end_idx = self.elastickey2ranges[key][1]
             if key == "sample_num_hidden_layers":
-                setattr(gene["arch_config"], key, gene["feat_config"][start_idx])
+                setattr(arch_config, key, feat_config[start_idx])
+            elif self.search_space_id is not None and key == "sample_hidden_size" and (self.search_space_id in ["v3"] or self.search_space_id.startswith("v4")):
+                setattr(arch_config, key, feat_config[start_idx])
             else:
-                setattr(gene["arch_config"], key, gene["feat_config"][start_idx:end_idx])
+                setattr(arch_config, key, feat_config[start_idx:end_idx])
         if "sample_num_hidden_layers" in self.elastickey2ranges:
-            num_hidden_layers = gene["feat_config"][self.elastickey2ranges["sample_num_hidden_layers"][0]]
+            num_hidden_layers = feat_config[self.elastickey2ranges["sample_num_hidden_layers"][0]]
             for key in self.sample_keys:
                 if key != "sample_num_hidden_layers":
-                    setattr(gene["arch_config"], key, getattr(gene["arch_config"], key)[0:num_hidden_layers])            
-        return gene
+                    setattr(arch_config, key, getattr(arch_config, key)[0:num_hidden_layers])            
+        return arch_config
 
     def satisfy_constraint(self, arch_config):
-        cur_params = calculate_params_from_config(arch_config)
+        cur_params = calculate_params_from_config(arch_config, search_space_id=self.search_space_id)
         if cur_params < self.params_min or cur_params > self.params_max:
             return False
         return True
@@ -641,6 +824,14 @@ def parse_args():
         type=str,
         default="/tmp/",
         help="Directory to write pareto front and best config",
+    )
+
+    # finetune vs. pretraining accuracy
+    parser.add_argument(
+        "--finetune",
+        type=str,
+        default=None,
+        help="None: only pretraining accuracy; mnli: supernet is finetuned on mnli"
     )
 
     args = parser.parse_args()

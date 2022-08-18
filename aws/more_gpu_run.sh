@@ -12,7 +12,7 @@
 ## number of nodes
 #SBATCH --nodes=1
 ## time
-#SBATCH --time 5000
+#SBATCH --time 25000
 
 ## number of tasks per node
 #SBATCH --ntasks-per-node=1

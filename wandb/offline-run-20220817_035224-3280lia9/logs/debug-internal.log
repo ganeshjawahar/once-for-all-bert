@@ -1,0 +1,20 @@
+2022-08-17 03:52:26,030 INFO    MainThread:1547138 [internal.py:wandb_internal():90] W&B internal server running at pid: 1547138, started at: 2022-08-17 03:52:26.028032
+2022-08-17 03:52:26,058 INFO    WriterThread:1547138 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220817_035224-3280lia9/run-3280lia9.wandb
+2022-08-17 03:52:26,058 DEBUG   HandlerThread:1547138 [handler.py:handle_request():141] handle_request: run_start
+2022-08-17 03:52:26,083 DEBUG   HandlerThread:1547138 [meta.py:__init__():35] meta init
+2022-08-17 03:52:26,083 DEBUG   HandlerThread:1547138 [meta.py:__init__():49] meta init done
+2022-08-17 03:52:26,083 DEBUG   HandlerThread:1547138 [meta.py:probe():209] probe
+2022-08-17 03:52:26,104 DEBUG   HandlerThread:1547138 [meta.py:_setup_git():199] setup git
+2022-08-17 03:52:26,206 DEBUG   HandlerThread:1547138 [meta.py:_setup_git():206] setup git done
+2022-08-17 03:52:26,206 DEBUG   HandlerThread:1547138 [meta.py:_save_pip():53] save pip
+2022-08-17 03:52:26,209 DEBUG   HandlerThread:1547138 [meta.py:_save_pip():67] save pip done
+2022-08-17 03:52:26,209 DEBUG   HandlerThread:1547138 [meta.py:_save_conda():74] save conda
+2022-08-17 03:52:43,592 DEBUG   HandlerThread:1547138 [meta.py:_save_conda():84] save conda done
+2022-08-17 03:52:43,592 DEBUG   HandlerThread:1547138 [meta.py:probe():247] probe done
+2022-08-17 03:53:02,984 DEBUG   HandlerThread:1547138 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-17 03:53:07,100 WARNING MainThread:1547138 [internal.py:is_dead():387] Internal process exiting, parent pid 1547107 disappeared
+2022-08-17 03:53:07,100 ERROR   MainThread:1547138 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-08-17 03:53:07,982 INFO    HandlerThread:1547138 [handler.py:finish():806] shutting down handler
+2022-08-17 03:53:07,983 INFO    WriterThread:1547138 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220817_035224-3280lia9/run-3280lia9.wandb
+2022-08-17 03:53:08,060 INFO    SenderThread:1547138 [sender.py:finish():1111] shutting down sender
+2022-08-17 03:53:08,061 INFO    MainThread:1547138 [internal.py:handle_exit():80] Internal process exited

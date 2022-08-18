@@ -95,41 +95,97 @@ def compute_student_loss(
         # overall_loss = cross_entropy_loss * args.inplace_kd_distill_loss_weights
         student_distill_loss = 0.0
         if "hard" in args.distillation_type:
-            student_distill_loss = 0.5 * student_mlm_loss + 0.5 * cross_entropy_loss.item()
+            student_distill_loss = args.inplace_kd_distill_loss_contrib * student_mlm_loss + args.inplace_kd_hard_loss_contrib * cross_entropy_loss
         else:
             student_distill_loss = cross_entropy_loss
         student_distill_loss = student_distill_loss / args.gradient_accumulation_steps
         overall_loss = overall_loss + student_distill_loss
-        losses["student_distill_loss"] = student_distill_loss.item()
+        losses["student_distill_loss"] = cross_entropy_loss.item()
     
     if "hiddenlastlayer" in args.distillation_type:
-        non_trainable_layernorm = nn.LayerNorm(teacher_info["teacher_hidden_states"][-1].shape[1:], elementwise_affine=False)
-        teacher_hidden, student_hidden  = teacher_info["teacher_hidden_states"][-1], outputs.hidden_states[-1]
-        teacher_hidden = non_trainable_layernorm(teacher_hidden.detach()) 
-        student_hidden = non_trainable_layernorm(student_hidden)
-        fkt = nn.MSELoss()(teacher_hidden, student_hidden)
+        fkt = 0.0
+        num_layers_distilled = 0
+        for layer_id in args.inplace_kd_layers:
+            if layer_id >= len(teacher_info["teacher_hidden_states"]):
+                continue
+            non_trainable_layernorm = nn.LayerNorm(teacher_info["teacher_hidden_states"][layer_id].shape[1:], elementwise_affine=False)
+            teacher_hidden, student_hidden  = teacher_info["teacher_hidden_states"][layer_id], outputs.hidden_states[layer_id]
+            teacher_hidden = non_trainable_layernorm(teacher_hidden.detach()) 
+            student_hidden = non_trainable_layernorm(student_hidden)
+            cur_fkt = nn.MSELoss()(teacher_hidden, student_hidden)
+            fkt = fkt + cur_fkt
+            num_layers_distilled += 1
+        fkt = fkt / float(num_layers_distilled)
+
         student_hidden_loss = 0.0
         if "hard" in args.distillation_type:
-            student_hidden_loss = 0.5 * student_mlm_loss + 0.5 * fkt.item()
+            student_hidden_loss = args.inplace_kd_distill_loss_contrib * student_mlm_loss + args.inplace_kd_hard_loss_contrib * fkt
         else:
             student_hidden_loss = fkt
         student_hidden_loss = student_hidden_loss / args.gradient_accumulation_steps
         overall_loss = overall_loss + student_hidden_loss
-        losses["student_hidden_loss"] = student_hidden_loss.item()
+        losses["student_hidden_loss"] = fkt.item()
     
     if "attentionlastlayer" in args.distillation_type:
-        teacher_attention, student_attention = teacher_info["teacher_attention_maps"][-1], outputs.attentions[-1]
-        student_attention = student_attention.clamp(min=1e-4).log()
-        student_kl = -(teacher_attention.detach() * student_attention)
-        akt = torch.mean(torch.sum(student_kl, axis=-1))
+        akt = 0.0
+        num_layers_distilled = 0
+        for layer_id in args.inplace_kd_layers:
+            if layer_id >= len(teacher_info["teacher_attention_maps"]):
+                continue
+            teacher_attention, student_attention = teacher_info["teacher_attention_maps"][layer_id], outputs.attentions[layer_id]
+            student_attention = student_attention.clamp(min=1e-4).log()
+            student_kl = -(teacher_attention.detach() * student_attention)
+            cur_akt = torch.mean(torch.sum(student_kl, axis=-1))
+            akt = akt + cur_akt
+            num_layers_distilled += 1
+        akt = akt / float(num_layers_distilled)
+
         student_attention_loss = 0.0
         if "hard" in args.distillation_type:
-            student_attention_loss = 0.5 * student_mlm_loss + 0.5 * akt.item()
+            student_attention_loss = args.inplace_kd_distill_loss_contrib * student_mlm_loss + args.inplace_kd_hard_loss_contrib * akt
         else:
             student_attention_loss = akt
         student_attention_loss = student_attention_loss / args.gradient_accumulation_steps
         overall_loss = overall_loss + student_attention_loss
-        losses["student_attention_loss"] = student_attention_loss.item()
+        losses["student_attention_loss"] = akt.item()
+    
+    if "tinybert" in args.distillation_type:
+        # hidden loss
+        fkt = 0.0
+        num_layers_distilled = 0
+        for layer_id in args.inplace_kd_layers:
+            if layer_id >= len(teacher_info["teacher_hidden_states"]):
+                continue
+            teacher_hidden, student_hidden  = teacher_info["teacher_hidden_states"][layer_id], outputs.hidden_states[layer_id]
+            cur_fkt = nn.MSELoss()(teacher_hidden.detach(), student_hidden)
+            fkt = fkt + cur_fkt
+            num_layers_distilled += 1
+
+        '''
+        # attention loss
+        akt = 0.0
+        num_layers_distilled = 0
+        for layer_id in args.inplace_kd_layers:
+            if layer_id >= len(teacher_info["teacher_attention_maps"]):
+                continue
+            teacher_attention, student_attention = teacher_info["teacher_attention_maps"][layer_id], outputs.attentions[layer_id]
+            teacher_attention.detach()
+            student_attention.detach()
+            # cur_akt = nn.MSELoss()(teacher_attention.detach(), student_attention)
+            # akt = akt + cur_akt
+            num_layers_distilled += 1
+        '''
+
+        # final distillation loss
+        final_distillation_loss = 0.0
+        if "hard" in args.distillation_type:
+            final_distillation_loss = args.inplace_kd_distill_loss_contrib * student_mlm_loss + args.inplace_kd_hard_loss_contrib * (fkt) # + akt.item())
+        else:
+            final_distillation_loss = fkt # + akt 
+
+        final_distillation_loss = final_distillation_loss / args.gradient_accumulation_steps
+        overall_loss = overall_loss + final_distillation_loss
+        losses["student_hidden_loss"] = fkt.item()
 
     losses["overall_loss"] = overall_loss.item()
 

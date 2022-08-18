@@ -184,7 +184,7 @@ class DynamicSeparableConv2d(nn.Module):
 
 class DynamicSeparableConv1d(nn.Module):
 
-    def __init__(self, max_in_channels, kernel_size_list, stride=1, dilation=1):
+    def __init__(self, max_in_channels, kernel_size_list, stride=1, dilation=1, normal_conv=False):
         super(DynamicSeparableConv1d, self).__init__()
 
         self.max_in_channels = max_in_channels
@@ -197,15 +197,21 @@ class DynamicSeparableConv1d(nn.Module):
             self.max_in_channels,
             max(self.kernel_size_list),
             self.stride,
-            groups=1,
+            groups=self.max_in_channels if not normal_conv else 1,
             bias=False, padding=max(self.kernel_size_list)//2)
         
         self.active_kernel_size = max(self.kernel_size_list)
+        self.normal_conv = normal_conv
 
         # init. kernel to identity
         # https://stackoverflow.com/questions/60782616/my-pytorch-conv1d-with-an-identity-kernel-does-not-produce-the-same-output-as-th
-        torch.nn.init.zeros_(self.conv.weight)
-        self.conv.weight.data[:, :, max(self.kernel_size_list)//2] = torch.eye(self.max_in_channels, self.max_in_channels)
+        if normal_conv:
+            torch.nn.init.zeros_(self.conv.weight)
+            self.conv.weight.data[:, :, max(self.kernel_size_list)//2] = torch.eye(self.max_in_channels, self.max_in_channels)
+        else:
+            self.conv.weight.data.zero_()
+            self.conv.weight.data[..., max(self.kernel_size_list)//2] = 1
+
     
     # todo: implement get_active_subnet function
 
@@ -218,16 +224,16 @@ class DynamicSeparableConv1d(nn.Module):
         #print(self.conv.weight.size())
         filters = self.conv.weight[:out_channel, :in_channel, :].contiguous()
         #print(x.size(), filters.size(), in_channel)
-        y = F.conv1d(x, filters, None, stride=self.stride, padding=self.active_kernel_size//2, dilation=self.dilation, groups=1)
+        y = F.conv1d(x, filters, None, stride=self.stride, padding=self.active_kernel_size//2, dilation=self.dilation, groups=in_channel if not self.normal_conv else 1)
 
         y = y.permute(0, 2, 1)
         return y
 
 def test():
-    layer1d = torch.nn.Conv1d(5, 5, 3, stride=1, padding='same')
-    # print(layer1d.weight.size())
+    layer1d = torch.nn.Conv1d(5, 5, 3, stride=1, padding='same', groups=5)
+    layer1d.weight.data.zero_()
+    layer1d.weight.data[...,3//2] = 1
     input = torch.Tensor(2, 5, 6)
-    # print(layer1d(input).size())
 
     l = DynamicSeparableConv1d(5, [3])
     input = torch.Tensor(2, 6, 4)
@@ -238,4 +244,8 @@ def test():
     print(l(input))
     print(l(input).size())
 
+
+    l = DynamicSeparableConv1d(3072, [7])
+    print(l.conv.weight.size())
 # test()
+

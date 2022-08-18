@@ -1223,6 +1223,10 @@ class BertIntermediate(nn.Module):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
+        if hasattr(config, "search_space_id") and (config.search_space_id is not None and config.search_space_id in ["v4.5"]):
+            # normal: Linear -> relu -> Linear
+            # 4.5: Depthwise Convnet -> Linear -> gelu -> Linear
+            self.conv1d = BertConv1d(config)
 
     def set_sample_config(self, config):
         sample_intermediate_size = config.sample_intermediate_size if config.sample_intermediate_size > 10 else int(config.sample_intermediate_size * config.sample_hidden_size) # todo: make it dynamic
@@ -1230,6 +1234,8 @@ class BertIntermediate(nn.Module):
         self.dense.set_sample_config(sample_hidden_size, sample_intermediate_size)
 
     def forward(self, hidden_states):
+        if hasattr(self, "conv1d"):
+            hidden_states = self.conv1d(hidden_states)
         hidden_states = self.dense(hidden_states)
         hidden_states = self.intermediate_act_fn(hidden_states)
         return hidden_states
@@ -1237,15 +1243,28 @@ class BertIntermediate(nn.Module):
 class BertConv1d(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.conv1d = DynamicSeparableConv1d(config.hidden_size, [7])
-        if isinstance(config.hidden_act, str):
-            self.intermediate_act_fn = ACT2FN[config.hidden_act]
-        else:
-            self.intermediate_act_fn = config.hidden_act
+
+        self.num_input_channels = config.hidden_size
+        if config.search_space_id == "v4.2" or config.search_space_id == "v4.3":
+            self.num_input_channels = config.intermediate_size
+        self.normval_conv = False
+        if config.search_space_id == "v4.1":
+            self.normval_conv = True
+        self.is_actvn = False
+        if config.search_space_id == "v4.1" or config.search_space_id == "v4.2":
+            self.is_actvn = True
+
+        self.conv1d = DynamicSeparableConv1d(self.num_input_channels, [7], normal_conv=self.normval_conv) # todo: make 7 command line
+        if self.is_actvn:
+            if isinstance(config.hidden_act, str):
+                self.intermediate_act_fn = ACT2FN[config.hidden_act]
+            else:
+                self.intermediate_act_fn = config.hidden_act
 
     def forward(self, hidden_states):
         hidden_states = self.conv1d(hidden_states)
-        hidden_states = self.intermediate_act_fn(hidden_states)
+        if self.is_actvn:
+            hidden_states = self.intermediate_act_fn(hidden_states)
         return hidden_states
 
 class BertOutput(nn.Module):
@@ -1257,7 +1276,13 @@ class BertOutput(nn.Module):
             config.hidden_size, eps=config.layer_norm_eps
         )
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        if config.search_space_id == "v4":
+        self.search_space_id = config.search_space_id if hasattr(config, "search_space_id") else None
+        if hasattr(config, "search_space_id") and (config.search_space_id is not None and config.search_space_id.startswith("v4") and config.search_space_id!="v4.5"):
+            # normal: Linear -> relu -> Linear
+            # 4.1: Linear -> relu -> Linear -> Normal Convnet -> relu  (current) 
+            # 4.2: Linear -> relu -> depthwise Convnet -> relu -> Linear 
+            # 4.3: Linear -> relu -> Linear -> Depthwise Convnet  
+            # 4.5: Depthwise Convnet -> Linear -> gelu -> Linear
             self.conv1d = BertConv1d(config)
 
     def set_sample_config(self, config, prev_layer_importance_order=None):
@@ -1296,16 +1321,37 @@ class BertOutput(nn.Module):
                     self.dense.sample_importance_order = final_importance_indices
 
     def forward(self, hidden_states, input_tensor):
-        hidden_states = self.dense(hidden_states)
-        hidden_states = self.dropout(hidden_states)
-        if self.config.rewire:
-            if hasattr(self.dense, "sample_importance_order"):
-                importance_order = self.dense.sample_importance_order
-                input_tensor = input_tensor[:, :, importance_order]
-        if hasattr(self, "conv1d"):
-            hidden_states = self.conv1d(hidden_states)
-        hidden_states = self.LayerNorm(hidden_states + input_tensor)
-
+        # normal: Linear -> relu -> Linear
+        # 4.1: Linear -> relu -> Linear -> Normal Convnet -> relu  (current) 
+        # 4.2: Linear -> relu -> depthwise Convnet -> relu -> Linear 
+        # 4.3: Linear -> relu -> Linear -> Depthwise Convnet  
+        # 4.5: Depthwise Convnet -> Linear -> gelu -> Linear
+        if self.search_space_id is None or self.search_space_id == "v4.5" or not self.search_space_id.startswith("v4"):
+            hidden_states = self.dense(hidden_states)
+            hidden_states = self.dropout(hidden_states)
+            if self.config.rewire:
+                if hasattr(self.dense, "sample_importance_order"):
+                    importance_order = self.dense.sample_importance_order
+                    input_tensor = input_tensor[:, :, importance_order]
+            hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        elif self.search_space_id == "v4.1":
+            hidden_states = self.dense(hidden_states)
+            hidden_states = self.dropout(hidden_states)
+            if hasattr(self, "conv1d"):
+                hidden_states = self.conv1d(hidden_states)
+            hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        elif self.search_space_id == "v4.2":
+            if hasattr(self, "conv1d"):
+                hidden_states = self.conv1d(hidden_states)
+            hidden_states = self.dense(hidden_states)
+            hidden_states = self.dropout(hidden_states)
+            hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        elif self.search_space_id == "v4.3":
+            hidden_states = self.dense(hidden_states)
+            hidden_states = self.dropout(hidden_states)
+            if hasattr(self, "conv1d"):
+                hidden_states = self.conv1d(hidden_states)
+            hidden_states = self.LayerNorm(hidden_states + input_tensor)
         return hidden_states
 
 
@@ -2522,6 +2568,9 @@ class BertForMaskedLM(BertPreTrainedModel):
         self.config = config
         if self.config.additional_random_softmaxing:
             self.random_softmaxing_idx = random.randint(1, 11)
+        if hasattr(config, "add_distill_linear_layer") and config.add_distill_linear_layer:
+            self.distill_input_features =  config.hidden_size[-1] if isinstance(config.hidden_size, list) else config.hidden_size
+            self.fit_dense = CustomLinear(self.distill_input_features, self.distill_input_features)
         self.init_weights()
 
     def sample_next_layer(self):
@@ -2547,6 +2596,10 @@ class BertForMaskedLM(BertPreTrainedModel):
             config, drop_layers=drop_layers, drop_vector=drop_vector
         )
         self.cls.set_sample_config(config)
+        if hasattr(self, 'fit_dense'):
+            # active_distill_input_features = config.sample_hidden_size[-1] if isinstance(config.sample_hidden_size, list) else config.sample_hidden_size
+            self.fit_dense.set_sample_config(self.distill_input_features, self.distill_input_features)
+            # self.active_distill_input_features = [768] + config.sample_hidden_size # embed: todo: adapt for other spaces beyond v1
 
     def get_active_subnet(self, config):
         subnet = BertForMaskedLM(config)
@@ -2653,17 +2706,25 @@ class BertForMaskedLM(BertPreTrainedModel):
                         prediction_scores.view(-1, self.config.vocab_size),
                         labels.view(-1),
                     )
-
+                    
         if not return_dict:
             output = (prediction_scores,) + outputs[2:]
             return (
                 ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
             )
 
+        hidden_states = outputs.hidden_states
+        if hasattr(self, 'fit_dense'):
+            tmp_hidden_states = []
+            for s_id, sequence_layer in enumerate(hidden_states):
+                # self.fit_dense.set_sample_config(self.active_distill_input_features[s_id], self.distill_input_features)
+                tmp_hidden_states.append(self.fit_dense(sequence_layer))
+            hidden_states = tmp_hidden_states
+
         return MaskedLMOutput(
             loss=masked_lm_loss,
             logits=prediction_scores,
-            hidden_states=outputs.hidden_states,
+            hidden_states=hidden_states,
             attentions=outputs.attentions,
         )
 

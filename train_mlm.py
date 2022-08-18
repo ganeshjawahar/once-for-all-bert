@@ -20,6 +20,7 @@ import logging
 import math
 import os
 import random
+from tkinter import E
 from torch._C import layout
 import wandb
 import json, re
@@ -697,10 +698,24 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--inplace_kd_distill_loss_weights",
+        "--inplace_kd_distill_loss_contrib",
         type=float,
-        default=1.0,
+        default=0.5,
         help=f"only useful if inplace_distillation is set",
+    )
+
+    parser.add_argument(
+        "--inplace_kd_hard_loss_contrib",
+        type=float,
+        default=0.5,
+        help=f"only useful if inplace_distillation is set",
+    )
+
+    parser.add_argument(
+        "--inplace_kd_layers",
+        type=str,
+        default=None,
+        help=f"only useful if inplace_distillation is set and distillation_type has hidden or attention",
     )
 
     parser.add_argument(
@@ -717,6 +732,13 @@ def parse_args():
         help=f"set yes to do turn off smallest transformer updates",
     )
 
+    parser.add_argument(
+        "--teacher_model_path",
+        type=str,
+        default=None,
+        help=f"path to the fixed teacher model",
+    )
+
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
     # )
@@ -725,6 +747,10 @@ def parse_args():
 
     if args.distillation_type:
         args.distillation_type = args.distillation_type.split("+")
+    if args.inplace_kd_layers:
+        args.inplace_kd_layers = [int(layer) for layer in args.inplace_kd_layers.split("+")]
+    else:
+        args.inplace_kd_layers = [11] # defaultd last layer: todo: set it dynamically
 
     #if args.subtransformer_config_path is None:
     #    args.model_name_or_path = "bert-base-cased"
@@ -944,6 +970,11 @@ def main():
             if args.check_test_loss_only == "yes":
                 test_valid = tokenized_datasets["test"].train_test_split(test_size=args.check_test_loss_only_percent, seed=123)
                 tokenized_datasets = DatasetDict({'train': tokenized_datasets['train'], 'validation': tokenized_datasets['validation'], 'test': test_valid['test']})
+        #elif "academic_bert" in args.tokenized_c4_dir:
+        #    train_testvalid = tokenized_datasets["train"].train_test_split(test_size=0.1, seed=123)
+        #    test_valid = train_testvalid["test"].train_test_split(test_size=0.95, seed=123)
+        #    tokenized_datasets = DatasetDict({'train': train_testvalid['train'], 'test': test_valid['test'], 'validation': test_valid['train'] })
+
                 
     elif args.dataset_name is not None:
         # Downloading and loading a dataset from the hub.
@@ -1054,6 +1085,12 @@ def main():
             global_config.output_hidden_states = True # need to correct name to last_hidden_states
         if "attentionlastlayer" in args.distillation_type:
             global_config.output_attentions = True # need to correct name to attentionlastlayer
+        if "tinybert" in args.distillation_type:
+            global_config.output_hidden_states = True
+            global_config.output_attentions = True
+            global_config.add_distill_linear_layer = True # adds 
+        else:
+            global_config.add_distill_linear_layer = False
 
     global_config.alpha_divergence = args.alpha_divergence
 
@@ -1189,6 +1226,21 @@ def main():
             print('initialized with random BERT weights')
             print(global_config)
             model = custom_bert.BertForMaskedLM(global_config)
+    
+    if args.teacher_model_path is not None:
+        teacher_config = deepcopy(global_config)
+        if args.distillation_type:
+            teacher_config.add_distill_linear_layer = False
+        teacher_model = custom_bert.BertForMaskedLM.from_pretrained(args.teacher_model_path, config=teacher_config)
+        
+        teacher_model.eval()
+        print('setting teachers requires_grad to False')
+        # hack to use accelerator to prepare teacher model
+        i = 0
+        for p in teacher_model.parameters(): 
+            if i != 0:
+                p.requires_grad = False
+            i += 1
 
     # if rewiring and resuming from checkpoint, we will load the rewiring weights seperately
     if args.rewire:
@@ -1425,6 +1477,9 @@ def main():
     model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
         model, optimizer, train_dataloader, eval_dataloader
     )
+    if args.teacher_model_path is not None:
+        teacher_model = accelerator.prepare(teacher_model) # not needed when teacher doesn't have any parameter that requires a gradient
+        
     # if args.resume_from_checkpoint_dir is not None:
     #    unwrapped_model = accelerator.unwrap_model(model)
     #    unwrapped_model.from_pretrained(args.resume_from_checkpoint_dir)
@@ -1435,11 +1490,15 @@ def main():
     ):
         # forward missing getattr and state_dict/load_state_dict to orig model
         model = ModuleProxyWrapper(model)
+        if args.teacher_model_path is not None:
+            teacher_model = ModuleProxyWrapper(teacher_model)
 
     if hasattr(global_config, "depth_features"):
         model.set_sample_config(global_config, drop_vector=global_config.depth_features)
     else:
         model.set_sample_config(global_config, drop_layers=False)
+    if args.teacher_model_path is not None:
+        teacher_model.set_sample_config(teacher_config, drop_layers=False)
     # Note -> the training dataloader needs to be prepared before we grab his length below (cause its length will be
     # shorter in multiprocess)
     # Scheduler and math around the number of training steps.
@@ -1706,22 +1765,23 @@ def main():
 
                 if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "biggest":
                     ## Sample Supertransformer
-                    model.set_sample_config(global_config, drop_layers=True)
-
-                    outputs = model(**batch)
-                    loss = outputs.loss
-
-                    teacher_mlm_loss = loss
-                    teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
-                    accelerator.backward(teacher_mlm_loss)
+                    if args.teacher_model_path is not None:
+                        outputs = teacher_model(**batch)
+                    else:
+                        model.set_sample_config(global_config, drop_layers=True)
+                        outputs = model(**batch)
+                        loss = outputs.loss
+                        teacher_mlm_loss = loss
+                        teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
+                        accelerator.backward(teacher_mlm_loss)
 
                     if args.inplace_distillation:
 
                         teacher_info = {}
-                        if "hiddenlastlayer" in args.distillation_type:
+                        if "hiddenlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
                             teacher_info["teacher_hidden_states"] = outputs.hidden_states
 
-                        if "attentionlastlayer" in args.distillation_type:
+                        if "attentionlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
                             teacher_info["teacher_attention_maps"] = outputs.attentions
                         
                         if "logits" in args.distillation_type:
@@ -1745,17 +1805,29 @@ def main():
                         # batch["labels"] = soft_logits
                 elif args.inplace_distillation and args.freeze_largest_model == "yes" and args.freeze_smallest_model == "yes":
                     # need teacher logits
-                    model.eval()
-                    model.set_sample_config(global_config, drop_layers=True)
-                    outputs = model(**batch)
-                    teacher_info = {}
-                    if "hiddenlastlayer" in args.distillation_type:
-                        teacher_info["teacher_hidden_states"] = outputs.hidden_states
-                    if "attentionlastlayer" in args.distillation_type:
-                        teacher_info["teacher_attention_maps"] = outputs.attentions
-                    if "logits" in args.distillation_type:
-                        teacher_info["teacher_logits"] = outputs.logits.detach()
-                    model.train()
+                    if args.teacher_model_path is None:
+                        model.eval()
+                        model.set_sample_config(global_config, drop_layers=True)
+                        outputs = model(**batch)
+                        teacher_info = {}
+                        if "hiddenlastlayer" in args.distillation_type:
+                            teacher_info["teacher_hidden_states"] = outputs.hidden_states
+                        if "attentionlastlayer" in args.distillation_type:
+                            teacher_info["teacher_attention_maps"] = outputs.attentions
+                        if "logits" in args.distillation_type:
+                            teacher_info["teacher_logits"] = outputs.logits.detach()
+                        model.train()
+                    else:
+                        with torch.no_grad():
+                            outputs = teacher_model(**batch)
+                        teacher_info = {}
+                        if "hiddenlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
+                            teacher_info["teacher_hidden_states"] = outputs.hidden_states
+                        if "attentionlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
+                            teacher_info["teacher_attention_maps"] = outputs.attentions
+                        if "logits" in args.distillation_type:
+                            teacher_info["teacher_logits"] = outputs.logits.detach()
+
                     # freeze_largest_model and freeze_smallest_model automatically works
 
                 if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "smallest":
@@ -1822,6 +1894,7 @@ def main():
             # cleanup
             if args.inplace_distillation or args.distillation_type:
                 del teacher_info
+                del outputs
             
             if (
                 step % args.gradient_accumulation_steps == 0

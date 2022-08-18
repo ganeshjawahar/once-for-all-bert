@@ -79,6 +79,8 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             distillloss_scores = {}
         if "hidden" in inpl_kd:
             hiddenloss_scores = {}
+        if "attention" in inpl_kd:
+            attentionloss_scores = {}
     for name, runid in supernet_runids: 
         # attribs: Supertransformer mlm loss, Smallest mlm loss, SuperTransformer Val Loss
         run = api.run(runid)
@@ -96,6 +98,9 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                 if "hidden" in inpl_kd:
                     hiddenloss_scores[name + "-small"] = [[],[]] # step, loss
                     hiddenloss_scores[name + "-rand"] = [[],[]] # step, loss
+                if "attention" in inpl_kd:
+                    attentionloss_scores[name + "-small"] = [[],[]] # step, loss
+                    attentionloss_scores[name + "-rand"] = [[],[]] # step, loss
         for row in metrics:
             if 'Supertransformer mlm loss' in row  and row['Supertransformer mlm loss'] != 'NaN': # and not np.isnan(row['Supertransformer mlm loss']):
                 trainloss_scores[name + "-big"][0].append(row['_step'])
@@ -129,7 +134,12 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                 if 'Subtransformer Student hidden loss' in row and row['Subtransformer Student hidden loss'] != 'NaN':
                     hiddenloss_scores[name + "-rand"][0].append(row['_step'] if '_step' in row else len(hiddenloss_scores[name + "-rand"][0]))
                     hiddenloss_scores[name + "-rand"][1].append(row['Subtransformer Student hidden loss'])
-
+                if 'Smallest Student attention loss' in row and row['Smallest Student attention loss'] != 'NaN':
+                    attentionloss_scores[name + "-small"][0].append(row['_step'] if '_step' in row else len(attentionloss_scores[name + "-small"][0]))
+                    attentionloss_scores[name + "-small"][1].append(row['Smallest Student attention loss'])
+                if 'Subtransformer Student attention loss' in row and row['Subtransformer Student attention loss'] != 'NaN':
+                    attentionloss_scores[name + "-rand"][0].append(row['_step'] if '_step' in row else len(attentionloss_scores[name + "-rand"][0]))
+                    attentionloss_scores[name + "-rand"][1].append(row['Subtransformer Student attention loss'])
     
     for name, runid in standalone_runids: 
         # attribs: Subtransf
@@ -155,6 +165,8 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             scores_list.append(("distill_loss", distillloss_scores))
         if "hidden" in inpl_kd:
             scores_list.append(("hidden_loss", hiddenloss_scores))
+        if "attention" in inpl_kd:
+            scores_list.append(("attention_loss", attentionloss_scores))
     for name, scores in scores_list:
         fig = plt.figure(figsize=(13,7))
         colors = ['b', "springgreen", "indigo", "olive", "firebrick", 'c', "gold", "violet", 'm', 'r', 'g', 'k', 'y']
@@ -164,8 +176,9 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                 sns.lineplot(x=scores[model][0], y=scores[model][1], color=colors[ei], label=model)
             else:
                 cur_x, cur_y = [], []
+                print(name, model)
                 for j in range(len(scores[model][0])):
-                    if j % every_x_steps == 0 and (ignore_first_x_steps is None or int(model[0][j]) >= ignore_first_x_steps):
+                    if j % every_x_steps == 0: # and (ignore_first_x_steps is None or int(model[0][j]) >= ignore_first_x_steps):
                         cur_x.append(scores[model][0][j])
                         cur_y.append(scores[model][1][j])
                 sns.lineplot(x=cur_x, y=cur_y, color=colors[ei], label=model)
@@ -192,6 +205,9 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_hypernet", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-hypnet-rank32-hyphid16", "ganayu/effbert/283vgn33"), ("supernet-hypnet-rank64-hyphid16", "ganayu/effbert/1m37fnbo"), ("supernet-hypnet-rank64-hyphid50", "ganayu/effbert/jrmtzw1h") ], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100, ignore_first_x_steps=50000)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_nasbert_bsz_1024_250Ksteps", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("supernet-1024_250Ksteps", "ganayu/effbert/24lo78gh") ], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug2_continue_pretrain_100ksteps_schedule", supernet_runids=[], standalone_runids=[("stage1", "ganayu/effbert/oisadmiy"), ("5timeslowerlr", "ganayu/effbert/39p9dmtg"), ("nowarmup", "ganayu/effbert/2m79af3n")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug8_continue_pretrain_100ksteps_schedule_softhard_vs_hard", supernet_runids=[], standalone_runids=[("soft+hard", "ganayu/effbert/3emvtqgq"), ("hard", "ganayu/effbert/2m79af3n")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug8_inplkd_logits_hidden", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"),  ("attentionhard", "ganayu/effbert/2gj82hqh"), ("hiddenhard", "ganayu/effbert/1ho5yd71"), ("logitshard", "ganayu/effbert/v8by4dk4")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], inpl_kd=["logits", "hidden", "attention"], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug10_v1_vs_v3", supernet_runids=[ ("supernet-v1", "ganayu/effbert/sanqznoy"), ("supernet-v3", "ganayu/effbert/2amuc50v") ], standalone_runids=[], every_x_steps=100)
 
 def wandb_locate_proj():
     import json
@@ -226,30 +242,68 @@ def get_best_ft_results():
             sys.exit(0)
 # get_best_ft_results()
 
-def get_best_mnli_ft_results(experiments):
-    for model in [ "2xtrainbudget"]: #"v2", "2xbudget", "sandwch_2rand",]:
-        for task in ["cola", "mrpc", "sst2"]:
+def get_best_mnli_ft_results(experiments, models, tasks, mm=False):
+    for model in models: #[ "2xtrainbudget"]: #"v2", "2xbudget", "sandwch_2rand",]:
+        for task in tasks: #["cola", "mrpc", "sst2"]:
             for exp in experiments:
                 best_mnli_dev_acc = None
+                best_config = None
                 for f in glob.glob("/fsx/ganayu/experiments/supershaper/%s/*%s*%s*/sys.out"%(exp, model, task)):
                     last_acc = None
                     for line in open(f):
                         line = line.strip()
-                        if "accuracy" in line and "lr=" in line:
-                            if "'f1'" in line:
-                                last_acc = 100.0*float(line.split("'accuracy': ")[1].split(",")[0])
-                            else:
+                        if mm and task == "mnli":
+                            if "accuracy" in line:
                                 last_acc = 100.0*float(line.split("'accuracy': ")[1].split("}")[0])
-                        elif "matthews_correlation" in line:
-                            last_acc = 100.0*float(line.split("'matthews_correlation': ")[1].split("}")[0])
+                        else:
+                            if "accuracy" in line and "lr=" in line:
+                                if "'f1'" in line:
+                                    last_acc = 100.0*float(line.split("'accuracy': ")[1].split(",")[0])
+                                else:
+                                    last_acc = 100.0*float(line.split("'accuracy': ")[1].split("}")[0])
+                            elif "spearmanr" in line and "lr=" in line:
+                                last_acc = 100.0*float(line.split("'spearmanr': ")[1].split("}")[0])
+                            elif "matthews_correlation" in line:
+                                last_acc = 100.0*float(line.split("'matthews_correlation': ")[1].split("}")[0])
                     if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
                         best_mnli_dev_acc = last_acc
-                print(model, task, best_mnli_dev_acc)
+                        best_config = f
+                print(model, task, best_mnli_dev_acc, best_config)
 
 # get_best_mnli_ft_results(["aug2_v3_finetune_supershaper_60M_direct", "aug2_v3_finetune_supershaper_60M_100Ksteps", "aug2_v3_finetune_v2_60M_direct"])
 # get_best_mnli_ft_results(["aug5_v3_finetune_sandwch_2rand_60M_100Ksteps"])
 # get_best_mnli_ft_results(["aug5_v3_finetune_v1_60M_100Ksteps_cola_mrpc_sst2"])
 # get_best_mnli_ft_results(["aug5_v3_finetune_2xbudget_60M_100Ksteps_cola_mrpc_sst2"])
+# get_best_mnli_ft_results(["aug7_finetune_v1_60M_100Ksteps_logitshard_mnli"], models=["v1"], tasks=["mnli"])
+# get_best_mnli_ft_results(["aug6_finetune_v2_60M_directFT_cola_mrpc_sst2"], models=["v2"], tasks=["cola", "mrpc", "sst2"])
+# get_best_mnli_ft_results(["aug8_finetune_inplacekd_logitshard_mnli"], models=["logitshard"], tasks=["mnli"])
+# get_best_mnli_ft_results(["aug8_finetune_search_v1_duplissueresolved_mnli"], models=["logitshard"], tasks=["mnli"])
+# get_best_mnli_ft_results(["aug10_finetune_acabertdata_bertbasestandalone"], models=["bertbase"], tasks=["mnli", "cola", "mrpc", "sst2"], mm=True)
+# get_best_mnli_ft_results(["aug10_finetune_acabertdata_robertbasestandalone"], models=["robertabase"], tasks=["mnli", "cola", "mrpc", "sst2"], mm=False)
+# get_best_mnli_ft_results(["aug12_directfinetune_v1_acabert_evo15"], models=["v1"], tasks=["mnli", "cola"], mm=False)
+# get_best_mnli_ft_results(["aug13_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_retrain_scratch"], models=["v1"], tasks=["mnli", "cola"], mm=False)
+# get_best_mnli_ft_results(["aug13_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue"], models=["v1"], tasks=["mnli", "cola"], mm=False)
+# get_best_mnli_ft_results(["aug13_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue_mnli_bestckpt_rte_stsb_mrpc"], models=["v1"], tasks=["rte", "mrpc", "stsb"], mm=False)
+
+def get_best_mnli_superft_results(experiments, models, tasks, mm=False):
+    for model in models: 
+        for task in tasks: #["cola", "mrpc", "sst2"]:
+            for exp in experiments:
+                best_mnli_dev_acc, best_setting = None, None
+                for f in glob.glob("/fsx/ganayu/experiments/supershaper/%s/*%s*%s*/sys.out"%(exp, model, task)):
+                    last_acc = None
+                    for line in open(f):
+                        line = line.strip()
+                        if "SmallestTransformer Val Accuracy" in line:
+                            small_acc = 100.0*float(line.split("'SmallestTransformer Val Accuracy': ")[1].split("}")[0])
+                            big_acc = 100.0*float(line.split("'SuperTransformer Val Accuracy': ")[1].split(",")[0])
+                            last_acc = (small_acc + big_acc)/2.0
+                    if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
+                        best_mnli_dev_acc = last_acc
+                        best_setting = f.split("/")[-2]
+                print(model, task, best_mnli_dev_acc, best_setting)
+# get_best_mnli_superft_results(["aug11_supernet_finetune_mnli_v3_bertbaseinit"], models=["bertbase"], tasks=["mnli"], mm=False) # 1_bertbase_mnli_5e-5_16_3
+# get_best_mnli_superft_results(["aug16_supernet_finetune_mnli_v3_supernetbertbaseinit"], models=["bertbase"], tasks=["mnli"], mm=False) # 2_bertbase_mnli_5e-5_16_4
 
 def get_best_ft_results_for_more_tasks(master_folder):
     '''
@@ -304,7 +358,6 @@ def get_best_ft_results_for_more_tasks(master_folder):
         print(exp, best_accuracies)
 # get_best_ft_results_for_more_tasks("/fsx/ganayu/experiments/supershaper/aug2_directfinetune_mnli_supershaper_2xtrainbudget_sandwch_2random")
 
-
 def get_best_ft_sweep_space():
     target_model = "supershaper"
     for fold in glob.glob("/fsx/ganayu/experiments/supershaper/aug2_supershaper_directfinetune_sweepcheck_*"):
@@ -337,6 +390,53 @@ def get_best_ft_sweep_space():
             best_dev_scores[prev_task] = prev_score
         print(fold.split("/")[-1], best_dev_scores)
 # get_best_ft_sweep_space()
+
+def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folder):
+    experiments = []
+    for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/shell.sh"):
+        line = line.strip()
+        if "accelerate launch" in line:
+            epochs = int(line.split("--num_train_epochs ")[1].split(" ")[0])
+            task = line.split("--task_name ")[1].split(" ")[0]
+            experiments.append([epochs, task])
+    
+    cur_exp = -1
+    prev_epoch = -1
+    task2runs = {}
+    last_score = None
+    cur_task = None
+    for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/sys.out"):
+        line = line.strip()
+        if "lr=" in line and "bs=" in line and "ep=" in line:
+            if "epoch 0" in line and prev_epoch != 0:
+                if prev_epoch != -1:
+                    assert(cur_task!=None)
+                    assert(last_score!=None)
+                    if cur_task not in task2runs:
+                        task2runs[cur_task] = []
+                    task2runs[cur_task].append(last_score)
+                cur_exp += 1
+                cur_task = experiments[cur_exp][1]
+            prev_epoch = int(line.split("epoch ")[1].split(":")[0])
+            last_score = line
+    task2runs[cur_task].append(last_score)
+
+    metric = {"mnli": "accuracy", "cola": "matthews_correlation", "mrpc": "accuracy", "sst2": "accuracy", "qnli": "accuracy", "qqp": "accuracy", "rte": "accuracy", "stsb": "spearmanr"}
+
+    for task in task2runs:
+        best_score = None
+        best_config = None
+        for score in task2runs[task]:
+            cur_score = 100.0*float(score.split("'"+metric[task]+"': ")[1].split()[0][0:-1])
+            if best_score is None or cur_score > best_score:
+                best_score = cur_score
+                best_config = score
+        print(task, best_score)
+
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue_otherglue/acav1")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v3_v4.1-3_mnli_cola_mrpc_sst2/dftv3")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v3_v4.1-3_mnli_cola_mrpc_sst2/dftv4.1")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v4.2_mnli_cola_mrpc_sst2/dftv4.2")
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)
@@ -380,4 +480,5 @@ def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_n
 
 # get_pareto_curve(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug3_pareto_diff_search_spaces", iteration="evo_results_29.xls", sheet_name="iter_10", experiments=["aug1_v3_supernetbase_search_different_spaces"])
 # get_pareto_curve(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_v3_supernetbase_search_diff_configs", iteration="evo_results_29.xls", sheet_name="iter_10", experiments=["aug1_v3_supernetbase_search_diff_configs"])
+
 
