@@ -1,0 +1,116 @@
+Subnet info: Model-Size=66958800, Val-PPL=6.072305523664952
+Subnet info: Gene=[600, 2, 3, 2, 3, 3, 3, 3, 3, 3, 4, 3, 4, 6, 12, 6, 12, 12, 12, 12, 12, 12, 12, 6, 12]
+Subnet info: Search_space_id=v3
+Subnet info: elastic_keys= ['sample_hidden_size', 'sample_intermediate_size', 'sample_num_attention_heads']
+Subnet info: gene_choices= [[120, 240, 360, 480, 540, 600, 768], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12]]
+Subnet info: gene_names= ['sample_hidden_size_0', 'sample_intermediate_size_0', 'sample_intermediate_size_1', 'sample_intermediate_size_2', 'sample_intermediate_size_3', 'sample_intermediate_size_4', 'sample_intermediate_size_5', 'sample_intermediate_size_6', 'sample_intermediate_size_7', 'sample_intermediate_size_8', 'sample_intermediate_size_9', 'sample_intermediate_size_10', 'sample_intermediate_size_11', 'sample_num_attention_heads_0', 'sample_num_attention_heads_1', 'sample_num_attention_heads_2', 'sample_num_attention_heads_3', 'sample_num_attention_heads_4', 'sample_num_attention_heads_5', 'sample_num_attention_heads_6', 'sample_num_attention_heads_7', 'sample_num_attention_heads_8', 'sample_num_attention_heads_9', 'sample_num_attention_heads_10', 'sample_num_attention_heads_11']
+Subnet info: elastickey2ranges= {'sample_hidden_size': [0, 1], 'sample_intermediate_size': [1, 13], 'sample_num_attention_heads': [13, 25]}
+pre-initialized with BERT weights
+perplexity before starting: 6.15
+{'SuperTransformer Val Accuracy': 0, 'SuperTransformer Val loss': tensor(1.8134, device='cuda:0'), 'SuperTransformer Perplexity': 6.1314828880378185}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+08/23/2022 22:13:24 - INFO - __main__ -   ==================================================================
+08/23/2022 22:13:24 - INFO - __main__ -   Number of parameters in custom config is 67 Million
+08/23/2022 22:13:24 - INFO - __main__ -   ==================================================================
+08/23/2022 22:13:32 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForMaskedLM                                              --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              7,087,872
+│    │    │    └─BertLayer: 4-2                              7,087,872
+│    │    │    └─BertLayer: 4-3                              7,087,872
+│    │    │    └─BertLayer: 4-4                              7,087,872
+│    │    │    └─BertLayer: 4-5                              7,087,872
+│    │    │    └─BertLayer: 4-6                              7,087,872
+│    │    │    └─BertLayer: 4-7                              7,087,872
+│    │    │    └─BertLayer: 4-8                              7,087,872
+│    │    │    └─BertLayer: 4-9                              7,087,872
+│    │    │    └─BertLayer: 4-10                             7,087,872
+│    │    │    └─BertLayer: 4-11                             7,087,872
+│    │    │    └─BertLayer: 4-12                             7,087,872
+├─BertOnlyMLMHead: 1-2                                       --
+│    └─BertLMPredictionHead: 2-3                             --
+│    │    └─BertPredictionHeadTransform: 3-7                 --
+│    │    │    └─CustomLinear: 4-13                          590,592
+│    │    │    └─CustomLayerNorm: 4-14                       1,536
+│    │    └─CustomLinear: 3-8                                23,471,418
+=====================================================================================
+Total params: 109,514,298
+Trainable params: 109,514,298
+Non-trainable params: 0
+=====================================================================================
+08/23/2022 22:13:32 - INFO - __main__ -   Skipping tokenization! as we have the tokenized dataset is already loaded from /fsx/ganayu/data/academic_bert_dataset/final_bert_preproc_128
+08/23/2022 22:13:32 - INFO - __main__ -   Sample 83810 of the training set: {'input_ids': [101, 2027, 2106, 2025, 2994, 2005, 1996, 2326, 2004, 4445, 1997, 2068, 2020, 2502, 2006, 2183, 2000, 2277, 1010, 23569, 2075, 2000, 2175, 2067, 2188, 1012, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+08/23/2022 22:13:32 - INFO - __main__ -   Sample 14592 of the training set: {'input_ids': [101, 4430, 18622, 1007, 2003, 1037, 2576, 2283, 1999, 7938, 1010, 2631, 2011, 14412, 6679, 10441, 3372, 8093, 7361, 8662, 1998, 5680, 2923, 2957, 17271, 3240, 2362, 2007, 5160, 2703, 14163, 4221, 1012, 2381, 1012, 1999, 2089, 2786, 1010, 2957, 17271, 3240, 2587, 2070, 20428, 17412, 1999, 12106, 1037, 2047, 2576, 2283, 1012, 1996, 7842, 16294, 2050, 2283, 2001, 19974, 28186, 1998, 2130, 2049, 4646, 2000, 2468, 2019, 2880, 2576, 2283, 2001, 2025, 4844, 2127, 2722, 1012, 2008, 2095, 1010, 2248, 15009, 4896, 10619, 2037, 4681, 2000, 7938, 2138, 1997, 6923, 7897, 1012, 2000, 20228, 19629, 2618, 1996, 17843, 1010, 3817, 19027, 2361, 25175, 2805, 17271, 3240, 2004, 5239, 3187, 1998, 2132, 1997, 1996, 2942, 2326, 1999, 2639, 1012, 17271, 3240, 1005, 1055, 2117, 12116, 1999, 1996, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+08/23/2022 22:13:32 - INFO - __main__ -   Sample 3278 of the training set: {'input_ids': [101, 2011, 2695, 6494, 2243, 1010, 2435, 1996, 2143, 6191, 1003, 1010, 2007, 4601, 1003, 3038, 2027, 2052, 5791, 16755, 2009, 1012, 2848, 2139, 19892, 22890, 1997, 1000, 3528, 1000, 2626, 1010, 1000, 2045, 2097, 2022, 4401, 2040, 2064, 2425, 2017, 2040, 2122, 3494, 2024, 1010, 2030, 2054, 1005, 1055, 2039, 2007, 1996, 1005, 2047, 2088, 1005, 2073, 9219, 2444, 1010, 2030, 2339, 2216, 1997, 2149, 1999, 1996, 1005, 2214, 2088, 1005, 2323, 2022, 5191, 2055, 2068, 1010, 2021, 2008, 2592, 2003, 2025, 3591, 1999, 2023, 17453, 5875, 2021, 7984, 2135, 2019, 23238, 2278, 4367, 3861, 1006, 4496, 1996, 2811, 3964, 1010, 2005, 2008, 3043, 1007, 1010, 2061, 3531, 5138, 2026, 25380, 1999, 5083, 1024, 2023, 3319, 2097, 3497, 2022, 2055, 2004, 18920, 2004, 1996, 2143, 2993, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+08/23/2022 22:13:44 - INFO - __main__ -   Number of steps/updates per epoch: 177
+08/23/2022 22:13:44 - INFO - __main__ -   ***** Running training *****
+08/23/2022 22:13:44 - INFO - __main__ -     Num examples = 90335
+08/23/2022 22:13:44 - INFO - __main__ -     Num Epochs = 707
+08/23/2022 22:13:44 - INFO - __main__ -     Instantaneous batch size per device = 128
+08/23/2022 22:13:44 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 512
+08/23/2022 22:13:44 - INFO - __main__ -     Gradient Accumulation steps = 2
+08/23/2022 22:13:44 - INFO - __main__ -     Total optimization steps = 125000, 0 steps completed so far
+  0%|                                                                                                                                     | 0/125000 [00:00<?, ?it/s]08/23/2022 22:13:44 - INFO - __main__ -   =============================
+08/23/2022 22:13:44 - INFO - __main__ -   Starting training from epoch 0
+08/23/2022 22:13:44 - INFO - __main__ -   Training till epoch  707
+08/23/2022 22:13:44 - INFO - __main__ -   =============================
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 177/177 [01:09<00:00,  2.54it/s]
+08/23/2022 22:14:53 - INFO - __main__ -   perplexity before starting: 6.15 ████████████████████████████████████████████████████████| 177/177 [01:09<00:00,  3.09it/s]
+[W reducer.cpp:1289] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 177/177 [01:04<00:00,  2.75it/s]
+[34m[1mwandb[39m[22m: [33mWARNING[39m wandb.plots.* functions are deprecated and will be removed in a future release. Please use wandb.plot.* instead.████| 177/177 [01:04<00:00,  2.39it/s]
+[34m[1mwandb[39m[22m: Visualizing heatmap.
+08/23/2022 22:17:35 - INFO - __main__ -   epoch 0: val_perplexity: 6.13, val_loss: 1.81, val_accuracy:  0.00
+  0%|▏                                                                                                                       | 255/125000 [04:50<18:36:22,  1.86it/s]Traceback (most recent call last):
+  File "train_mlm.py", line 2257, in <module>
+    main()
+  File "train_mlm.py", line 1915, in main
+    outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/utils/module_proxy_wrapper.py", line 53, in forward
+    return self.module(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/accelerate/utils/operations.py", line 487, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/autocast_mode.py", line 12, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 963, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2655, in forward
+    outputs = self.bert(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2227, in forward
+    encoder_outputs = self.encoder(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1719, in forward
+    layer_outputs = layer_module(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1480, in forward
+    self_attention_outputs = self.attention(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1193, in forward
+    self_outputs = self.self(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 471, in forward
+    attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
+KeyboardInterrupt

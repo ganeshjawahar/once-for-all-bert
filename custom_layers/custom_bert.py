@@ -2953,7 +2953,6 @@ class BertForSequenceClassification(BertPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-
         pooled_output = outputs[1]
 
         pooled_output = self.dropout(pooled_output)

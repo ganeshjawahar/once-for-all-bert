@@ -1,0 +1,20 @@
+Subnet info: Model-Size=66958800, Val-PPL=6.072305523664952
+Subnet info: Gene=[600, 2, 3, 2, 3, 3, 3, 3, 3, 3, 4, 3, 4, 6, 12, 6, 12, 12, 12, 12, 12, 12, 12, 6, 12]
+Subnet info: Search_space_id=v3
+Subnet info: elastic_keys= ['sample_hidden_size', 'sample_intermediate_size', 'sample_num_attention_heads']
+Subnet info: gene_choices= [[120, 240, 360, 480, 540, 600, 768], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [2, 3, 4], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12], [6, 12]]
+Subnet info: gene_names= ['sample_hidden_size_0', 'sample_intermediate_size_0', 'sample_intermediate_size_1', 'sample_intermediate_size_2', 'sample_intermediate_size_3', 'sample_intermediate_size_4', 'sample_intermediate_size_5', 'sample_intermediate_size_6', 'sample_intermediate_size_7', 'sample_intermediate_size_8', 'sample_intermediate_size_9', 'sample_intermediate_size_10', 'sample_intermediate_size_11', 'sample_num_attention_heads_0', 'sample_num_attention_heads_1', 'sample_num_attention_heads_2', 'sample_num_attention_heads_3', 'sample_num_attention_heads_4', 'sample_num_attention_heads_5', 'sample_num_attention_heads_6', 'sample_num_attention_heads_7', 'sample_num_attention_heads_8', 'sample_num_attention_heads_9', 'sample_num_attention_heads_10', 'sample_num_attention_heads_11']
+Subnet info: elastickey2ranges= {'sample_hidden_size': [0, 1], 'sample_intermediate_size': [1, 13], 'sample_num_attention_heads': [13, 25]}
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+08/22/2022 04:05:04 - INFO - __main__ -   ==================================================================
+Traceback (most recent call last):
+  File "train_mlm.py", line 2229, in <module>
+    main()
+  File "train_mlm.py", line 1150, in main
+    f"Number of parameters in custom config is {millify(calculate_params_from_config(global_config, scaling_laws=False, add_output_emb_layer=False))}"
+  File "/fsx/ganayu/code/SuperShaper/utils/__init__.py", line 205, in calculate_params_from_config
+    return calculate_params(
+  File "/fsx/ganayu/code/SuperShaper/utils/__init__.py", line 128, in calculate_params
+    for layer_idx, (d_ff, emb_dim) in enumerate(zip(d_ff_list, emb_dims)):
+TypeError: 'int' object is not iterable

@@ -49,7 +49,8 @@ from transformers import (
     DataCollatorForLanguageModeling,
     SchedulerType,
     get_scheduler,
-    set_seed, BertConfig
+    set_seed, BertConfig,
+    AutoConfig
 )
 from operator import attrgetter
 
@@ -99,6 +100,7 @@ def validate_subtransformer(
     len_eval_dataset,
     per_device_eval_batch_size,
     pad_to_max_length,
+    accuracy_required
 ):
     metric = load_metric("custom_metrics/mlm_accuracy.py")
 
@@ -158,7 +160,7 @@ def validate_subtransformer(
 
     losses = torch.cat(losses)
     losses = losses[:len_eval_dataset]
-    eval_metric = metric.compute()
+    eval_metric = metric.compute() if accuracy_required == "yes" else {"accuracy": 0}
 
     try:
         val_loss = torch.mean(losses)
@@ -739,6 +741,27 @@ def parse_args():
         help=f"path to the fixed teacher model",
     )
 
+    parser.add_argument(
+        "--trial_run",
+        type=str,
+        default="no",
+        help=f"trial run",
+    )
+
+    parser.add_argument(
+        "--accuracy_required",
+        type=str,
+        default="yes",
+        help=f"accuracy is required?",
+    )
+
+    parser.add_argument(
+        "--max_experts",
+        type=int,
+        default=-1,
+        help=f"number of experts for supernet training",
+    )
+
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
     # )
@@ -1023,7 +1046,8 @@ def main():
             random_layer_selection_probability=args.random_layer_selection_probability, 
             use_hypernet_w_low_rank=args.use_hypernet_w_low_rank, bottleneck_rank=args.bottleneck_rank,
             hypernet_hidden_size=args.hypernet_hidden_size,
-            search_space_id=args.search_space_id
+            search_space_id=args.search_space_id,
+            max_experts=args.max_experts
         )
     else:
         global_config = get_supertransformer_config(
@@ -1031,6 +1055,7 @@ def main():
             mixing=args.mixing,
             additional_random_softmaxing=args.additional_random_softmaxing,
             random_layer_selection_probability=args.random_layer_selection_probability,
+            max_experts=args.max_experts
         )
 
     if args.tokenizer_name:
@@ -1228,9 +1253,22 @@ def main():
             model = custom_bert.BertForMaskedLM(global_config)
     
     if args.teacher_model_path is not None:
-        teacher_config = deepcopy(global_config)
-        if args.distillation_type:
-            teacher_config.add_distill_linear_layer = False
+        #teacher_config = deepcopy(global_config)
+        #if args.distillation_type:
+        #    teacher_config.add_distill_linear_layer = False
+        teacher_config = get_supertransformer_config(
+            args.teacher_model_path,
+            mixing="attention", # todo: set it dynamically
+        )
+        teacher_config.rewire = args.rewire
+        teacher_config.layer_drop_prob = args.layer_drop_prob
+        if "hiddenlastlayer" in args.distillation_type:
+            teacher_config.output_hidden_states = True # need to correct name to last_hidden_states
+        if "attentionlastlayer" in args.distillation_type:
+            teacher_config.output_attentions = True # need to correct name to attentionlastlayer
+        if "tinybert" in args.distillation_type:
+            teacher_config.output_hidden_states = True
+            teacher_config.output_attentions = True
         teacher_model = custom_bert.BertForMaskedLM.from_pretrained(args.teacher_model_path, config=teacher_config)
         
         teacher_model.eval()
@@ -1408,7 +1446,7 @@ def main():
             f"Skipping tokenization! as we have the tokenized dataset is already loaded from {args.tokenized_c4_dir}"
         )
 
-    train_dataset = tokenized_datasets["train"]
+    train_dataset = tokenized_datasets["train"] if args.trial_run == "no" else tokenized_datasets["validation"]
     eval_dataset = tokenized_datasets["validation"] if args.check_test_loss_only == "no" else tokenized_datasets["test"]
 
     # Log a few random samples from the training set:
@@ -1663,6 +1701,7 @@ def main():
             len(eval_dataset),
             args.per_device_eval_batch_size,
             args.pad_to_max_length,
+            args.accuracy_required
         )
         perpx = eval_metric["perplexity"]
         logger.info(f"perplexity before starting: {perpx:.2f} ")
@@ -1686,6 +1725,7 @@ def main():
                     len(eval_dataset),
                     args.per_device_eval_batch_size,
                     args.pad_to_max_length,
+                    args.accuracy_required
                 )
                 # eval_metric['validation_random_seed'] = random_seed
                 # label_lst.append([eval_metric['accuracy'], random_seed])
@@ -2033,6 +2073,7 @@ def main():
             len(eval_dataset),
             args.per_device_eval_batch_size,
             args.pad_to_max_length,
+            args.accuracy_required
         )
         val_accuracy, val_loss, perplexity = (
             eval_metric["accuracy"] * 100,
@@ -2059,6 +2100,7 @@ def main():
                 len(eval_dataset),
                 args.per_device_eval_batch_size,
                 args.pad_to_max_length,
+                args.accuracy_required
             )
             smallest_val_accuracy, smallest_val_loss, smallest_perplexity = (
                 smallest_eval_metric["accuracy"] * 100,
@@ -2141,8 +2183,6 @@ def main():
             f"epoch {epoch}: val_perplexity: {perplexity:.2f}, val_loss: {val_loss:.2f}, val_accuracy:  {val_accuracy:.2f}"
         )
         completed_epochs += 1
-
-
 
         if args.output_dir is not None:
             accelerator.wait_for_everyone()

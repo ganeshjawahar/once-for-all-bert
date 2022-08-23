@@ -1,0 +1,1 @@
+{"epochs": 0, "_timestamp": 1660931950, "_runtime": 73, "_step": 237, "Subtransformer mlm loss": 0.5735015869140625, "Subtransformer Student hidden loss": 0.7430210113525391, "_wandb": {"runtime": 72}}

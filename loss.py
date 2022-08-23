@@ -82,12 +82,13 @@ def compute_student_loss(
         # compute KL-div of student logits and teacher logits
         # https://raw.githubusercontent.com/liuzechun/ReActNet/master/utils/KD_loss.py
         student_logits = outputs.logits
-        student_logits = student_logits.reshape(-1, student_logits.size(2))
+        if student_logits.dim() == 3:
+            student_logits = student_logits.reshape(-1, student_logits.size(2))
         model_output_log_prob = F.log_softmax(student_logits, dim=1)
         model_output_log_prob = model_output_log_prob.unsqueeze(2)
 
         teacher_logits = teacher_info["teacher_logits"]
-        real_output_soft = F.softmax(teacher_logits.reshape(-1, teacher_logits.size(2)), dim=1)
+        real_output_soft = F.softmax(teacher_logits.reshape(-1, teacher_logits.size(2)) if teacher_logits.dim() == 3 else teacher_logits, dim=1)
         real_output_soft = real_output_soft.unsqueeze(1)
 
         cross_entropy_loss = -torch.bmm(real_output_soft, model_output_log_prob)
@@ -332,7 +333,7 @@ class CrossEntropyLossSoft(_Loss):
         )
         print(target.view(target.shape[0], -1).size(), logprobs.size())
         batchloss = -torch.sum(target.view(target.shape[0], -1) * logprobs, dim=1)
-        sys.exit(0)
+        
         if reduction == "none":
             return batchloss
         elif reduction == "mean":

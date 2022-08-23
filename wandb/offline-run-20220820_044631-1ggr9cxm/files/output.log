@@ -1,0 +1,31 @@
+Subnet info: Model-Size=66690408, Val-PPL=6.315006387005788
+Subnet info: Gene=[360, 240, 240, 360, 360, 360, 540, 360, 480, 540, 540, 600]
+Subnet info: Search_space_id=
+Subnet info: elastic_keys= ['sample_hidden_size']
+Subnet info: gene_choices= [[120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768]]
+Subnet info: gene_names= ['sample_hidden_size_0', 'sample_hidden_size_1', 'sample_hidden_size_2', 'sample_hidden_size_3', 'sample_hidden_size_4', 'sample_hidden_size_5', 'sample_hidden_size_6', 'sample_hidden_size_7', 'sample_hidden_size_8', 'sample_hidden_size_9', 'sample_hidden_size_10', 'sample_hidden_size_11']
+Subnet info: elastickey2ranges= {'sample_hidden_size': [0, 12]}
+pre-initialized with BERT weights
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+08/20/2022 04:46:42 - INFO - __main__ -   ==================================================================
+08/20/2022 04:46:42 - INFO - __main__ -   Number of parameters in custom config is 67 Million
+08/20/2022 04:46:42 - INFO - __main__ -   ==================================================================
+08/20/2022 04:46:49 - INFO - __main__ -   BERT-Bottleneck Initiliazed with BERT-base
+08/20/2022 04:46:49 - INFO - __main__ -   setting bottlenecks to identity and bias to zero
+Traceback (most recent call last):
+  File "train_mlm.py", line 2226, in <module>
+    main()
+  File "train_mlm.py", line 1243, in main
+    teacher_model = custom_bert.BertForMaskedLM.from_pretrained(args.teacher_model_path, config=teacher_config)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1385, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2566, in __init__
+    self.bert = BertModel(config, add_pooling_layer=False)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2054, in __init__
+    self.embeddings = BertEmbeddings(config)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 237, in __init__
+    self.use_bottleneck = config.mixing == "bert-bottleneck"
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py", line 234, in __getattribute__
+    return super().__getattribute__(key)
+AttributeError: 'BertConfig' object has no attribute 'mixing'

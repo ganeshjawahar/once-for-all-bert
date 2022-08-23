@@ -456,6 +456,19 @@ def main():
     progress_bar = tqdm(range(args.max_train_steps), disable=not accelerator.is_local_main_process)
     completed_steps = 0
 
+    '''
+    model.eval()
+    for step, batch in enumerate(eval_dataloader):
+        outputs = model(**batch)
+        predictions = outputs.logits.argmax(dim=-1) if not is_regression else outputs.logits.squeeze()
+        metric.add_batch(
+            predictions=accelerator.gather(predictions),
+            references=accelerator.gather(batch["labels"]),
+        )
+    eval_metric = metric.compute()
+    logger.info(f"before training : {eval_metric}")
+    '''
+
     for epoch in range(args.num_train_epochs):
         model.train()
         for step, batch in enumerate(train_dataloader):

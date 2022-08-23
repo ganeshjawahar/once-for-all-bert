@@ -22,6 +22,7 @@ import json
 import loss
 from loss import *
 import wandb
+from copy import deepcopy
 
 from xlrd import open_workbook
 import datasets
@@ -302,6 +303,13 @@ def parse_args():
         help=f"path to the fixed teacher model",
     )
 
+    parser.add_argument(
+        "--validate_teacher_before_training",
+        type=str,
+        default="no",
+        help=f"should we validate teacher before training",
+    )
+
     args = parser.parse_args()
 
     if args.distillation_type:
@@ -437,7 +445,7 @@ def main():
             global_config.add_distill_linear_layer = True # adds 
         else:
             global_config.add_distill_linear_layer = False
-            
+
     # todo: remove these unused globals
     global_config.layer_drop_prob = 0.0
 
@@ -467,11 +475,59 @@ def main():
         print("Subnet info: gene_names=", gene_names)
         print("Subnet info: elastickey2ranges=", elastickey2ranges)
         subnet_config.num_labels = num_labels
+        if args.distillation_type:
+            # logits is always included
+            if "hiddenlastlayer" in args.distillation_type:
+                subnet_config.output_hidden_states = True # need to correct name to last_hidden_states
+            if "attentionlastlayer" in args.distillation_type:
+                subnet_config.output_attentions = True # need to correct name to attentionlastlayer
+            if "tinybert" in args.distillation_type:
+                subnet_config.output_hidden_states = True
+                subnet_config.output_attentions = True
+                subnet_config.add_distill_linear_layer = True # adds 
+            else:
+                subnet_config.add_distill_linear_layer = False
+
         model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config)
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
         # config.hidden_dropout_prob = 0.1
     print(summary(model, depth=4, verbose=0))
+
+    if args.teacher_model_path is not None:
+        #teacher_config = deepcopy(global_config)
+        #if args.distillation_type:
+        #    teacher_config.add_distill_linear_layer = False
+        teacher_config = AutoConfig.from_pretrained(args.teacher_model_path, num_labels=num_labels, finetuning_task=args.task_name)
+        # logits is always included
+        if "hiddenlastlayer" in args.distillation_type:
+            teacher_config.output_hidden_states = True # need to correct name to last_hidden_states
+        if "attentionlastlayer" in args.distillation_type:
+            teacher_config.output_attentions = True # need to correct name to attentionlastlayer
+        if "tinybert" in args.distillation_type:
+            teacher_config.output_hidden_states = True
+            teacher_config.output_attentions = True
+        # todo: make the following dynamic
+        '''
+        for param, def_value in [("mixing", "attention"), ("normalization_type", "layer_norm"), ("sample_hidden_size", [768 for i in range(12)]), ("sample_intermediate_size", [3072 for i in range(12)]), ("sample_num_attention_heads", [12 for i in range(12)]), ("sample_num_hidden_layers", 12)]:
+            if not hasattr(teacher_config, param):
+                setattr(teacher_config, param, def_value)
+        print(teacher_config)
+        '''
+
+        if os.path.exists(args.teacher_model_path):
+            teacher_model = custom_bert.BertForSequenceClassification.from_pretrained(args.teacher_model_path, config=teacher_config)
+        else:
+            teacher_model = AutoModelForSequenceClassification.from_pretrained(args.teacher_model_path, config=teacher_config)
+        
+        teacher_model.eval()
+        print('setting teachers requires_grad to False')
+        # hack to use accelerator to prepare teacher model
+        i = 0
+        for p in teacher_model.parameters(): 
+            if i != 0:
+                p.requires_grad = False
+            i += 1
 
     # Preprocessing the datasets
     if args.task_name is not None:
@@ -583,18 +639,28 @@ def main():
     model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
         model, optimizer, train_dataloader, eval_dataloader
     )
+    if args.teacher_model_path is not None:
+        teacher_model = accelerator.prepare(teacher_model) # not needed when teacher doesn't have any parameter that requires a gradient
 
+    '''
     if (
         accelerator.distributed_type == DistributedType.MULTI_GPU
         or accelerator.distributed_type == DistributedType.TPU
     ):
         # forward missing getattr and state_dict/load_state_dict to orig model
         model = ModuleProxyWrapper(model)
+        if args.teacher_model_path is not None:
+            teacher_model = ModuleProxyWrapper(teacher_model)
+    '''
 
     if args.subtransformer_config_path is not None:
         print('setting the subnet...')
         print(subnet_config)
         model.module.set_sample_config(subnet_config)
+    else:
+        model.module.set_sample_config(global_config, drop_layers=False)
+    if args.teacher_model_path is not None and os.path.exists(args.teacher_model_path):
+        teacher_model.module.set_sample_config(teacher_config)
 
     # Note -> the training dataloader needs to be prepared before we grab his length below (cause its length will be
     # shorter in multiprocess)
@@ -618,8 +684,6 @@ def main():
         metric = load_metric("glue", args.task_name)
     else:
         metric = load_metric("accuracy")
-    
-    model.set_sample_config(global_config, drop_layers=False)
 
     # Train!
     total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
@@ -704,6 +768,18 @@ def main():
         print(f"mnli-mm: {eval_metric}", args.learning_rate, args.per_device_train_batch_size, args.num_train_epochs)
     '''
 
+    if args.validate_teacher_before_training == "yes":
+        for step, batch in enumerate(eval_dataloader):
+            outputs = teacher_model(**batch)
+            predictions = outputs.logits.argmax(dim=-1) if not is_regression else outputs.logits.squeeze()
+            metric.add_batch(
+                predictions=accelerator.gather(predictions),
+                references=accelerator.gather(batch["labels"]),
+            )
+        supernet_eval_metric = metric.compute()
+        print("teacher model", supernet_eval_metric)
+        sys.exit(0)
+
     seed = -1
     completed_epochs = 0
     completed_steps = 0
@@ -726,47 +802,59 @@ def main():
             track_loss = step % args.logging_steps == 0 and step > 0
 
             ### Applying Sandwich Rule ###
-            if args.sampling_rule == "sandwich"or args.inplace_distillation:
+            if args.sampling_rule == "sandwich" or args.inplace_distillation:
                 if args.sampling_rule == "sandwich":
                     ## Sample Supertransformer
-                    model.set_sample_config(global_config, drop_layers=True)
-
-                    outputs = model(**batch)
-                    loss = outputs.loss
-
-                    teacher_mlm_loss = loss
-                    teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
-                    accelerator.backward(teacher_mlm_loss)
+                    if args.teacher_model_path is not None:
+                        outputs = teacher_model(**batch)
+                    else:
+                        model.module.set_sample_config(global_config, drop_layers=True)
+                        outputs = model(**batch)
+                        loss = outputs.loss
+                        teacher_mlm_loss = loss
+                        teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
+                        accelerator.backward(teacher_mlm_loss)
 
                     if args.inplace_distillation:
 
                         teacher_info = {}
-                        if "hiddenlastlayer" in args.distillation_type:
+                        if "hiddenlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
                             teacher_info["teacher_hidden_states"] = outputs.hidden_states
 
-                        if "attentionlastlayer" in args.distillation_type:
+                        if "attentionlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
                             teacher_info["teacher_attention_maps"] = outputs.attentions
                         
                         if "logits" in args.distillation_type:
                             teacher_info["teacher_logits"] = outputs.logits.detach()
                 elif args.inplace_distillation and args.freeze_largest_model == "yes" and args.freeze_smallest_model == "yes":
                     # need teacher logits
-                    model.eval()
-                    model.set_sample_config(global_config, drop_layers=True)
-                    outputs = model(**batch)
-                    teacher_info = {}
-                    if "hiddenlastlayer" in args.distillation_type:
-                        teacher_info["teacher_hidden_states"] = outputs.hidden_states
-                    if "attentionlastlayer" in args.distillation_type:
-                        teacher_info["teacher_attention_maps"] = outputs.attentions
-                    if "logits" in args.distillation_type:
-                        teacher_info["teacher_logits"] = outputs.logits.detach()
-                    model.train()
+                    if args.teacher_model_path is None:
+                        model.eval()
+                        model.module.set_sample_config(global_config, drop_layers=True)
+                        outputs = model(**batch)
+                        teacher_info = {}
+                        if "hiddenlastlayer" in args.distillation_type:
+                            teacher_info["teacher_hidden_states"] = outputs.hidden_states
+                        if "attentionlastlayer" in args.distillation_type:
+                            teacher_info["teacher_attention_maps"] = outputs.attentions
+                        if "logits" in args.distillation_type:
+                            teacher_info["teacher_logits"] = outputs.logits.detach()
+                        model.train()
+                    else:
+                        with torch.no_grad():
+                            outputs = teacher_model(**batch)
+                        teacher_info = {}
+                        if "hiddenlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
+                            teacher_info["teacher_hidden_states"] = outputs.hidden_states
+                        if "attentionlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
+                            teacher_info["teacher_attention_maps"] = outputs.attentions
+                        if "logits" in args.distillation_type:
+                            teacher_info["teacher_logits"] = outputs.logits.detach()
 
                 if args.sampling_rule == "sandwich":
                     ## Sample Smallest Subtransformer
                     
-                    model.set_sample_config(super_config_small, drop_layers=True)
+                    model.module.set_sample_config(super_config_small, drop_layers=True)
                     outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
                     loss = outputs.loss
 
@@ -793,7 +881,7 @@ def main():
                 if args.sampling_type != "none":
                     super_config = super_configs[idx]
                     
-                    model.set_sample_config(super_config, drop_layers=True)
+                    model.module.set_sample_config(super_config, drop_layers=True)
 
                 outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
                 loss = outputs.loss
@@ -816,6 +904,7 @@ def main():
             # cleanup
             if args.inplace_distillation or args.distillation_type:
                 del teacher_info
+                del outputs
 
             if step % args.gradient_accumulation_steps == 0 or step == len(train_dataloader) - 1:
                 optimizer.step()
@@ -869,7 +958,10 @@ def main():
                 break
 
         # change to supertransformer config
-        model.set_sample_config(global_config, drop_layers=False)
+        if args.subtransformer_config_path is not None and args.sampling_type == "none":
+            model.module.set_sample_config(subnet_config, drop_layers=False)
+        else:
+            model.module.set_sample_config(global_config, drop_layers=False)
         model.eval()
 
         # valid acc for supernet
@@ -881,6 +973,7 @@ def main():
                 references=accelerator.gather(batch["labels"]),
             )
         supernet_eval_metric = metric.compute()
+        print(supernet_eval_metric)
         wandb_log = {"SuperTransformer Val Accuracy": supernet_eval_metric['accuracy'] if "accuracy" in supernet_eval_metric else supernet_eval_metric['matthews_correlation']}
 
         if args.sampling_type != "none":
@@ -892,7 +985,7 @@ def main():
                 v1_small=True # todo: make this dynamic based on search space
             )
             super_config_small = config_dict["smallest_subtransformer"]
-            model.set_sample_config(super_config_small, drop_layers=False)
+            model.module.set_sample_config(super_config_small, drop_layers=False)
             for step, batch in enumerate(eval_dataloader):
                 outputs = model(**batch)
                 predictions = outputs.logits.argmax(dim=-1) if not is_regression else outputs.logits.squeeze()
@@ -921,3 +1014,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

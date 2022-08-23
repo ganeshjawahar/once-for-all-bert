@@ -1,0 +1,71 @@
+Subnet info: Model-Size=66690408, Val-PPL=6.315006387005788
+Subnet info: Gene=[360, 240, 240, 360, 360, 360, 540, 360, 480, 540, 540, 600]
+Subnet info: Search_space_id=
+Subnet info: elastic_keys= ['sample_hidden_size']
+Subnet info: gene_choices= [[120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768]]
+Subnet info: gene_names= ['sample_hidden_size_0', 'sample_hidden_size_1', 'sample_hidden_size_2', 'sample_hidden_size_3', 'sample_hidden_size_4', 'sample_hidden_size_5', 'sample_hidden_size_6', 'sample_hidden_size_7', 'sample_hidden_size_8', 'sample_hidden_size_9', 'sample_hidden_size_10', 'sample_hidden_size_11']
+Subnet info: elastickey2ranges= {'sample_hidden_size': [0, 12]}
+pre-initialized with BERT weights
+setting teachers requires_grad to False
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+08/20/2022 04:57:15 - INFO - __main__ -   ==================================================================
+08/20/2022 04:57:15 - INFO - __main__ -   Number of parameters in custom config is 67 Million
+08/20/2022 04:57:15 - INFO - __main__ -   ==================================================================
+08/20/2022 04:57:24 - INFO - __main__ -   BERT-Bottleneck Initiliazed with BERT-base
+08/20/2022 04:57:24 - INFO - __main__ -   setting bottlenecks to identity and bias to zero
+08/20/2022 04:57:31 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForMaskedLM                                              --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              8,269,056
+│    │    │    └─BertLayer: 4-2                              8,269,056
+│    │    │    └─BertLayer: 4-3                              8,269,056
+│    │    │    └─BertLayer: 4-4                              8,269,056
+│    │    │    └─BertLayer: 4-5                              8,269,056
+│    │    │    └─BertLayer: 4-6                              8,269,056
+│    │    │    └─BertLayer: 4-7                              8,269,056
+│    │    │    └─BertLayer: 4-8                              8,269,056
+│    │    │    └─BertLayer: 4-9                              8,269,056
+│    │    │    └─BertLayer: 4-10                             8,269,056
+│    │    │    └─BertLayer: 4-11                             8,269,056
+│    │    │    └─BertLayer: 4-12                             8,269,056
+├─BertOnlyMLMHead: 1-2                                       --
+│    └─BertLMPredictionHead: 2-3                             --
+│    │    └─BertPredictionHeadTransform: 3-7                 --
+│    │    │    └─CustomLinear: 4-13                          590,592
+│    │    │    └─CustomLayerNorm: 4-14                       1,536
+│    │    └─CustomLinear: 3-8                                23,471,418
+├─CustomLinear: 1-3                                          590,592
+=====================================================================================
+Total params: 124,279,098
+Trainable params: 124,279,098
+Non-trainable params: 0
+=====================================================================================
+08/20/2022 04:57:31 - INFO - __main__ -   Skipping tokenization! as we have the tokenized dataset is already loaded from /fsx/ganayu/data/academic_bert_dataset/final_bert_preproc_128
+08/20/2022 04:57:31 - INFO - __main__ -   Sample 7471301 of the training set: {'input_ids': [101, 4448, 2003, 1037, 2883, 1011, 4351, 2173, 1006, 8561, 1007, 1999, 16222, 9626, 3600, 2221, 1010, 3448, 1012, 2004, 1997, 1996, 2230, 2883, 1010, 2049, 2313, 2001, 6564, 2475, 1012, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+08/20/2022 04:57:31 - INFO - __main__ -   Sample 1678443 of the training set: {'input_ids': [101, 1012, 2009, 2790, 2008, 2016, 2018, 1037, 3167, 8406, 1999, 2010, 3437, 1012, 1000, 2331, 2003, 8552, 1012, 2111, 2006, 3011, 7166, 2000, 2228, 2008, 2331, 2003, 2345, 1010, 2030, 2008, 1037, 2117, 2166, 3310, 2044, 2331, 1012, 1045, 2123, 1005, 1056, 2156, 2331, 1999, 2593, 1997, 2216, 3971, 1012, 2108, 2757, 2003, 2074, 2178, 2126, 2008, 2057, 4671, 2054, 2057, 2024, 2081, 1997, 1012, 1996, 7209, 2126, 1997, 6595, 4142, 1999, 1996, 3151, 3168, 2003, 2000, 3413, 2006, 2256, 9165, 2011, 2383, 2336, 1012, 2008, 1005, 1055, 2339, 2057, 3280, 1010, 4312, 1012, 1000, 1000, 2054, 2079, 2017, 2812, 1029, 1000, 1000, 1996, 3114, 2057, 3280, 2003, 2138, 2057, 3413, 2006, 2256, 9165, 1010, 2000, 2191, 2488, 4617, 1997, 9731, 2612, 1997, 29486, 2075, 2256, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+08/20/2022 04:57:31 - INFO - __main__ -   Sample 18456905 of the training set: {'input_ids': [101, 2006, 2538, 2233, 2889, 1010, 1996, 8773, 2864, 2049, 10494, 3462, 1012, 2206, 2006, 2013, 2049, 2034, 3462, 1010, 2009, 2506, 2000, 2022, 2109, 2005, 3231, 7599, 2005, 2070, 2051, 1010, 14313, 2119, 1996, 16736, 1997, 1996, 4145, 1998, 1997, 1996, 2047, 24264, 2072, 1011, 6377, 3001, 1012, 2096, 1996, 10003, 7160, 2064, 4232, 9563, 1997, 1996, 2250, 15643, 2018, 2042, 6025, 1010, 5604, 2001, 4208, 2588, 1996, 2047, 20704, 3258, 6558, 5361, 1010, 2029, 2020, 2056, 2011, 24264, 2072, 2000, 2191, 2005, 1037, 4659, 2715, 4959, 2948, 1012, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+Traceback (most recent call last):
+  File "train_mlm.py", line 2229, in <module>
+    main()
+  File "train_mlm.py", line 1513, in main
+    teacher_model.set_sample_config(teacher_config, drop_layers=False)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2595, in set_sample_config
+    self.bert.set_sample_config(
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2087, in set_sample_config
+    self.encoder.set_sample_config(
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1582, in set_sample_config
+    if config.layer_drop_prob > 0:
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py", line 234, in __getattribute__
+    return super().__getattribute__(key)
+AttributeError: 'BertConfig' object has no attribute 'layer_drop_prob'

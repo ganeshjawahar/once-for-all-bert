@@ -1,0 +1,19 @@
+2022-08-19 18:16:26,350 INFO    MainThread:1462945 [internal.py:wandb_internal():90] W&B internal server running at pid: 1462945, started at: 2022-08-19 18:16:26.347609
+2022-08-19 18:16:26,353 INFO    WriterThread:1462945 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220819_181624-alttdo2s/run-alttdo2s.wandb
+2022-08-19 18:16:26,354 DEBUG   HandlerThread:1462945 [handler.py:handle_request():141] handle_request: run_start
+2022-08-19 18:16:26,366 DEBUG   HandlerThread:1462945 [meta.py:__init__():35] meta init
+2022-08-19 18:16:26,367 DEBUG   HandlerThread:1462945 [meta.py:__init__():49] meta init done
+2022-08-19 18:16:26,367 DEBUG   HandlerThread:1462945 [meta.py:probe():209] probe
+2022-08-19 18:16:26,375 DEBUG   HandlerThread:1462945 [meta.py:_setup_git():199] setup git
+2022-08-19 18:16:26,470 DEBUG   HandlerThread:1462945 [meta.py:_setup_git():206] setup git done
+2022-08-19 18:16:26,470 DEBUG   HandlerThread:1462945 [meta.py:_save_pip():53] save pip
+2022-08-19 18:16:26,473 DEBUG   HandlerThread:1462945 [meta.py:_save_pip():67] save pip done
+2022-08-19 18:16:26,473 DEBUG   HandlerThread:1462945 [meta.py:_save_conda():74] save conda
+2022-08-19 18:16:35,000 DEBUG   HandlerThread:1462945 [meta.py:_save_conda():84] save conda done
+2022-08-19 18:16:35,000 DEBUG   HandlerThread:1462945 [meta.py:probe():247] probe done
+2022-08-19 18:16:35,361 WARNING MainThread:1462945 [internal.py:is_dead():387] Internal process exiting, parent pid 1462873 disappeared
+2022-08-19 18:16:35,362 ERROR   MainThread:1462945 [internal.py:wandb_internal():149] Internal process shutdown.
+2022-08-19 18:16:35,362 INFO    SenderThread:1462945 [sender.py:finish():1111] shutting down sender
+2022-08-19 18:16:35,662 INFO    HandlerThread:1462945 [handler.py:finish():806] shutting down handler
+2022-08-19 18:16:36,358 INFO    WriterThread:1462945 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220819_181624-alttdo2s/run-alttdo2s.wandb
+2022-08-19 18:16:36,362 INFO    MainThread:1462945 [internal.py:handle_exit():80] Internal process exited

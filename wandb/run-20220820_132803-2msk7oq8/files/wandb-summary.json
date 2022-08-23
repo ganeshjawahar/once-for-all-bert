@@ -1,0 +1,1 @@
+{"epochs": 1, "_timestamp": 1661002158, "_runtime": 75, "_step": 300, "Subtransformer mlm loss": 0.6762542724609375, "SuperTransformer Val Accuracy": 0.0, "_wandb": {"runtime": 75}}

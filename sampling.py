@@ -510,7 +510,8 @@ def get_supertransformer_config(
     additional_random_softmaxing=False,
     random_layer_selection_probability=0.1,
     use_hypernet_w_low_rank=0, bottleneck_rank=50, hypernet_hidden_size=64,
-    search_space_id=None
+    search_space_id=None,
+    max_experts=1
 ):
     config = AutoConfig.from_pretrained(model_name_or_path)
 
@@ -562,6 +563,9 @@ def get_supertransformer_config(
     config.additional_random_softmaxing = additional_random_softmaxing
     config.random_layer_selection_probability = random_layer_selection_probability
     config.rewire = False
+    if max_experts != -1:
+        config.max_experts = max_experts
+
     return config
 
 

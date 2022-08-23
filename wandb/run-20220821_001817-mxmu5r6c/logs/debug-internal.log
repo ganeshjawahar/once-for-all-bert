@@ -1,0 +1,149 @@
+2022-08-21 00:18:19,886 INFO    MainThread:3037287 [internal.py:wandb_internal():90] W&B internal server running at pid: 3037287, started at: 2022-08-21 00:18:19.883575
+2022-08-21 00:18:19,889 INFO    WriterThread:3037287 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/run-mxmu5r6c.wandb
+2022-08-21 00:18:19,899 DEBUG   SenderThread:3037287 [sender.py:send():235] send: header
+2022-08-21 00:18:19,899 DEBUG   SenderThread:3037287 [sender.py:send():235] send: run
+2022-08-21 00:18:20,009 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: check_version
+2022-08-21 00:18:20,013 INFO    SenderThread:3037287 [dir_watcher.py:__init__():205] watching files in: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files
+2022-08-21 00:18:20,013 INFO    SenderThread:3037287 [sender.py:_start_run_threads():812] run started: mxmu5r6c with start time 1661041097
+2022-08-21 00:18:20,013 DEBUG   SenderThread:3037287 [sender.py:send():235] send: summary
+2022-08-21 00:18:20,016 INFO    SenderThread:3037287 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-08-21 00:18:20,018 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: check_version
+2022-08-21 00:18:20,054 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: run_start
+2022-08-21 00:18:20,063 DEBUG   HandlerThread:3037287 [meta.py:__init__():35] meta init
+2022-08-21 00:18:20,063 DEBUG   HandlerThread:3037287 [meta.py:__init__():49] meta init done
+2022-08-21 00:18:20,063 DEBUG   HandlerThread:3037287 [meta.py:probe():209] probe
+2022-08-21 00:18:20,072 DEBUG   HandlerThread:3037287 [meta.py:_setup_git():199] setup git
+2022-08-21 00:18:20,148 DEBUG   HandlerThread:3037287 [meta.py:_setup_git():206] setup git done
+2022-08-21 00:18:20,149 DEBUG   HandlerThread:3037287 [meta.py:_save_pip():53] save pip
+2022-08-21 00:18:20,151 DEBUG   HandlerThread:3037287 [meta.py:_save_pip():67] save pip done
+2022-08-21 00:18:20,153 DEBUG   HandlerThread:3037287 [meta.py:_save_conda():74] save conda
+2022-08-21 00:18:21,018 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/conda-environment.yaml
+2022-08-21 00:18:21,018 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/wandb-summary.json
+2022-08-21 00:18:21,018 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/requirements.txt
+2022-08-21 00:18:26,025 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/output.log
+2022-08-21 00:18:31,303 DEBUG   HandlerThread:3037287 [meta.py:_save_conda():84] save conda done
+2022-08-21 00:18:31,303 DEBUG   HandlerThread:3037287 [meta.py:probe():247] probe done
+2022-08-21 00:18:31,994 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: stop_status
+2022-08-21 00:18:31,994 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: stop_status
+2022-08-21 00:18:32,035 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/conda-environment.yaml
+2022-08-21 00:18:32,035 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/wandb-metadata.json
+2022-08-21 00:18:32,048 DEBUG   SenderThread:3037287 [sender.py:send():235] send: telemetry
+2022-08-21 00:18:32,049 DEBUG   SenderThread:3037287 [sender.py:send():235] send: files
+2022-08-21 00:18:32,049 INFO    SenderThread:3037287 [sender.py:_save_file():949] saving file wandb-metadata.json with policy now
+2022-08-21 00:18:32,377 INFO    Thread-11 :3037287 [upload_job.py:push():132] Uploaded file /tmp/tmpns8a75qvwandb/3b714bx6-wandb-metadata.json
+2022-08-21 00:18:38,536 WARNING MainThread:3037287 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-08-21 00:18:45,082 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: stop_status
+2022-08-21 00:18:45,082 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: stop_status
+2022-08-21 00:18:46,540 DEBUG   SenderThread:3037287 [sender.py:send():235] send: telemetry
+2022-08-21 00:18:48,062 INFO    Thread-7  :3037287 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/output.log
+2022-08-21 00:18:48,620 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:48,621 DEBUG   SenderThread:3037287 [sender.py:send():235] send: exit
+2022-08-21 00:18:48,621 INFO    SenderThread:3037287 [sender.py:send_exit():371] handling exit code: 255
+2022-08-21 00:18:48,621 INFO    SenderThread:3037287 [sender.py:send_exit():373] handling runtime: 28
+2022-08-21 00:18:48,624 INFO    SenderThread:3037287 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-08-21 00:18:48,624 INFO    SenderThread:3037287 [sender.py:send_exit():379] send defer
+2022-08-21 00:18:48,625 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:48,625 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,626 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 0
+2022-08-21 00:18:48,626 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,626 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 0
+2022-08-21 00:18:48,626 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 1
+2022-08-21 00:18:48,626 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,626 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 1
+2022-08-21 00:18:48,714 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,714 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 1
+2022-08-21 00:18:48,714 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 2
+2022-08-21 00:18:48,714 DEBUG   SenderThread:3037287 [sender.py:send():235] send: stats
+2022-08-21 00:18:48,715 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,715 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 2
+2022-08-21 00:18:48,715 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,715 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 2
+2022-08-21 00:18:48,715 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 3
+2022-08-21 00:18:48,715 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,715 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 3
+2022-08-21 00:18:48,715 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,715 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 3
+2022-08-21 00:18:48,715 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 4
+2022-08-21 00:18:48,715 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,715 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 4
+2022-08-21 00:18:48,715 DEBUG   SenderThread:3037287 [sender.py:send():235] send: summary
+2022-08-21 00:18:48,718 INFO    SenderThread:3037287 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-08-21 00:18:48,718 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,718 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 4
+2022-08-21 00:18:48,718 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 5
+2022-08-21 00:18:48,719 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,719 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 5
+2022-08-21 00:18:48,719 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,719 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 5
+2022-08-21 00:18:48,726 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:48,794 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 6
+2022-08-21 00:18:48,794 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:48,795 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:48,795 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 6
+2022-08-21 00:18:48,796 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:48,796 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 6
+2022-08-21 00:18:48,796 INFO    SenderThread:3037287 [dir_watcher.py:finish():336] shutting down directory watcher
+2022-08-21 00:18:48,896 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,066 INFO    SenderThread:3037287 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/config.yaml
+2022-08-21 00:18:49,067 INFO    SenderThread:3037287 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/output.log
+2022-08-21 00:18:49,067 INFO    SenderThread:3037287 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/wandb-summary.json
+2022-08-21 00:18:49,067 INFO    SenderThread:3037287 [dir_watcher.py:finish():366] scan: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files
+2022-08-21 00:18:49,068 INFO    SenderThread:3037287 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/output.log output.log
+2022-08-21 00:18:49,068 INFO    SenderThread:3037287 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/wandb-metadata.json wandb-metadata.json
+2022-08-21 00:18:49,069 INFO    SenderThread:3037287 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/conda-environment.yaml conda-environment.yaml
+2022-08-21 00:18:49,069 INFO    SenderThread:3037287 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/wandb-summary.json wandb-summary.json
+2022-08-21 00:18:49,069 INFO    SenderThread:3037287 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/requirements.txt requirements.txt
+2022-08-21 00:18:49,069 INFO    SenderThread:3037287 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/config.yaml config.yaml
+2022-08-21 00:18:49,069 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 7
+2022-08-21 00:18:49,070 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,070 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:49,070 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 7
+2022-08-21 00:18:49,071 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:49,071 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 7
+2022-08-21 00:18:49,071 INFO    SenderThread:3037287 [file_pusher.py:finish():145] shutting down file pusher
+2022-08-21 00:18:49,171 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,171 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,272 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,272 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,373 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,373 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,430 INFO    Thread-12 :3037287 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/output.log
+2022-08-21 00:18:49,432 INFO    Thread-15 :3037287 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/requirements.txt
+2022-08-21 00:18:49,440 INFO    Thread-13 :3037287 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/conda-environment.yaml
+2022-08-21 00:18:49,444 INFO    Thread-14 :3037287 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/wandb-summary.json
+2022-08-21 00:18:49,456 INFO    Thread-16 :3037287 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/files/config.yaml
+2022-08-21 00:18:49,474 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,474 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,575 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,576 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,656 INFO    Thread-6  :3037287 [sender.py:transition_state():392] send defer: 8
+2022-08-21 00:18:49,656 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:49,656 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 8
+2022-08-21 00:18:49,657 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:49,657 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 8
+2022-08-21 00:18:49,677 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,704 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 9
+2022-08-21 00:18:49,704 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,705 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:49,705 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 9
+2022-08-21 00:18:49,705 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:49,705 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 9
+2022-08-21 00:18:49,705 INFO    SenderThread:3037287 [sender.py:transition_state():392] send defer: 10
+2022-08-21 00:18:49,705 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: defer
+2022-08-21 00:18:49,705 INFO    HandlerThread:3037287 [handler.py:handle_request_defer():164] handle defer: 10
+2022-08-21 00:18:49,706 DEBUG   SenderThread:3037287 [sender.py:send():235] send: final
+2022-08-21 00:18:49,706 DEBUG   SenderThread:3037287 [sender.py:send():235] send: footer
+2022-08-21 00:18:49,706 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: defer
+2022-08-21 00:18:49,706 INFO    SenderThread:3037287 [sender.py:send_request_defer():388] handle sender defer: 10
+2022-08-21 00:18:49,805 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: poll_exit
+2022-08-21 00:18:49,806 DEBUG   SenderThread:3037287 [sender.py:send_request():249] send_request: poll_exit
+2022-08-21 00:18:49,806 INFO    SenderThread:3037287 [file_pusher.py:join():150] waiting for file pusher
+2022-08-21 00:18:50,022 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: sampled_history
+2022-08-21 00:18:50,022 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: get_summary
+2022-08-21 00:18:50,023 DEBUG   HandlerThread:3037287 [handler.py:handle_request():141] handle_request: shutdown
+2022-08-21 00:18:50,023 INFO    HandlerThread:3037287 [handler.py:finish():806] shutting down handler
+2022-08-21 00:18:50,706 INFO    WriterThread:3037287 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/run-20220821_001817-mxmu5r6c/run-mxmu5r6c.wandb
+2022-08-21 00:18:50,921 INFO    SenderThread:3037287 [sender.py:finish():1111] shutting down sender
+2022-08-21 00:18:50,922 INFO    SenderThread:3037287 [file_pusher.py:finish():145] shutting down file pusher
+2022-08-21 00:18:50,922 INFO    SenderThread:3037287 [file_pusher.py:join():150] waiting for file pusher
+2022-08-21 00:18:50,923 INFO    MainThread:3037287 [internal.py:handle_exit():80] Internal process exited

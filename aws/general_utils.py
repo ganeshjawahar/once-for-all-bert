@@ -208,6 +208,8 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug8_continue_pretrain_100ksteps_schedule_softhard_vs_hard", supernet_runids=[], standalone_runids=[("soft+hard", "ganayu/effbert/3emvtqgq"), ("hard", "ganayu/effbert/2m79af3n")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug8_inplkd_logits_hidden", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"),  ("attentionhard", "ganayu/effbert/2gj82hqh"), ("hiddenhard", "ganayu/effbert/1ho5yd71"), ("logitshard", "ganayu/effbert/v8by4dk4")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], inpl_kd=["logits", "hidden", "attention"], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug10_v1_vs_v3", supernet_runids=[ ("supernet-v1", "ganayu/effbert/sanqznoy"), ("supernet-v3", "ganayu/effbert/2amuc50v") ], standalone_runids=[], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug20_inplkd_logits_attention", supernet_runids=[ ("supernet", "ganayu/effbert/sanqznoy"), ("mlm1-att1", "ganayu/effbert/3igyemgd"), ("mlm0.5-logit0.5", "ganayu/effbert/14jy3peu")], standalone_runids=[("standalone-small", "ganayu/effbert/2d2niusu"), ("standalone-big", "ganayu/effbert/1h79h5q7")], inpl_kd=["attention", "logits"], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug23_subnet_kd", supernet_runids=[], standalone_runids=[("MLM+hiddenproj", "ganayu/effbert/tcr8v07b"), ("MLM+hid", "ganayu/effbert/1h79h5q7"), ("MLM+hid", "ganayu/effbert/i705bfim"), ("MLM+att", "ganayu/effbert/3npbclo0")], inpl_kd=["attention"], every_x_steps=100)
 
 def wandb_locate_proj():
     import json
@@ -265,6 +267,8 @@ def get_best_mnli_ft_results(experiments, models, tasks, mm=False):
                                 last_acc = 100.0*float(line.split("'spearmanr': ")[1].split("}")[0])
                             elif "matthews_correlation" in line:
                                 last_acc = 100.0*float(line.split("'matthews_correlation': ")[1].split("}")[0])
+                            elif "Accuracy" in line:
+                                last_acc = 100.0*float(line.split("Accuracy': ")[1].split("}")[0])
                     if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
                         best_mnli_dev_acc = last_acc
                         best_config = f
@@ -284,6 +288,12 @@ def get_best_mnli_ft_results(experiments, models, tasks, mm=False):
 # get_best_mnli_ft_results(["aug13_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_retrain_scratch"], models=["v1"], tasks=["mnli", "cola"], mm=False)
 # get_best_mnli_ft_results(["aug13_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue"], models=["v1"], tasks=["mnli", "cola"], mm=False)
 # get_best_mnli_ft_results(["aug13_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue_mnli_bestckpt_rte_stsb_mrpc"], models=["v1"], tasks=["rte", "mrpc", "stsb"], mm=False)
+# get_best_mnli_ft_results(["aug19_finetune_v1sub_cola_hardhidden"], models=["v1"], tasks=["cola"], mm=False)
+# get_best_mnli_ft_results(["aug18_finetune_acabertdata_bertbasestandalone_mnli_ckptneeded"], models=["bertbase"], tasks=["cola", "mnli"], mm=False)
+# get_best_mnli_ft_results(["aug23_finetune_v1sub_cola_hardlogits"], models=["hardlogits"], tasks=["cola"], mm=False)
+# get_best_mnli_ft_results(["aug23_finetune_v1sub_cola_hardattn"], models=["hardattn"], tasks=["cola"], mm=False)
+# get_best_mnli_ft_results(["aug23_finetune_v1sub_mnli_hardlogits"], models=["hardlogits"], tasks=["mnli"], mm=False)
+# get_best_mnli_ft_results(["aug22_finetune_v1sub_mnli_hardattn"], models=["hardattn"], tasks=["mnli"], mm=False)
 
 def get_best_mnli_superft_results(experiments, models, tasks, mm=False):
     for model in models: 
@@ -437,6 +447,9 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v3_v4.1-3_mnli_cola_mrpc_sst2/dftv3")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v3_v4.1-3_mnli_cola_mrpc_sst2/dftv4.1")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v4.2_mnli_cola_mrpc_sst2/dftv4.2")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug19_directfinetune_v4.5_mnli_cola_mrpc_sst2/dftv4.5")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug21_directfinetune_atthard_mnli_cola_mrpc_sst2/dftatthard")
+
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)

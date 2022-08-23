@@ -36,10 +36,10 @@ class EvoSearch:
         self.trial_run = args.trial_run
         self.finetune = args.finetune
         if self.trial_run == "yes":
-            # self.population_size = 50
-            # self.parent_size = 5
-            # self.mutation_size = 5
-            # self.crossover_size = 5
+            self.population_size = 50
+            self.parent_size = 5
+            self.mutation_size = 5
+            self.crossover_size = 5
             self.evo_iter = 3
             
         # model hyperparams
@@ -384,6 +384,8 @@ class EvoSearch:
             timers["cat"] += time.time()-cur_time
             cur_time = time.time()
         eval_metric = {} # self.metric.compute() super-time consuming 120s for 50K with batch size of 256
+        if self.fitness_metric == "accuracy":
+            eval_metric = self.metric.compute()
         if timer_set:
             timers["metric_compute"] += time.time()-cur_time
             cur_time = time.time()
