@@ -309,6 +309,13 @@ def parse_args():
         default="no",
         help=f"should we validate teacher before training",
     )
+    
+    parser.add_argument(
+        "--is_mnli_checkpoint",
+        type=int,
+        default=0,
+        help=f"if model path is a pretrained mnli checkpoint",
+    )
 
     args = parser.parse_args()
 
@@ -458,7 +465,7 @@ def main():
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         # model = AutoModelForSequenceClassification.from_pretrained( args.model_name_or_path, from_tf=bool(".ckpt" in args.model_name_or_path), config=config)
         global_config.num_labels = num_labels
-        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=global_config)
+        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=global_config, ignore_mismatched_sizes="mnli" in args.model_name_or_path) # todo: mnli dynamic
     else:
         rb = open_workbook(args.subtransformer_config_path, formatting_info=True)
         best_config_sheet = rb.sheet_by_name("best_config")
@@ -488,7 +495,7 @@ def main():
             else:
                 subnet_config.add_distill_linear_layer = False
 
-        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config)
+        model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes="mnli" in args.model_name_or_path) # todo: mnli dynamic
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
         # config.hidden_dropout_prob = 0.1
@@ -498,7 +505,7 @@ def main():
         #teacher_config = deepcopy(global_config)
         #if args.distillation_type:
         #    teacher_config.add_distill_linear_layer = False
-        teacher_config = AutoConfig.from_pretrained(args.teacher_model_path, num_labels=num_labels, finetuning_task=args.task_name)
+        teacher_config = AutoConfig.from_pretrained(args.teacher_model_path, num_labels=num_labels, finetuning_task=args.task_name,  ignore_mismatched_sizes="mnli" in args.teacher_model_path)
         # logits is always included
         if "hiddenlastlayer" in args.distillation_type:
             teacher_config.output_hidden_states = True # need to correct name to last_hidden_states

@@ -632,3 +632,298 @@
 2022-08-10 17:28:16 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug6_supernetbase_v3_v4_space/code/wandb/offline-run-20220807_210635-2amuc50v/files/output.log
 2022-08-10 17:28:16 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug6_supernetbase_v3_v4_space/code/wandb/offline-run-20220807_210635-2amuc50v/files/conda-environment.yaml
 2022-08-10 17:28:16 INFO send defer: 8
+2022-08-24 19:30:06 INFO open for scan: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/run-2t12zawf.wandb
+2022-08-24 19:30:06 INFO watching files in: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files
+2022-08-24 19:30:06 INFO run started: 2t12zawf with start time 1661276671
+2022-08-24 19:30:06 INFO saving file wandb-metadata.json with policy now
+2022-08-24 19:30:07 INFO Uploaded file /tmp/tmp37nu2mimwandb/1h8idxb8-wandb-metadata.json
+2022-08-24 19:30:09 INFO Uploaded file /data/home/ganayu/.cache/wandb/artifacts/obj/md5/a0/9eb0096afacd5cf3d3d47de5ba005d
+2022-08-24 19:30:09 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'PENDING', 'aliases': [], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': None}, 'version': 'latest'}
+2022-08-24 19:30:09 INFO saving file media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:10 INFO Uploaded file /tmp/tmp37nu2mimwandb/24o5w67o-media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:11 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:30:11 INFO saving file media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:13 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:30:13 INFO saving file media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:13 INFO Uploaded file /tmp/tmp37nu2mimwandb/29kgu2xw-media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:14 INFO Uploaded file /tmp/tmp37nu2mimwandb/2o229mji-media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:15 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:30:15 INFO saving file media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:16 INFO Uploaded file /tmp/tmp37nu2mimwandb/s3vtqo1w-media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:17 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:30:17 INFO saving file media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:18 INFO Uploaded file /tmp/tmp37nu2mimwandb/u0cyri15-media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:19 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:30:19 INFO saving file media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:20 INFO Uploaded file /tmp/tmp37nu2mimwandb/fbqumlcp-media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO sent artifact run-2t12zawf-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-2t12zawf-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNTIz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxNDM1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:30:21 INFO saving file media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:30:21 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:30:21 INFO handling exit code: 0
+2022-08-24 19:30:21 INFO handling runtime: 70552
+2022-08-24 19:30:21 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:30:21 INFO send defer
+2022-08-24 19:30:21 INFO handle sender defer: 0
+2022-08-24 19:30:21 INFO send defer: 1
+2022-08-24 19:30:21 INFO handle sender defer: 1
+2022-08-24 19:30:21 INFO send defer: 2
+2022-08-24 19:30:21 INFO handle sender defer: 2
+2022-08-24 19:30:21 INFO send defer: 3
+2022-08-24 19:30:21 INFO handle sender defer: 3
+2022-08-24 19:30:21 INFO send defer: 4
+2022-08-24 19:30:21 INFO handle sender defer: 4
+2022-08-24 19:30:21 INFO send defer: 5
+2022-08-24 19:30:21 INFO handle sender defer: 5
+2022-08-24 19:30:21 INFO send defer: 6
+2022-08-24 19:30:21 INFO handle sender defer: 6
+2022-08-24 19:30:21 INFO shutting down directory watcher
+2022-08-24 19:30:21 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/wandb-summary.json
+2022-08-24 19:30:21 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/config.yaml
+2022-08-24 19:30:21 INFO scan: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/requirements.txt requirements.txt
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/config.yaml config.yaml
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/output.log output.log
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/conda-environment.yaml conda-environment.yaml
+2022-08-24 19:30:21 INFO Uploaded file /tmp/tmp37nu2mimwandb/2rqv0ilc-media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/wandb-summary.json wandb-summary.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/wandb-metadata.json wandb-metadata.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:30:21 INFO send defer: 7
+2022-08-24 19:30:21 INFO handle sender defer: 7
+2022-08-24 19:30:21 INFO shutting down file pusher
+2022-08-24 19:30:21 INFO shutting down sender
+2022-08-24 19:30:21 INFO shutting down file pusher
+2022-08-24 19:30:21 INFO waiting for file pusher
+2022-08-24 19:30:22 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/wandb-summary.json
+2022-08-24 19:30:22 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/config.yaml
+2022-08-24 19:30:22 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/output.log
+2022-08-24 19:30:22 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/requirements.txt
+2022-08-24 19:30:22 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_hardhidden/code/wandb/offline-run-20220823_174430-2t12zawf/files/conda-environment.yaml
+2022-08-24 19:30:22 INFO send defer: 8
+2022-08-24 19:31:21 INFO open for scan: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/run-rztz6cia.wandb
+2022-08-24 19:31:22 INFO watching files in: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files
+2022-08-24 19:31:22 INFO run started: rztz6cia with start time 1661273927
+2022-08-24 19:31:22 INFO saving file wandb-metadata.json with policy now
+2022-08-24 19:31:22 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/33pdm6dx-wandb-metadata.json
+2022-08-24 19:31:24 INFO Uploaded file /data/home/ganayu/.cache/wandb/artifacts/obj/md5/a0/9eb0096afacd5cf3d3d47de5ba005d
+2022-08-24 19:31:25 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'PENDING', 'aliases': [], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': None}, 'version': 'latest'}
+2022-08-24 19:31:25 INFO saving file media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:25 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/ceiaa3ft-media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:27 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:31:27 INFO saving file media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:27 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/1ioml51m-media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:29 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:31:29 INFO saving file media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:29 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/1j9a6bkc-media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:31 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:31:31 INFO saving file media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:31 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/jsd060nr-media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:33 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:31:33 INFO saving file media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:33 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/3mvm5xyq-media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:34 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:31:34 INFO saving file media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:35 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/fspc89ne-media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:31:36 INFO saving file media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:31:36 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:31:36 INFO handling exit code: 0
+2022-08-24 19:31:36 INFO handling runtime: 81763
+2022-08-24 19:31:36 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:31:36 INFO send defer
+2022-08-24 19:31:36 INFO handle sender defer: 0
+2022-08-24 19:31:36 INFO send defer: 1
+2022-08-24 19:31:36 INFO handle sender defer: 1
+2022-08-24 19:31:36 INFO send defer: 2
+2022-08-24 19:31:36 INFO handle sender defer: 2
+2022-08-24 19:31:36 INFO send defer: 3
+2022-08-24 19:31:36 INFO handle sender defer: 3
+2022-08-24 19:31:36 INFO send defer: 4
+2022-08-24 19:31:36 INFO handle sender defer: 4
+2022-08-24 19:31:36 INFO send defer: 5
+2022-08-24 19:31:36 INFO handle sender defer: 5
+2022-08-24 19:31:36 INFO send defer: 6
+2022-08-24 19:31:36 INFO handle sender defer: 6
+2022-08-24 19:31:36 INFO shutting down directory watcher
+2022-08-24 19:31:36 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-summary.json
+2022-08-24 19:31:36 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/config.yaml
+2022-08-24 19:31:36 INFO scan: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/requirements.txt requirements.txt
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/config.yaml config.yaml
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-metadata.json wandb-metadata.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/conda-environment.yaml conda-environment.yaml
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/output.log output.log
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-summary.json wandb-summary.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:36 INFO send defer: 7
+2022-08-24 19:31:36 INFO handle sender defer: 7
+2022-08-24 19:31:36 INFO shutting down file pusher
+2022-08-24 19:31:36 INFO shutting down sender
+2022-08-24 19:31:36 INFO shutting down file pusher
+2022-08-24 19:31:36 INFO waiting for file pusher
+2022-08-24 19:31:36 INFO Uploaded file /tmp/tmpv_8r_ccbwandb/1tan8yg9-media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:31:37 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/requirements.txt
+2022-08-24 19:31:37 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/config.yaml
+2022-08-24 19:31:37 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/output.log
+2022-08-24 19:31:37 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/conda-environment.yaml
+2022-08-24 19:31:37 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-summary.json
+2022-08-24 19:31:37 INFO send defer: 8
+2022-08-24 19:34:50 INFO open for scan: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/run-igurztly.wandb
+2022-08-24 19:34:50 INFO watching files in: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files
+2022-08-24 19:34:50 INFO run started: igurztly with start time 1660384014
+2022-08-24 19:34:50 INFO saving file wandb-metadata.json with policy now
+2022-08-24 19:34:51 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/297o8ud3-wandb-metadata.json
+2022-08-24 19:34:53 INFO Uploaded file /data/home/ganayu/.cache/wandb/artifacts/obj/md5/a0/9eb0096afacd5cf3d3d47de5ba005d
+2022-08-24 19:34:54 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'PENDING', 'aliases': [], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': None}, 'version': 'latest'}
+2022-08-24 19:34:54 INFO saving file media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:34:54 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/t0cy2b5x-media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:34:56 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:34:56 INFO saving file media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:34:57 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/17yinkdc-media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:34:58 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:34:58 INFO saving file media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:34:59 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/ek63343p-media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:00 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:35:00 INFO saving file media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:35:01 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/11jcfqep-media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:02 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:35:02 INFO saving file media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:35:03 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/xythjkd2-media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:05 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:35:05 INFO saving file media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:35:05 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/pquf4b6s-media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO sent artifact run-igurztly-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-igurztly-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzODMz', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYyOTY4', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:35:07 INFO saving file media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:35:07 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:35:07 INFO handling exit code: 0
+2022-08-24 19:35:07 INFO handling runtime: 90021
+2022-08-24 19:35:07 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:35:07 INFO send defer
+2022-08-24 19:35:07 INFO handle sender defer: 0
+2022-08-24 19:35:07 INFO send defer: 1
+2022-08-24 19:35:07 INFO handle sender defer: 1
+2022-08-24 19:35:07 INFO send defer: 2
+2022-08-24 19:35:07 INFO handle sender defer: 2
+2022-08-24 19:35:07 INFO send defer: 3
+2022-08-24 19:35:07 INFO handle sender defer: 3
+2022-08-24 19:35:07 INFO send defer: 4
+2022-08-24 19:35:07 INFO handle sender defer: 4
+2022-08-24 19:35:07 INFO send defer: 5
+2022-08-24 19:35:07 INFO handle sender defer: 5
+2022-08-24 19:35:07 INFO send defer: 6
+2022-08-24 19:35:07 INFO handle sender defer: 6
+2022-08-24 19:35:07 INFO shutting down directory watcher
+2022-08-24 19:35:07 INFO Uploaded file /tmp/tmpfgyvhy_jwandb/3rfi8gma-media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/wandb-summary.json
+2022-08-24 19:35:07 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/config.yaml
+2022-08-24 19:35:07 INFO scan: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/wandb-summary.json wandb-summary.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/wandb-metadata.json wandb-metadata.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/output.log output.log
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/requirements.txt requirements.txt
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/conda-environment.yaml conda-environment.yaml
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/config.yaml config.yaml
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO scan save: /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:35:07 INFO send defer: 7
+2022-08-24 19:35:07 INFO handle sender defer: 7
+2022-08-24 19:35:07 INFO shutting down file pusher
+2022-08-24 19:35:07 INFO shutting down sender
+2022-08-24 19:35:07 INFO shutting down file pusher
+2022-08-24 19:35:07 INFO waiting for file pusher
+2022-08-24 19:35:07 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/config.yaml
+2022-08-24 19:35:08 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/requirements.txt
+2022-08-24 19:35:08 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/wandb-summary.json
+2022-08-24 19:35:08 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/conda-environment.yaml
+2022-08-24 19:35:08 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug13_v1_acadbertdata_supernet_retrain_subnet_125Ksteps/code/wandb/offline-run-20220813_094653-igurztly/files/output.log
+2022-08-24 19:35:08 INFO send defer: 8
+2022-08-24 19:40:34 INFO open for scan: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/run-rztz6cia.wandb
+2022-08-24 19:40:34 INFO watching files in: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files
+2022-08-24 19:40:34 INFO run started: rztz6cia with start time 1661273927
+2022-08-24 19:40:34 INFO saving file wandb-metadata.json with policy now
+2022-08-24 19:40:35 INFO Uploaded file /tmp/tmpbj_9pncywandb/2rmqjbr3-wandb-metadata.json
+2022-08-24 19:40:36 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:36 INFO saving file media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:37 INFO Uploaded file /tmp/tmpbj_9pncywandb/2k0f2a6x-media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:38 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:38 INFO saving file media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:39 INFO Uploaded file /tmp/tmpbj_9pncywandb/2wlleutj-media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:41 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:41 INFO saving file media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:41 INFO Uploaded file /tmp/tmpbj_9pncywandb/ijgqn9a7-media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:43 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:43 INFO saving file media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:43 INFO Uploaded file /tmp/tmpbj_9pncywandb/chpnudd1-media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:45 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:45 INFO saving file media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:45 INFO Uploaded file /tmp/tmpbj_9pncywandb/hvkwqo84-media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:47 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:47 INFO saving file media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:47 INFO Uploaded file /tmp/tmpbj_9pncywandb/39zv6cxl-media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:49 INFO sent artifact run-rztz6cia-LayerWisesamplingrate - {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'digest': '64618324ed4a1645695857f3aa30254f', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'latest'}, {'artifactCollectionName': 'run-rztz6cia-LayerWisesamplingrate', 'alias': 'v0'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjI2NTIzNjEy', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTc4MDYxODA1', 'versionIndex': 0}}, 'version': 'v0'}
+2022-08-24 19:40:49 INFO saving file media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json with policy now
+2022-08-24 19:40:49 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:40:49 INFO handling exit code: 0
+2022-08-24 19:40:49 INFO handling runtime: 81763
+2022-08-24 19:40:49 INFO saving file wandb-summary.json with policy end
+2022-08-24 19:40:49 INFO send defer
+2022-08-24 19:40:49 INFO handle sender defer: 0
+2022-08-24 19:40:49 INFO send defer: 1
+2022-08-24 19:40:49 INFO handle sender defer: 1
+2022-08-24 19:40:49 INFO send defer: 2
+2022-08-24 19:40:49 INFO handle sender defer: 2
+2022-08-24 19:40:49 INFO send defer: 3
+2022-08-24 19:40:49 INFO handle sender defer: 3
+2022-08-24 19:40:49 INFO send defer: 4
+2022-08-24 19:40:49 INFO handle sender defer: 4
+2022-08-24 19:40:49 INFO send defer: 5
+2022-08-24 19:40:49 INFO handle sender defer: 5
+2022-08-24 19:40:49 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-summary.json
+2022-08-24 19:40:49 INFO send defer: 6
+2022-08-24 19:40:49 INFO handle sender defer: 6
+2022-08-24 19:40:49 INFO shutting down directory watcher
+2022-08-24 19:40:49 INFO Uploaded file /tmp/tmpbj_9pncywandb/k3xg48xt-media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO file/dir modified: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/config.yaml
+2022-08-24 19:40:50 INFO scan: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/requirements.txt requirements.txt
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/config.yaml config.yaml
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-metadata.json wandb-metadata.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/conda-environment.yaml conda-environment.yaml
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/output.log output.log
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-summary.json wandb-summary.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_109744_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_36580_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_219490_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_252497_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_73162_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_146326_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO scan save: /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json media/table/LayerWise sampling rate_182908_f75ed268e8d04686afcf.table.json
+2022-08-24 19:40:50 INFO send defer: 7
+2022-08-24 19:40:50 INFO handle sender defer: 7
+2022-08-24 19:40:50 INFO shutting down file pusher
+2022-08-24 19:40:50 INFO shutting down sender
+2022-08-24 19:40:50 INFO shutting down file pusher
+2022-08-24 19:40:50 INFO waiting for file pusher
+2022-08-24 19:40:50 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/wandb-summary.json
+2022-08-24 19:40:50 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/conda-environment.yaml
+2022-08-24 19:40:50 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/config.yaml
+2022-08-24 19:40:50 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/requirements.txt
+2022-08-24 19:40:50 INFO Uploaded file /fsx/ganayu/experiments/supershaper/aug23_v1_acadbertdata_supernet_retrain_subnet_125Ksteps_logitshard/code/wandb/offline-run-20220823_165847-rztz6cia/files/output.log
+2022-08-24 19:40:50 INFO send defer: 8

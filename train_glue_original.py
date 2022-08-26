@@ -26,6 +26,7 @@ from datasets import load_dataset, load_metric
 from torch.utils.data.dataloader import DataLoader
 from tqdm.auto import tqdm
 from utils import (calculate_params_from_config, millify)
+import pandas as pd
 
 import transformers
 from accelerate import Accelerator
@@ -44,6 +45,7 @@ from transformers import (
 )
 from transformers.utils.versions import require_version
 from custom_layers import custom_bert
+import torch
 
 logger = logging.getLogger(__name__)
 
@@ -177,7 +179,6 @@ def parse_args():
         help=f"if model path is a pretrained mnli checkpoint",
     )
 
-
     args = parser.parse_args()
 
     # Sanity checks
@@ -281,9 +282,20 @@ def main():
         model = AutoModelForSequenceClassification.from_pretrained(
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
-            config=config,
+            config=config, ignore_mismatched_sizes=args.is_mnli_checkpoint
         )
+        if hasattr(config, "torch_dtype"):
+            setattr(config, "torch_dtype", None)
     else:
+        '''
+        if args.subtransformer_config_path.endswith(".csv"):
+            df = pd.read_csv(args.subtransformer_config_path)
+            df["configs"] = df["configs"].map(convert_to_dict)
+            subnet_config = df.iloc[0]["configs"] # pick first row (outputted by evo search)
+            subnet_config = subnet_config.to_dict()
+            subnet_config["num_labels"] = num_labels
+        else:
+        '''
         rb = open_workbook(args.subtransformer_config_path, formatting_info=True)
         best_config_sheet = rb.sheet_by_name("best_config")
         print("Subnet info: Model-Size=%s, Val-PPL=%s"%(best_config_sheet.cell(2, 1).value, best_config_sheet.cell(3, 1).value))
@@ -299,11 +311,11 @@ def main():
         print("Subnet info: gene_names=", gene_names)
         print("Subnet info: elastickey2ranges=", elastickey2ranges)
         subnet_config.num_labels = num_labels
+        # subnet_config.hidden_dropout_prob = 0.1
         model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
-        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        # config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
-        # config.hidden_dropout_prob = 0.1
-
+        
     # Preprocessing the datasets
     if args.task_name is not None:
         sentence1_key, sentence2_key = task_to_keys[args.task_name]
