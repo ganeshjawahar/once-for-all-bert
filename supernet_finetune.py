@@ -522,7 +522,7 @@ def main():
         print(teacher_config)
         '''
 
-        if os.path.exists(args.teacher_model_path):
+        if os.path.exists(args.teacher_model_path) and hasattr(teacher_config, "mixing"):
             teacher_model = custom_bert.BertForSequenceClassification.from_pretrained(args.teacher_model_path, config=teacher_config)
         else:
             teacher_model = AutoModelForSequenceClassification.from_pretrained(args.teacher_model_path, config=teacher_config)
@@ -666,7 +666,7 @@ def main():
         model.module.set_sample_config(subnet_config)
     else:
         model.module.set_sample_config(global_config, drop_layers=False)
-    if args.teacher_model_path is not None and os.path.exists(args.teacher_model_path):
+    if args.teacher_model_path is not None and os.path.exists(args.teacher_model_path) and hasattr(teacher_config, "mixing"):
         teacher_model.module.set_sample_config(teacher_config)
 
     # Note -> the training dataloader needs to be prepared before we grab his length below (cause its length will be

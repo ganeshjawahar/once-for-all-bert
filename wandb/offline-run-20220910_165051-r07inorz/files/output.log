@@ -1,0 +1,16 @@
+
+pre-initialized with BERT weights
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "train_mlm.py", line 2342, in <module>
+    main()
+  File "train_mlm.py", line 1267, in main
+    model = custom_bert.BertForMaskedLM.from_pretrained(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1424, in from_pretrained
+    model, missing_keys, unexpected_keys, mismatched_keys, error_msgs = cls._load_state_dict_into_model(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1528, in _load_state_dict_into_model
+    model._init_weights(module)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1959, in _init_weights
+    module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
+KeyboardInterrupt

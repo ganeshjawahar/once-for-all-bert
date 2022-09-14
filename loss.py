@@ -64,6 +64,7 @@ def compute_student_loss(
     teacher_info,
     args,
     track_layerwise_loss=False,
+    logits_kd=False
 ):
 
     # outputs = model(**batch, use_soft_loss=True)
@@ -78,7 +79,7 @@ def compute_student_loss(
     losses = {}
     losses["student_mlm_loss"] = student_mlm_loss.item()
     
-    if "logits" in args.distillation_type:
+    if (args.distillation_type is not None and "logits" in args.distillation_type) or logits_kd:
         # compute KL-div of student logits and teacher logits
         # https://raw.githubusercontent.com/liuzechun/ReActNet/master/utils/KD_loss.py
         student_logits = outputs.logits
@@ -95,7 +96,7 @@ def compute_student_loss(
         cross_entropy_loss = cross_entropy_loss.mean()
         # overall_loss = cross_entropy_loss * args.inplace_kd_distill_loss_weights
         student_distill_loss = 0.0
-        if "hard" in args.distillation_type:
+        if (args.distillation_type is not None and "hard" in args.distillation_type) and not logits_kd:
             student_distill_loss = args.inplace_kd_distill_loss_contrib * student_mlm_loss + args.inplace_kd_hard_loss_contrib * cross_entropy_loss
         else:
             student_distill_loss = cross_entropy_loss
@@ -103,7 +104,7 @@ def compute_student_loss(
         overall_loss = overall_loss + student_distill_loss
         losses["student_distill_loss"] = cross_entropy_loss.item()
     
-    if "hiddenlastlayer" in args.distillation_type:
+    if (args.distillation_type is not None and "hiddenlastlayer" in args.distillation_type):
         fkt = 0.0
         num_layers_distilled = 0
         for layer_id in args.inplace_kd_layers:
@@ -127,7 +128,7 @@ def compute_student_loss(
         overall_loss = overall_loss + student_hidden_loss
         losses["student_hidden_loss"] = fkt.item()
     
-    if "attentionlastlayer" in args.distillation_type:
+    if (args.distillation_type is not None and "attentionlastlayer" in args.distillation_type):
         akt = 0.0
         num_layers_distilled = 0
         for layer_id in args.inplace_kd_layers:
@@ -150,7 +151,7 @@ def compute_student_loss(
         overall_loss = overall_loss + student_attention_loss
         losses["student_attention_loss"] = akt.item()
     
-    if "tinybert" in args.distillation_type:
+    if (args.distillation_type is not None and "tinybert" in args.distillation_type):
         # hidden loss
         fkt = 0.0
         num_layers_distilled = 0

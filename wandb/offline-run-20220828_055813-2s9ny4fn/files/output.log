@@ -1,0 +1,9 @@
+pre-initialized with BERT weights
+tensor([-0.0052,  0.0065,  0.0186,  0.0227, -0.0436])
+tensor([-0.0771, -0.0097, -0.0242,  0.0077,  0.0442])
+tensor([-0.0771, -0.0097, -0.0242,  0.0077,  0.0442])
+tensor([-0.0771, -0.0097, -0.0242,  0.0077,  0.0442])
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+08/28/2022 05:58:29 - INFO - __main__ -   BERT-Bottleneck Initiliazed with BERT-base
+08/28/2022 05:58:29 - INFO - __main__ -   Other experts Initiliazed with BERT-base

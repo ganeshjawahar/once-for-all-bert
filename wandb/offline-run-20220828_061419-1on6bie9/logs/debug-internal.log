@@ -1,0 +1,25 @@
+2022-08-28 06:14:21,222 INFO    MainThread:792055 [internal.py:wandb_internal():90] W&B internal server running at pid: 792055, started at: 2022-08-28 06:14:21.217668
+2022-08-28 06:14:21,250 INFO    WriterThread:792055 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220828_061419-1on6bie9/run-1on6bie9.wandb
+2022-08-28 06:14:21,250 DEBUG   HandlerThread:792055 [handler.py:handle_request():141] handle_request: run_start
+2022-08-28 06:14:21,283 DEBUG   HandlerThread:792055 [meta.py:__init__():35] meta init
+2022-08-28 06:14:21,283 DEBUG   HandlerThread:792055 [meta.py:__init__():49] meta init done
+2022-08-28 06:14:21,283 DEBUG   HandlerThread:792055 [meta.py:probe():209] probe
+2022-08-28 06:14:21,296 DEBUG   HandlerThread:792055 [meta.py:_setup_git():199] setup git
+2022-08-28 06:14:21,424 DEBUG   HandlerThread:792055 [meta.py:_setup_git():206] setup git done
+2022-08-28 06:14:21,425 DEBUG   HandlerThread:792055 [meta.py:_save_pip():53] save pip
+2022-08-28 06:14:21,430 DEBUG   HandlerThread:792055 [meta.py:_save_pip():67] save pip done
+2022-08-28 06:14:21,435 DEBUG   HandlerThread:792055 [meta.py:_save_conda():74] save conda
+2022-08-28 06:14:40,474 DEBUG   HandlerThread:792055 [meta.py:_save_conda():84] save conda done
+2022-08-28 06:14:40,474 DEBUG   HandlerThread:792055 [meta.py:probe():247] probe done
+2022-08-28 06:14:59,428 DEBUG   HandlerThread:792055 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-28 06:15:00,266 DEBUG   HandlerThread:792055 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-28 06:15:01,114 DEBUG   HandlerThread:792055 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-28 06:15:01,906 DEBUG   HandlerThread:792055 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-28 06:15:02,794 DEBUG   HandlerThread:792055 [handler.py:handle_request():141] handle_request: partial_history
+2022-08-28 06:15:02,957 WARNING MainThread:792055 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-08-28 06:15:02,966 WARNING MainThread:792055 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-08-28 06:15:02,966 ERROR   MainThread:792055 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-08-28 06:15:03,266 INFO    SenderThread:792055 [sender.py:finish():1111] shutting down sender
+2022-08-28 06:15:03,796 INFO    HandlerThread:792055 [handler.py:finish():806] shutting down handler
+2022-08-28 06:15:03,796 INFO    WriterThread:792055 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220828_061419-1on6bie9/run-1on6bie9.wandb
+2022-08-28 06:15:03,799 INFO    MainThread:792055 [internal.py:handle_exit():80] Internal process exited

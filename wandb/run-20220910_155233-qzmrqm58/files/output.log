@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "train_mlm.py", line 2346, in <module>
+    main()
+  File "train_mlm.py", line 1095, in main
+    consistency_loss=args.consistency_loss
+AttributeError: 'Namespace' object has no attribute 'consistency_loss'

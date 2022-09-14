@@ -56,7 +56,9 @@ class Sampler:
         static_keys=None,
         layerwise_changing_keys=None,
         magic_sampling=False,
-        search_space_id=None
+        search_space_id=None,
+        collapsed_training=None,
+        consistency_loss_max=None
     ):
         self.config = config
         self.sampling_type = sampling_type
@@ -65,6 +67,8 @@ class Sampler:
         self.magic_sampling = magic_sampling
         self.prev_subtransformer_configs = None
         self.search_space_id = search_space_id
+        self.collapsed_training = collapsed_training
+        self.consistency_loss_max = consistency_loss_max
         self.static_keys = static_keys or [
             "sample_hidden_size",
             "sample_num_hidden_layers",
@@ -355,6 +359,9 @@ class Sampler:
         for key in config_dict.keys():
             setattr(config, key, config_dict[key])
 
+        if hasattr(config, "max_experts"):
+            setattr(config, "sample_expert_ids", [random.randint(0, getattr(config, "max_experts")-1) for i in range(num_hidden_layers)] if self.collapsed_training == "no" else [0]*num_hidden_layers)
+
         return config
 
     def get_small_config(self, v1_small=False):
@@ -462,10 +469,21 @@ class Sampler:
             configs = _sample()
         
         self.prev_subtransformer_configs = configs
-        return {
-            "smallest_subtransformer": smallest_config,
-            "random_subtransformers": configs,
-        }
+        output_configs = { "smallest_subtransformer": smallest_config, "random_subtransformers": configs}
+        
+        if hasattr(self.config, "max_experts"):
+            moe_biggest_config = copy.deepcopy(self.config)
+            setattr(moe_biggest_config, "sample_expert_ids", [random.randint(0, getattr(moe_biggest_config, "max_experts")-1) for i in range(getattr(moe_biggest_config, "num_hidden_layers"))] if self.collapsed_training == "no" else [0]*getattr(moe_biggest_config, "num_hidden_layers"))
+            moe_smallest_config = copy.deepcopy(smallest_config)
+            setattr(moe_smallest_config, "sample_expert_ids", [random.randint(0, getattr(moe_smallest_config, "max_experts")-1) for i in range(getattr(moe_smallest_config, "num_hidden_layers"))] if self.collapsed_training == "no" else [0]*getattr(moe_smallest_config, "num_hidden_layers"))
+            output_configs["moe_biggest_config"] = moe_biggest_config
+            output_configs["moe_smallest_config"] = moe_smallest_config
+            if hasattr(self.config, "consistency_loss_max") and self.consistency_loss_max == "yes":
+                moe_biggest_config_2 = copy.deepcopy(self.config)
+                setattr(moe_biggest_config_2, "sample_expert_ids", [random.randint(0, getattr(moe_biggest_config_2, "max_experts")-1) for i in range(getattr(moe_biggest_config_2, "num_hidden_layers"))] if self.collapsed_training == "no" else [0]*getattr(moe_biggest_config_2, "num_hidden_layers"))
+            output_configs["moe_biggest_config_2"] = moe_smallest_config
+                
+        return output_configs
 
     def calc_probs(self, choices_dictionary):
         normalized_probs = {}
@@ -511,7 +529,10 @@ def get_supertransformer_config(
     random_layer_selection_probability=0.1,
     use_hypernet_w_low_rank=0, bottleneck_rank=50, hypernet_hidden_size=64,
     search_space_id=None,
-    max_experts=1
+    max_experts=-1,
+    expert_routing_type="sentence",
+    last_expert_averaging_expert="no",
+    consistency_loss="no"
 ):
     config = AutoConfig.from_pretrained(model_name_or_path)
 
@@ -565,6 +586,9 @@ def get_supertransformer_config(
     config.rewire = False
     if max_experts != -1:
         config.max_experts = max_experts
+        config.expert_routing_type = expert_routing_type
+        config.sample_expert_ids = [0 for i in range(config.sample_num_hidden_layers)]
+        config.last_expert_averaging_expert = last_expert_averaging_expert
 
     return config
 

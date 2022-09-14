@@ -275,7 +275,7 @@ def parse_args():
     )
     parser.add_argument(
         "--lr_scheduler_type",
-        type=SchedulerType,
+        type=SchedulerType, 
         default="linear",
         help="The scheduler type to use.",
         choices=[
@@ -285,6 +285,7 @@ def parse_args():
             "polynomial",
             "constant",
             "constant_with_warmup",
+            "CyclicLR"
         ],
     )
     parser.add_argument(
@@ -762,6 +763,48 @@ def parse_args():
         help=f"number of experts for supernet training",
     )
 
+    parser.add_argument(
+        "--expert_routing_type",
+        type=str,
+        default="sentence",
+        help=f"sentence (batch) or token level routing or sentence_single",
+    )
+
+    parser.add_argument(
+        "--last_expert_averaging_expert",
+        type=str,
+        default="no",
+        help=f"is last expert simply an average of rest of the experts?",
+    )
+
+    parser.add_argument(
+        "--initialize_other_experts",
+        type=str,
+        default="yes",
+        help=f"initialize other experts from bert-base",
+    )
+
+    parser.add_argument(
+        "--collapsed_training",
+        type=str,
+        default="no",
+        help=f"initialize the first expert with parameter average of all experts and perform training",
+    )
+
+    parser.add_argument(
+        "--partial_collapsing",
+        type=str,
+        default="no",
+        help=f"collapse only the middle four layers",
+    )
+
+    parser.add_argument(
+        "--consistency_loss_max",
+        type=str,
+        default="no",
+        help=f"use consistency loss for max",
+    )
+
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
     # )
@@ -1047,7 +1090,9 @@ def main():
             use_hypernet_w_low_rank=args.use_hypernet_w_low_rank, bottleneck_rank=args.bottleneck_rank,
             hypernet_hidden_size=args.hypernet_hidden_size,
             search_space_id=args.search_space_id,
-            max_experts=args.max_experts
+            max_experts=args.max_experts,
+            expert_routing_type=args.expert_routing_type,
+            last_expert_averaging_expert=args.last_expert_averaging_expert
         )
     else:
         global_config = get_supertransformer_config(
@@ -1055,7 +1100,9 @@ def main():
             mixing=args.mixing,
             additional_random_softmaxing=args.additional_random_softmaxing,
             random_layer_selection_probability=args.random_layer_selection_probability,
-            max_experts=args.max_experts
+            max_experts=args.max_experts,
+            expert_routing_type=args.expert_routing_type,
+            last_expert_averaging_expert=args.last_expert_averaging_expert
         )
 
     if args.tokenizer_name:
@@ -1222,6 +1269,30 @@ def main():
                 args.model_name_or_path, config=global_config
             )
             logger.info("BERT-Bottleneck Initiliazed with BERT-base")
+            if args.max_experts != -1:
+                if args.initialize_other_experts == "yes":
+                    logger.info("Other experts Initiliazed with BERT-base")
+                    for name, param in model.named_parameters():
+                        if param.requires_grad and "experts" in name:
+                            src_module = None
+                            if "other_output_experts" in name:
+                                src_module = ".".join(name.replace("other_output_experts", "output").split(".")[0:-3] + name.replace("other_output_experts", "output").split(".")[-2:])
+                            elif "other_intermediate_experts" in name:
+                                src_module = ".".join(name.replace("other_intermediate_experts", "intermediate").split(".")[0:-3] + name.replace("other_intermediate_experts", "intermediate").split(".")[-2:])
+                            model.state_dict()[name].data.copy_(model.state_dict()[src_module].data)
+                elif args.collapsed_training == "yes":
+                    logger.info("First expert initiliazed with parameter average of other experts")
+                    for layer_id in range(global_config.num_hidden_layers):
+                        if args.partial_collapsing == "yes" and (layer_id <=3 or layer_id >=8):
+                            print("skipping expert average initialization for layer %d"%layer_id)
+                            continue
+                        for main_expert, other_experts in [("bert.encoder.layer.<layer_id>.intermediate.dense.weight", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.intermediate.dense.bias", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.dense.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.output.dense.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.weight"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.bias")]:
+                            first_expert = model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.clone()
+                            for expert_id in range(global_config.max_experts-1):
+                                first_expert = first_expert + model.state_dict()[other_experts.replace("<layer_id>", str(layer_id)).replace("<expert_id>", str(expert_id))].data
+                            first_expert = first_expert / float(global_config.max_experts)
+                            model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(first_expert)
+                    del first_expert
         else:
             print('initialized with random BERT weights')
             model = custom_bert.BertForMaskedLM(global_config)
@@ -1550,12 +1621,14 @@ def main():
         args.num_train_epochs = math.ceil(
             args.max_train_steps / num_update_steps_per_epoch
         )
-
+    #if args.lr_scheduler_type == "CyclicLR":
+    #    lr_scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=args.learning_rate, step_size_up=args.num_warmup_steps, step_size_down=int(args.max_train_steps//2)-args.num_warmup_steps)
+    #else:
     lr_scheduler = get_scheduler(
         name=args.lr_scheduler_type,
         optimizer=optimizer,
         num_warmup_steps=args.num_warmup_steps,
-        num_training_steps=args.max_train_steps,
+        num_training_steps=args.max_train_steps
     )
 
     if args.resume_from_checkpoint_dir is not None:
@@ -1626,7 +1699,9 @@ def main():
         args.mixing,
         global_config,
         magic_sampling=magic_sampling,
-        search_space_id=args.search_space_id
+        search_space_id=args.search_space_id,
+        collapsed_training=args.collapsed_training,
+        consistency_loss_max = args.consistency_loss_max
     )
 
     if args.eval_random_subtransformers:
@@ -1807,25 +1882,39 @@ def main():
                     ## Sample Supertransformer
                     if args.teacher_model_path is not None:
                         outputs = teacher_model(**batch)
+                        if args.inplace_distillation:
+                            model.set_sample_config(global_config, drop_layers=True)
+                            nonteacher_outputs = model(**batch)
+                            loss = nonteacher_outputs.loss
+                            teacher_mlm_loss = loss
+                            teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
+                            accelerator.backward(teacher_mlm_loss)
                     else:
-                        model.set_sample_config(global_config, drop_layers=True)
+                        model.set_sample_config(global_config if not hasattr(global_config, "max_experts") else config_dict["moe_biggest_config"], drop_layers=True)
                         outputs = model(**batch)
                         loss = outputs.loss
                         teacher_mlm_loss = loss
                         teacher_mlm_loss = teacher_mlm_loss / args.gradient_accumulation_steps
                         accelerator.backward(teacher_mlm_loss)
+                        if args.consistency_loss_max == "yes":
+                            teacher_info = {"teacher_logits": outputs.logits.detach()}
+                            model.set_sample_config(config_dict["moe_biggest_config_2"], drop_layers=True)
+                            outputs = model(**batch)
+                            (moe_biggest_config_2_loss, moe_biggest_config_2_losses_dict) = compute_student_loss(outputs, teacher_info, args, track_layerwise_loss=track_loss, logits_kd=True)
+                            accelerator.backward(moe_biggest_config_2_loss)
 
                     if args.inplace_distillation:
 
                         teacher_info = {}
-                        if "hiddenlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
-                            teacher_info["teacher_hidden_states"] = outputs.hidden_states
+                        if args.distillation_type:
+                            if "hiddenlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
+                                teacher_info["teacher_hidden_states"] = outputs.hidden_states
 
-                        if "attentionlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
-                            teacher_info["teacher_attention_maps"] = outputs.attentions
-                        
-                        if "logits" in args.distillation_type:
-                            teacher_info["teacher_logits"] = outputs.logits.detach()
+                            if "attentionlastlayer" in args.distillation_type or "tinybert" in args.distillation_type:
+                                teacher_info["teacher_attention_maps"] = outputs.attentions
+                            
+                            if "logits" in args.distillation_type:
+                                teacher_info["teacher_logits"] = outputs.logits.detach()
 
                         # teacher_hidden_states = outputs.hidden_states
                         # teacher_attention_maps = outputs.attentions
@@ -1872,8 +1961,7 @@ def main():
 
                 if args.sampling_rule == "sandwich" or cur_sampling_one_arch_choice == "smallest":
                     ## Sample Smallest Subtransformer
-                    
-                    model.set_sample_config(super_config_small, drop_layers=True)
+                    model.set_sample_config(super_config_small if not hasattr(global_config, "max_experts") else config_dict["moe_smallest_config"], drop_layers=True)
                     outputs = model(**batch) #, use_soft_loss=args.inplace_distillation)
                     loss = outputs.loss
 

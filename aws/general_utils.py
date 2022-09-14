@@ -169,7 +169,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             scores_list.append(("attention_loss", attentionloss_scores))
     for name, scores in scores_list:
         fig = plt.figure(figsize=(13,7))
-        colors = ['b', "springgreen", "indigo", "olive", "firebrick", 'c', "gold", "violet", 'm', 'r', 'g', 'k', 'y']
+        colors = ['b', "springgreen", "indigo", "olive", "firebrick", 'c', "gold", "violet", 'm', 'r', 'g', 'k', 'y', 'fuchsia', 'maroon', 'sienna', 'orange', 'coral']
         ei = 0
         for model in sorted(scores):
             if name == "val_loss" or every_x_steps == -1:
@@ -212,7 +212,10 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug23_subnet_kd", supernet_runids=[], standalone_runids=[("MLM+hiddenproj", "ganayu/effbert/tcr8v07b"), ("MLM+hid", "ganayu/effbert/1h79h5q7"), ("MLM+hid", "ganayu/effbert/i705bfim"), ("MLM+att", "ganayu/effbert/3npbclo0")], inpl_kd=["attention"], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug24_subnet_kd", supernet_runids=[], standalone_runids=[("scratch-MLM", "ganayu/effbert/1kjx2mpp"), ("continue-MLM+hid24681012", "ganayu/effbert/vnw397qh"), ("continue-MLM+hid12", "ganayu/effbert/2t12zawf"), ("continue-MLM+hid1-12", "ganayu/effbert/7r2twr3j"), ("continue-MLM+logits", "ganayu/effbert/rztz6cia"), ("continue-MLM", "ganayu/effbert/igurztly") ], inpl_kd=["attention"], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug24_subnet_kd", supernet_runids=[], standalone_runids=[("scratch-MLM", "ganayu/effbert/1kjx2mpp"),  ("continue-MLM+hid24681012", "ganayu/effbert/vnw397qh"), ("continue-MLM+hid12", "ganayu/effbert/2t12zawf"), ("continue-MLM+hid1-12", "ganayu/effbert/7r2twr3j"), ("continue-MLM+logits", "ganayu/effbert/rztz6cia"), ("continue-MLM", "ganayu/effbert/igurztly"), ("scratch+logits-MLM", "ganayu/effbert/3by8zjll") ], inpl_kd=["attention"], every_x_steps=100)
-get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug26_supernet_inplkd", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("MLM+hid1-12", "ganayu/effbert/1rlq5v50"), ("MLM+hid12", "ganayu/effbert/3inltdpj"), ("MLM+hid24681012", "ganayu/effbert/ocql4hmv")], standalone_runids=[("standalone-big", "ganayu/effbert/2n2qpwob")], inpl_kd=["hidden", "logits"], every_x_steps=100) # ("standalone-small", "ganayu/effbert/2d2niusu")
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug26_supernet_inplkd", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("MLM+hid1-12", "ganayu/effbert/1rlq5v50"), ("MLM+hid12", "ganayu/effbert/3inltdpj"), ("MLM+hid24681012", "ganayu/effbert/ocql4hmv"), ("MLM+logits", "ganayu/effbert/2c18e6jq"), ("MLM+goologits", "ganayu/effbert/2jfrxvav")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], inpl_kd=["hidden", "logits"], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug31_supernet_moe", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("4e_1rand", "ganayu/effbert/dns0jab5"), ("2e_1rand", "ganayu/effbert/1we400qi")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug31_supernet_moe_2rand", supernet_runids=[ ("4e_1rand", "ganayu/effbert/dns0jab5"), ("2e_1rand", "ganayu/effbert/1we400qi"), ("2e_2rand", "ganayu/effbert/x80tlkv1"), ("4e_2rand", "ganayu/effbert/319k7x8y")], standalone_runids=[], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/sep7_supernet_moe_jack", supernet_runids=[ ("2e", "ganayu/effbert/1we400qi"), ("2e+jack", "ganayu/effbert/i3w3y04e")], standalone_runids=[], every_x_steps=100)
 
 def wandb_locate_proj():
     import json
@@ -221,8 +224,7 @@ def wandb_locate_proj():
         content = json.load(open(f))
         if content["gpu_count"] == 8 and content["codePath"] == "train_mlm.py":
             print(f.split("/")[-3])
-# wandb_locate_proj()   
-
+# wandb_locate_proj()
 
 def poke_bertbase_weights():
     from transformers import AutoTokenizer, AutoModelForMaskedLM
@@ -272,9 +274,10 @@ def get_best_mnli_ft_results(experiments, models, tasks, mm=False):
                                 last_acc = 100.0*float(line.split("'matthews_correlation': ")[1].split("}")[0])
                             elif "Accuracy" in line:
                                 last_acc = 100.0*float(line.split("Accuracy': ")[1].split("}")[0])
-                    if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
-                        best_mnli_dev_acc = last_acc
-                        best_config = f
+                    if last_acc:
+                        if best_mnli_dev_acc is None or best_mnli_dev_acc < last_acc:
+                            best_mnli_dev_acc = last_acc
+                            best_config = f
                 print(model, task, best_mnli_dev_acc, best_config)
 
 # get_best_mnli_ft_results(["aug2_v3_finetune_supershaper_60M_direct", "aug2_v3_finetune_supershaper_60M_100Ksteps", "aug2_v3_finetune_v2_60M_direct"])
@@ -306,7 +309,13 @@ def get_best_mnli_ft_results(experiments, models, tasks, mm=False):
 # get_best_mnli_ft_results(["aug24_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue_v3"], models=["acav3"], tasks=["mrpc", "sst2", "rte"], mm=False)
 # get_best_mnli_ft_results(["aug25_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue"], models=[""], tasks=["mnli", "cola", "sst2"], mm=False)
 # get_best_mnli_ft_results(["aug25_finetune_acabertdata_bertbasestandalone_mrpc_rte_ckptneeded"], models=[""], tasks=["mrpc", "rte"], mm=False)
-# get_best_mnli_ft_results(["aug25_finetune_aca_v1subnet_rsub_60M"], models=[""], tasks=["cola"], mm=False)
+# get_best_mnli_ft_results(["aug25_finetune_aca_v1subnet_rsub_60M"], models=[""], tasks=["cola", "mnli"], mm=False)
+# get_best_mnli_ft_results(["aug25_directfinetune_v1sub_cola_hardlogits"], models=[""], tasks=["cola"], mm=False)
+# get_best_mnli_ft_results(["aug25_directfinetune_v1sub_mnli_hardlogits"], models=[""], tasks=["mnli"], mm=False)
+# get_best_mnli_ft_results(["aug25_directfinetune_v1scratch_cola_hardlogits"], models=[""], tasks=["cola"], mm=False)
+# get_best_mnli_ft_results(["aug25_directfinetune_v1scratch_mnli_hardlogits"], models=[""], tasks=["mnli"], mm=False)
+# get_best_mnli_ft_results(["aug25_finetune_googlebert_mnli_cola_ckptneeded"], models=[""], tasks=["mnli", "cola", "sst2", "qnli", "qqp"], mm=False)
+# get_best_mnli_ft_results(["aug25_finetune_googlebert_mrpc_rte_stsb_ckptneeded"], models=[""], tasks=["mrpc", "rte"], mm=False)
 
 def get_best_mnli_superft_results(experiments, models, tasks, mm=False):
     for model in models: 
@@ -414,7 +423,7 @@ def get_best_ft_sweep_space():
         print(fold.split("/")[-1], best_dev_scores)
 # get_best_ft_sweep_space()
 
-def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folder):
+def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folder, supernet_finetune=False, num_gpus=8):
     experiments = []
     for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/shell.sh"):
         line = line.strip()
@@ -422,39 +431,74 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
             epochs = int(line.split("--num_train_epochs ")[1].split(" ")[0])
             task = line.split("--task_name ")[1].split(" ")[0]
             experiments.append([epochs, task])
-    
-    cur_exp = -1
-    prev_epoch = -1
-    task2runs = {}
-    last_score = None
-    cur_task = None
-    for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/sys.out"):
-        line = line.strip()
-        if "lr=" in line and "bs=" in line and "ep=" in line:
-            if "epoch 0" in line and prev_epoch != 0:
-                if prev_epoch != -1:
-                    assert(cur_task!=None)
-                    assert(last_score!=None)
-                    if cur_task not in task2runs:
-                        task2runs[cur_task] = []
-                    task2runs[cur_task].append(last_score)
-                cur_exp += 1
-                cur_task = experiments[cur_exp][1]
-            prev_epoch = int(line.split("epoch ")[1].split(":")[0])
-            last_score = line
-    task2runs[cur_task].append(last_score)
 
-    metric = {"mnli": "accuracy", "cola": "matthews_correlation", "mrpc": "accuracy", "sst2": "accuracy", "qnli": "accuracy", "qqp": "accuracy", "rte": "accuracy", "stsb": "spearmanr"}
+    finalscores = {}
+    if not supernet_finetune:
+        cur_exp = -1
+        prev_epoch = -1
+        task2runs = {}
+        last_score = None
+        cur_task = None
+        for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/sys.out"):
+            line = line.strip()
+            if "lr=" in line and "bs=" in line and "ep=" in line:
+                if "epoch 0" in line and prev_epoch != 0:
+                    if prev_epoch != -1:
+                        assert(cur_task!=None)
+                        assert(last_score!=None)
+                        if cur_task not in task2runs:
+                            task2runs[cur_task] = []
+                        task2runs[cur_task].append(last_score)
+                    cur_exp += 1
+                    cur_task = experiments[cur_exp][1]
+                prev_epoch = int(line.split("epoch ")[1].split(":")[0])
+                last_score = line
+        if cur_task not in task2runs:
+            task2runs[cur_task] = []
+        task2runs[cur_task].append(last_score)
 
-    for task in task2runs:
-        best_score = None
-        best_config = None
-        for score in task2runs[task]:
-            cur_score = 100.0*float(score.split("'"+metric[task]+"': ")[1].split()[0][0:-1])
-            if best_score is None or cur_score > best_score:
-                best_score = cur_score
-                best_config = score
-        print(task, best_score)
+        metric = {"mnli": "accuracy", "cola": "matthews_correlation", "mrpc": "accuracy", "sst2": "accuracy", "qnli": "accuracy", "qqp": "accuracy", "rte": "accuracy", "stsb": "spearmanr"}
+
+        for task in task2runs:
+            best_score = None
+            best_config = None
+            for score in task2runs[task]:
+                cur_score = 100.0*float(score.split("'"+metric[task]+"': ")[1].split()[0][0:-1])
+                if best_score is None or cur_score > best_score:
+                    best_score = cur_score
+                    best_config = score
+            print(task, best_score)
+            finalscores[task] = best_score
+    else:
+        scores = []
+        for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/sys.out"):
+            line = line.strip()
+            if "SuperTransformer Val Accuracy" in line:
+                scores.append(float(line.split("'SuperTransformer Val Accuracy'")[1].split(":")[1][0:-1]))
+        task2score = {}
+        incomplete_tasks = {}
+        cur_idx = 0
+        for exp in experiments:
+            epoch, task = exp
+            if task not in task2score:
+                task2score[task] = None
+            if cur_idx+epoch > len(scores):
+                incomplete_tasks[task] = True
+                break
+            cur_score = scores[cur_idx+epoch-1]
+            if task2score[task] is None or cur_score > task2score[task]:
+                task2score[task] = cur_score
+            cur_idx += epoch
+        print(task2score)
+        print("incomplete", incomplete_tasks)
+        finalscores = {task: 100.0*task2score[task] for task in task2score}
+    res = ""
+    for task in ["mnli", "cola", "mrpc", "sst2", "qnli", "qqp", "rte", "stsb"]:
+        if task in finalscores and finalscores[task] is not None:
+            res+= "%.2f,"%(finalscores[task])
+        else:
+            res += ","
+    print(res)
 
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_supernet_continue_otherglue/acav1")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug14_directfinetune_v3_v4.1-3_mnli_cola_mrpc_sst2/dftv3")
@@ -463,6 +507,54 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug19_directfinetune_v4.5_mnli_cola_mrpc_sst2/dftv4.5")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug21_directfinetune_atthard_mnli_cola_mrpc_sst2/dftatthard")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug21_directfinetune_v1_aca_60M_mnli_cola_mrpc_sst2/df60M")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug27_finetune_aca_v3rsub_1e5_mnli_cola_qnli_qqp/acav3")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug28_finetune_aca_v3rsub_4e5_mnli_cola_qnli_qqp/acav34e5")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug28_finetune_aca_v3rsub_3e5_mnli_cola_qnli_qqp/acav33e5")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug27_finetune_aca_v1_supernet_inplace_kd_loghard/loghard")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug27_finetune_aca_v1_supernet_inplace_kd_hid1-12/hid1-12")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_aca_v1_supernet_inplace_kd_hid1-12_nonmnli_8tasks/hid1-12")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_retrain_scratch_nonmnlicola_tasks/v1scratch")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_noretrain_125Ksteps_nonmnlicola_tasks/v1scratch")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_moe2e1rand_125Ksteps_mnli/moe2e1rand")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_inplkd_googlebert_loghard_125Ksteps_mnli/gooft")
+#for task in ["cola", "mnli", "sst2", "qnli", "qqp"]:
+#    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_directfinetune_v1scratch_%s_hardlogits/hl%s"%(task, task), supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_retrain_scratch_nonmnlicola_tasks/v1scratch")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_noretrain_125Ksteps_nonmnlicola_tasks/v1scratch")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_aca_v1_supernet_inplace_kd_hid1-12_nonmnli_8tasks/hid1-12")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug27_finetune_aca_v1_supernet_inplace_kd_hid12/hid12")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug27_finetune_aca_v1_supernet_inplace_kd_hid24681012/hid24681012")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_moe2e1rand_125Ksteps_mnli/moe2e1rand")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_moe4e1rand_125Ksteps_mnli/moe4e1rand")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug30_finetune_acadbertdata_supernet_moe2e1rand_allexpavg_mnli/allexpavg")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug30_finetune_acadbertdata_supernet_moe4e1rand_allexpavg_mnli/allexpavg")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_finetune_acadbertdata_supernet_moe4e1rand_125Ksteps_nonmnlitasks/moe4e1rand")
+#for nexp, popsize in [(2, 1), (4, 1), (8, 1)]:
+    # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep4_finetune_acadbertdata_supernet_v1_moe_%de_%drand/%de_%drand"%(nexp, popsize, nexp, popsize))
+#    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep4_finetune_acadbertdata_supernet_v1_moe_%de_%drand_allexpavg/%de_%drand"%(nexp, popsize, nexp, popsize))
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_directfinetune_v3rsub_mnli_hardlogits/31hlmnli", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_directfinetune_v3rsub_cola_hardlogits/31hlcola", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_finetune_v1_subnetkd_logitshard_fthard_mnli_cola_mrpc/31log")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_finetune_v1_subnetkd_logitshid1-12_fthard_mnli_cola_mrpc/31hid1-12")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_finetune_v1_subnetkd_logitshid24681012_fthard_mnli_cola_mrpc/31hid24681012")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_finetune_acadbertdata_supernet_moe2e2rand_125Ksteps_alltasks/2e_2rand")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug31_finetune_acadbertdata_supernet_moe4e2rand_125Ksteps_alltasks/4e_2rand")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep6_finetune_supernetbase_moe_averagingexpert_3e_1rand_allexpavg/ft3e_aleavg")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep6_finetune_supernetbase_moe_averagingexpert_3e_1rand_firstexp/ft3e_1stexp")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep6_finetune_supernetbase_inplacekd_fixedteacher_loghard_hid1-12/ikd1-12")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep6_finetune_acadbertdata_supernet_v1_moe_minmaxrand_corrected_2e_1rand/ft2e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep9_finetune_acadbertdata_supernet_v1_moe_8e_minmaxrand_corrected/ft2e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep9_finetune_acadbertdata_supernet_v1_moe_2e_8e_initialize_other_experts_no/ft2e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep9_finetune_acadbertdata_supernet_v1_moe_minmaxrand_collapsedtraining/ft2e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep9_acadbertdata_supernet_v1_moe_minmaxrand_collapsedtraining_partialcollapsing/ft2e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep11_finetune_acadbertdata_supernet_v1_moe_minmaxrand_corrected_4e/11-4e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep11_finetune_acadbertdata_supernet_v1_moe_minmaxrand_corrected_6e/11-6e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep10_finetune_acadbertdata_supernet_v1_moe_minmaxrand_corrected_2e_1rand_useexpert2/ft2e")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep12_finetune_acadbertdata_supernet_v1_moe_2e_consistencyloss_for_max/12-clmax")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep12_finetune_acadbertdata_supernet_v1_inplacekd_logits_moe2e/12-ikd")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep10_finetune_v1_subnetkdlogits_finetunekdlogits_67M/10s-f-kd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep12_finetune_subnethardlog_evosearch_supernet_v1_moe2e_67M/12-fsubmoe")
+
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)
@@ -506,6 +598,9 @@ def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_n
 
 # get_pareto_curve(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug3_pareto_diff_search_spaces", iteration="evo_results_29.xls", sheet_name="iter_10", experiments=["aug1_v3_supernetbase_search_different_spaces"])
 # get_pareto_curve(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug1_v3_supernetbase_search_diff_configs", iteration="evo_results_29.xls", sheet_name="iter_10", experiments=["aug1_v3_supernetbase_search_diff_configs"])
+# def collapse_sparse_to_dense_model_using_paramaverage(src_ckpt, dest_ckpt):
+# collapse_sparse_to_dense_model_using_paramaverage("/fsx/ganayu/experiments/supershaper/aug27_acadbertdata_supernet_v1_moe/2e_1rand/best_model", "/fsx/ganayu/experiments/supershaper/aug27_acadbertdata_supernet_v1_moe/2e_1rand/all_average_model")
+
 
 
 

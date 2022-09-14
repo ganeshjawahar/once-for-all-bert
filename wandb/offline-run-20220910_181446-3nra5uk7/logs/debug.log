@@ -1,0 +1,31 @@
+2022-09-10 18:14:46,064 INFO    MainThread:58683 [wandb_setup.py:_flush():76] Loading settings from /data/home/ganayu/.config/wandb/settings
+2022-09-10 18:14:46,065 INFO    MainThread:58683 [wandb_setup.py:_flush():76] Loading settings from /fsx/ganayu/code/SuperShaper/wandb/settings
+2022-09-10 18:14:46,065 INFO    MainThread:58683 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2022-09-10 18:14:46,065 INFO    MainThread:58683 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train_mlm.py', 'program': 'train_mlm.py'}
+2022-09-10 18:14:46,065 INFO    MainThread:58683 [wandb_init.py:_log_setup():428] Logging user logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220910_181446-3nra5uk7/logs/debug.log
+2022-09-10 18:14:46,066 INFO    MainThread:58683 [wandb_init.py:_log_setup():429] Logging internal logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20220910_181446-3nra5uk7/logs/debug-internal.log
+2022-09-10 18:14:46,066 INFO    MainThread:58683 [wandb_init.py:init():462] calling init triggers
+2022-09-10 18:14:46,066 INFO    MainThread:58683 [wandb_init.py:init():465] wandb.init called with sweep_config: {}
+config: {}
+2022-09-10 18:14:46,066 INFO    MainThread:58683 [wandb_init.py:init():515] starting backend
+2022-09-10 18:14:46,066 INFO    MainThread:58683 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-09-10 18:14:46,102 INFO    MainThread:58683 [backend.py:ensure_launched():217] starting backend process...
+2022-09-10 18:14:46,112 INFO    MainThread:58683 [backend.py:ensure_launched():222] started backend process with pid: 58727
+2022-09-10 18:14:46,118 INFO    MainThread:58683 [wandb_init.py:init():525] backend started and connected
+2022-09-10 18:14:46,136 INFO    MainThread:58683 [wandb_init.py:init():596] updated telemetry
+2022-09-10 18:14:46,191 INFO    MainThread:58683 [wandb_init.py:init():662] starting run threads in backend
+2022-09-10 18:14:51,198 INFO    MainThread:58683 [wandb_run.py:_console_start():1898] atexit reg
+2022-09-10 18:14:51,200 INFO    MainThread:58683 [wandb_run.py:_redirect():1771] redirect: SettingsConsole.REDIRECT
+2022-09-10 18:14:51,201 INFO    MainThread:58683 [wandb_run.py:_redirect():1776] Redirecting console.
+2022-09-10 18:14:51,208 INFO    MainThread:58683 [wandb_run.py:_redirect():1832] Redirects installed.
+2022-09-10 18:14:51,208 INFO    MainThread:58683 [wandb_init.py:init():688] run started, returning control to user process
+2022-09-10 18:15:11,351 INFO    MainThread:58683 [wandb_run.py:_atexit_cleanup():1867] got exitcode: 1
+2022-09-10 18:15:11,353 INFO    MainThread:58683 [wandb_run.py:_restore():1839] restore
+2022-09-10 18:15:13,609 INFO    MainThread:58683 [wandb_run.py:_on_finish():1996] got exit ret: 
+2022-09-10 18:15:13,870 INFO    MainThread:58683 [wandb_run.py:_on_finish():1996] got exit ret: 
+2022-09-10 18:15:13,972 INFO    MainThread:58683 [wandb_run.py:_on_finish():1996] got exit ret: done: true
+exit_result {
+}
+local_info {
+}
+

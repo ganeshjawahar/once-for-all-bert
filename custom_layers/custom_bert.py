@@ -24,6 +24,7 @@
 
 import math
 import os
+from re import L
 from typing_extensions import final
 import warnings
 import random
@@ -1387,6 +1388,14 @@ class BertLayer(nn.Module):
         self.output = BertOutput(config)
         self.is_identity_layer = False
 
+        # add expert layers
+        if hasattr(config, "max_experts"):
+            self.max_experts = getattr(config, "max_experts")
+            assert(self.max_experts>1)
+            # self.intermediate is first expert and other experts are:
+            self.other_intermediate_experts = nn.ModuleList([BertIntermediate(config) for _ in range(self.max_experts-1)] )
+            self.other_output_experts = nn.ModuleList([BertOutput(config) for _ in range(self.max_experts-1)] )
+
     def set_sample_config(self, config, is_identity_layer=False):
         sample_hidden_size = config.sample_hidden_size
         if is_identity_layer:
@@ -1435,6 +1444,15 @@ class BertLayer(nn.Module):
         self.output.set_sample_config(
             config, prev_layer_importance_order=prev_layer_importance_order
         )
+
+        self.active_expert_id = 0
+        if hasattr(self, "other_intermediate_experts"):
+            additional_experts = self.max_experts-1 if config.last_expert_averaging_expert == "no" else self.max_experts-2
+            for i in range(additional_experts):
+                self.other_intermediate_experts[i].set_sample_config(config)
+                self.other_output_experts[i].set_sample_config(config, prev_layer_importance_order=prev_layer_importance_order)
+            self.active_expert_id = config.master_sample_expert_id
+            self.last_expert_averaging_expert = config.last_expert_averaging_expert
 
     def get_active_subnet(self, config):
         sublayer = BertLayer(config)
@@ -1541,7 +1559,29 @@ class BertLayer(nn.Module):
         return outputs
 
     def feed_forward_chunk(self, attention_output):
-        intermediate_output = self.intermediate(attention_output)
+        if hasattr(self, "last_expert_averaging_expert") and self.last_expert_averaging_expert == "yes" and self.active_expert_id == self.max_experts-1:
+            # simulate averaging expert
+            intermediate_weights = self.intermediate.dense.samples["weight"]
+            intermediate_bias = self.intermediate.dense.samples["bias"]
+            layer_output_weights = self.output.dense.samples["weight"]
+            layer_output_bias = self.output.dense.samples["bias"]
+            for expert_id in range(1, self.max_experts-2):
+                intermediate_weights = intermediate_weights + self.other_intermediate_experts[expert_id].dense.samples["weight"]
+                intermediate_bias = intermediate_bias + self.other_intermediate_experts[expert_id].dense.samples["bias"]
+                layer_output_weights = layer_output_weights + self.other_output_experts[expert_id].dense.samples["weight"]
+                layer_output_bias = layer_output_bias + self.other_output_experts[expert_id].dense.samples["bias"]
+            intermediate_weights = intermediate_weights / (self.max_experts-1)
+            intermediate_bias = intermediate_bias / (self.max_experts-1)
+            layer_output_weights = layer_output_weights / (self.max_experts-1)
+            layer_output_bias = layer_output_bias / (self.max_experts-1)
+            intermediate_output = F.linear(attention_output, intermediate_weights, intermediate_bias)
+            layer_output = F.linear(intermediate_output, layer_output_weights, layer_output_bias)
+            layer_output = self.output.dropout(layer_output)
+            layer_output = self.output.LayerNorm(layer_output + attention_output)
+        else:
+            intermediate_output = self.intermediate(attention_output) if self.active_expert_id == 0 else self.other_intermediate_experts[self.active_expert_id - 1](attention_output)
+            layer_output = self.output(intermediate_output, attention_output) if self.active_expert_id == 0 else self.other_output_experts[self.active_expert_id - 1](intermediate_output, attention_output)
+        '''
         if self.config.rewire:
             if self.invert_importance_order and hasattr(
                 self.intermediate.dense, "inv_importance_order"
@@ -1549,8 +1589,7 @@ class BertLayer(nn.Module):
                 inv_importance_order = self.intermediate.dense.inv_importance_order
                 # undo permutation before adding in residual
                 attention_output = attention_output[:, :, inv_importance_order]
-        layer_output = self.output(intermediate_output, attention_output)
-
+        '''
         return layer_output
 
 
@@ -1612,6 +1651,8 @@ class BertEncoder(nn.Module):
         for i, (drop, layer) in enumerate(zip(layers_to_drop, self.layer)):
             layer_config = deepcopy(config)
             layer_config.master_sample_hidden_size = layer_config.sample_hidden_size
+            if hasattr(config, "sample_expert_ids"):
+                layer_config.master_sample_expert_id = config.sample_expert_ids[i]
 
             if i < self.sample_num_hidden_layers:
                 layer_config.sample_intermediate_size = sample_intermediate_sizes[i]

@@ -19,6 +19,7 @@ import math
 import os, sys
 import random
 import json
+from copy import deepcopy
 
 from xlrd import open_workbook
 import datasets
@@ -178,6 +179,26 @@ def parse_args():
         default=0,
         help=f"if model path is a pretrained mnli checkpoint",
     )
+    parser.add_argument(
+        "--all_experts_average",
+        type=int,
+        default=0,
+        help=f"useful only when the model is MoE. performs a simple parameter average of all experts",
+    )
+
+    parser.add_argument(
+        "--last_expert_averaging_expert",
+        type=str,
+        default="no",
+        help=f"is last expert simply an average of rest of the experts?",
+    )
+
+    parser.add_argument(
+        "--use_expert_id",
+        type=int,
+        default=0,
+        help=f"set expert id to use",
+    )
 
     args = parser.parse_args()
 
@@ -311,10 +332,56 @@ def main():
         print("Subnet info: gene_names=", gene_names)
         print("Subnet info: elastickey2ranges=", elastickey2ranges)
         subnet_config.num_labels = num_labels
+
         # subnet_config.hidden_dropout_prob = 0.1
         model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
-        # config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        # checkpoints = torch.load(
+        #    os.path.join(args.model_name_or_path, "pytorch_model.bin"),
+        #    map_location="cpu",
+        # )
+        
+        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        if hasattr(config, "max_experts"):
+            if args.all_experts_average == 1:
+                print("perform simple parameter average of all experts in a given layer...")
+                subnet_copy_config = deepcopy(subnet_config)
+                for key in ["max_experts", "expert_routing_type", "sample_expert_ids"]:
+                    if hasattr(config, key):
+                        if key == "max_experts" and args.last_expert_averaging_expert == "yes":
+                            setattr(subnet_copy_config, key, getattr(config, key)-1)
+                        else:
+                            setattr(subnet_copy_config, key, getattr(config, key))
+                print(subnet_copy_config)
+                actual_model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_copy_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
+                for layer_id in range(subnet_copy_config.sample_num_hidden_layers):
+                    for main_expert, other_experts in [("bert.encoder.layer.<layer_id>.intermediate.dense.weight", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.intermediate.dense.bias", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.dense.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.output.dense.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.weight"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.bias")]:
+                        first_expert = actual_model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.clone()
+                        for expert_id in range(subnet_copy_config.max_experts-1):
+                            first_expert = first_expert + actual_model.state_dict()[other_experts.replace("<layer_id>", str(layer_id)).replace("<expert_id>", str(expert_id))].data
+                        first_expert = first_expert / float(subnet_copy_config.max_experts)
+                        model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(first_expert)
+                del first_expert
+                del actual_model
+            elif args.use_expert_id != 0:
+                print("using expert %d instead of 0"%(args.use_expert_id))
+                subnet_copy_config = deepcopy(subnet_config)
+                for key in ["max_experts", "expert_routing_type", "sample_expert_ids"]:
+                    if hasattr(config, key):
+                        if key == "max_experts" and args.last_expert_averaging_expert == "yes":
+                            setattr(subnet_copy_config, key, getattr(config, key)-1)
+                        else:
+                            setattr(subnet_copy_config, key, getattr(config, key))
+                print(subnet_copy_config)
+                actual_model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_copy_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
+                for layer_id in range(subnet_copy_config.sample_num_hidden_layers):
+                    for main_expert, other_experts in [("bert.encoder.layer.<layer_id>.intermediate.dense.weight", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.intermediate.dense.bias", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.dense.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.output.dense.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.weight"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.bias")]:
+                        interested_expert = actual_model.state_dict()[other_experts.replace("<layer_id>", str(layer_id)).replace("<expert_id>", str(args.use_expert_id-1))].data
+                        model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(interested_expert)
+                del interested_expert
+                del actual_model
+
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
+            
         
     # Preprocessing the datasets
     if args.task_name is not None:

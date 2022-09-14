@@ -218,7 +218,7 @@ class DynamicSeparableConv1d(nn.Module):
     def forward(self, x):
         x = x.permute(0, 2, 1)
         in_channel = x.size(1)
-
+        
         out_channel = in_channel
         max_kernel_size = max(self.kernel_size_list)
         #print(self.conv.weight.size())
