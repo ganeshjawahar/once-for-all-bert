@@ -55,7 +55,6 @@ class EvoSearch:
         self.pad_to_max_length = False
         self.fitness_metric = args.fitness_metric
         
-
         # data
         self.data_dir = args.data_dir
         self.num_batches = -1
@@ -76,6 +75,7 @@ class EvoSearch:
         global_metrics = self.fitness_score(self.global_config, track_progress=True)
         if self.accelerator.is_main_process:
             print(global_metrics)
+        sys.exit(0)
 
         # set search space sampler
         self.sampler = Sampler("random", "none", args.mixing, self.global_config, search_space_id=self.search_space_id)
@@ -233,6 +233,20 @@ class EvoSearch:
 
         # create model
         self.model = custom_bert.BertForMaskedLM.from_pretrained(self.supernet_ckpt_dir, config=self.global_config)
+
+        '''
+        # trial: set expert 2
+        self.global_config.max_experts = 2
+        self.global_config.expert_routing_type = "sentence"
+        self.global_config.sample_expert_ids = [0 for i in range(12)]
+        self.global_config.last_expert_averaging_expert = 0
+        self.model = custom_bert.BertForMaskedLM.from_pretrained(self.supernet_ckpt_dir, config=self.global_config)
+        self.use_expert_id = 1
+        for layer_id in range(self.global_config.sample_num_hidden_layers):
+            for main_expert, other_experts in [("bert.encoder.layer.<layer_id>.intermediate.dense.weight", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.intermediate.dense.bias", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.dense.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.output.dense.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.weight"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.bias")]:
+                interested_expert = self.model.state_dict()[other_experts.replace("<layer_id>", str(layer_id)).replace("<expert_id>", str(self.use_expert_id-1))].data
+                self.model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(interested_expert)
+        '''
 
         # Data collator
         # This one will take care of randomly masking the tokens.

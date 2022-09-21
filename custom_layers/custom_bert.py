@@ -1370,6 +1370,25 @@ class BertLayer(nn.Module):
                 self.output_bottleneck = CustomLinear(
                     config.hidden_size, config.hidden_size
                 )
+                if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_2L", "archrouting_1L"]:
+                    self.arch_embeds = config.sample_hidden_size
+                    self.arch_expert = None
+                    if config.expert_routing_type == "archrouting_2L":
+                        self.arch_expert = torch.nn.Sequential(
+                            torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                            torch.nn.ReLU(),
+                            torch.nn.Linear(config.hypernet_hidden_size, config.max_experts),
+                            torch.nn.Softmax(dim=-1)
+                        )
+                    elif config.expert_routing_type == "archrouting_1L":
+                        self.arch_expert = torch.nn.Sequential(
+                            torch.nn.Linear(len(self.arch_embeds), config.max_experts),
+                            torch.nn.Softmax(dim=-1)
+                        )
+                    # todo
+                    self.max_hidden_size = float(768) 
+                    self.min_hidden_size = float(120)
+                    self.register_buffer("active_arch_embed", torch.zeros(len(self.arch_embeds)))
             else:
                 self.input_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
                 self.output_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
@@ -1412,6 +1431,10 @@ class BertLayer(nn.Module):
                     config.sample_hidden_size,
                     config.hidden_size,
                 )
+                if hasattr(self, "arch_expert"):
+                    norm_active_arch_embed = min_max_normalization(config.master_sample_hidden_size, self.min_hidden_size, self.max_hidden_size)
+                    for i in range(len(norm_active_arch_embed)):
+                        self.active_arch_embed[i] = norm_active_arch_embed[i]
             else:
                 arch_embed = config.sample_hidden_size
                 self.input_bottleneck.set_sample_config(
@@ -1578,6 +1601,12 @@ class BertLayer(nn.Module):
             layer_output = F.linear(intermediate_output, layer_output_weights, layer_output_bias)
             layer_output = self.output.dropout(layer_output)
             layer_output = self.output.LayerNorm(layer_output + attention_output)
+        elif hasattr(self, "arch_expert"):
+            route_prob = self.arch_expert(self.active_arch_embed)
+            route_prob_max, routes = torch.max(route_prob, dim=-1)
+            intermediate_output = self.intermediate(attention_output) if routes == 0 else self.other_intermediate_experts[routes - 1](attention_output)
+            layer_output = self.output(intermediate_output, attention_output) if routes == 0 else self.other_output_experts[routes - 1](intermediate_output, attention_output)
+            layer_output = route_prob_max * layer_output
         else:
             intermediate_output = self.intermediate(attention_output) if self.active_expert_id == 0 else self.other_intermediate_experts[self.active_expert_id - 1](attention_output)
             layer_output = self.output(intermediate_output, attention_output) if self.active_expert_id == 0 else self.other_output_experts[self.active_expert_id - 1](intermediate_output, attention_output)

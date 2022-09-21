@@ -177,6 +177,13 @@ class Sampler:
                         "sample_intermediate_size": [2, 3, 4], # ratios
                         "sample_num_hidden_layers": [6, 9, 12],
                     }
+                elif self.search_space_id == "v1.1":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [12],
+                        "sample_intermediate_size": [3072],
+                        "sample_num_hidden_layers": [12],
+                    }
             else:
                 choices = {
                     "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
@@ -361,6 +368,9 @@ class Sampler:
 
         if hasattr(config, "max_experts"):
             setattr(config, "sample_expert_ids", [random.randint(0, getattr(config, "max_experts")-1) for i in range(num_hidden_layers)] if self.collapsed_training == "no" else [0]*num_hidden_layers)
+        
+        if self.search_space_id == "v1.1":
+            setattr(config, "sample_intermediate_size", [ 4*getattr(config, "sample_hidden_size")[i] for i in range(getattr(config, "sample_num_hidden_layers")) ])
 
         return config
 
@@ -411,6 +421,9 @@ class Sampler:
                 continue
 
             config_dict[choice] = [min(choices[choice])] * config_dict["sample_num_hidden_layers"] if not v1_small else [max(choices[choice])] * config_dict["sample_num_hidden_layers"] # todo: make this dynamic
+        
+        if not v1_small and self.search_space_id == "v1.1":
+            config_dict["sample_intermediate_size"] = [4*config_dict["sample_hidden_size"][i] for i in range(config_dict["sample_num_hidden_layers"]) ]
 
         for key in config_dict.keys():
             setattr(config, key, config_dict[key])

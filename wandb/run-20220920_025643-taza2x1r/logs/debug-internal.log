@@ -1,0 +1,322 @@
+2022-09-20 02:56:45,782 INFO    MainThread:614346 [internal.py:wandb_internal():90] W&B internal server running at pid: 614346, started at: 2022-09-20 02:56:45.780018
+2022-09-20 02:56:45,808 INFO    WriterThread:614346 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/run-taza2x1r.wandb
+2022-09-20 02:56:45,813 DEBUG   SenderThread:614346 [sender.py:send():235] send: header
+2022-09-20 02:56:45,813 DEBUG   SenderThread:614346 [sender.py:send():235] send: run
+2022-09-20 02:56:45,930 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: check_version
+2022-09-20 02:56:45,983 INFO    SenderThread:614346 [dir_watcher.py:__init__():205] watching files in: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files
+2022-09-20 02:56:45,984 INFO    SenderThread:614346 [sender.py:_start_run_threads():812] run started: taza2x1r with start time 1663642603
+2022-09-20 02:56:45,984 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:56:45,986 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:56:45,987 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: check_version
+2022-09-20 02:56:46,039 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: run_start
+2022-09-20 02:56:46,059 DEBUG   HandlerThread:614346 [meta.py:__init__():35] meta init
+2022-09-20 02:56:46,059 DEBUG   HandlerThread:614346 [meta.py:__init__():49] meta init done
+2022-09-20 02:56:46,059 DEBUG   HandlerThread:614346 [meta.py:probe():209] probe
+2022-09-20 02:56:46,076 DEBUG   HandlerThread:614346 [meta.py:_setup_git():199] setup git
+2022-09-20 02:56:46,197 DEBUG   HandlerThread:614346 [meta.py:_setup_git():206] setup git done
+2022-09-20 02:56:46,197 DEBUG   HandlerThread:614346 [meta.py:_save_pip():53] save pip
+2022-09-20 02:56:46,203 DEBUG   HandlerThread:614346 [meta.py:_save_pip():67] save pip done
+2022-09-20 02:56:46,203 DEBUG   HandlerThread:614346 [meta.py:_save_conda():74] save conda
+2022-09-20 02:56:46,973 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/requirements.txt
+2022-09-20 02:56:46,973 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:56:46,974 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/conda-environment.yaml
+2022-09-20 02:56:51,983 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:56:53,986 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:02,627 DEBUG   HandlerThread:614346 [meta.py:_save_conda():84] save conda done
+2022-09-20 02:57:02,627 DEBUG   HandlerThread:614346 [meta.py:probe():247] probe done
+2022-09-20 02:57:03,005 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/conda-environment.yaml
+2022-09-20 02:57:03,005 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-metadata.json
+2022-09-20 02:57:03,343 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: stop_status
+2022-09-20 02:57:03,344 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: stop_status
+2022-09-20 02:57:03,399 DEBUG   SenderThread:614346 [sender.py:send():235] send: telemetry
+2022-09-20 02:57:03,400 DEBUG   SenderThread:614346 [sender.py:send():235] send: files
+2022-09-20 02:57:03,400 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-metadata.json with policy now
+2022-09-20 02:57:03,757 INFO    Thread-11 :614346 [upload_job.py:push():132] Uploaded file /tmp/tmp9f6009gxwandb/2wm5dv0r-wandb-metadata.json
+2022-09-20 02:57:04,006 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:06,010 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:07,157 DEBUG   SenderThread:614346 [sender.py:send():235] send: telemetry
+2022-09-20 02:57:10,596 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:11,082 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: stop_status
+2022-09-20 02:57:11,082 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: stop_status
+2022-09-20 02:57:16,613 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/config.yaml
+2022-09-20 02:57:19,073 DEBUG   SenderThread:614346 [sender.py:send():235] send: stats
+2022-09-20 02:57:21,462 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:21,463 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:21,463 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:21,473 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:21,622 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:22,048 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:22,048 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:22,048 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:22,057 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:22,625 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:22,625 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:22,679 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:22,680 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:22,680 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:22,683 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:23,268 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:23,279 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:23,279 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:23,282 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:23,628 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:23,948 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:23,948 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:23,949 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:23,957 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:24,564 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:24,571 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:24,571 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:24,574 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:24,631 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:24,631 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:25,232 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:25,232 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:25,232 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:25,241 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:25,635 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:25,875 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:25,876 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:25,876 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:25,885 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:26,138 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: stop_status
+2022-09-20 02:57:26,139 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: stop_status
+2022-09-20 02:57:26,529 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:26,529 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:26,529 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:26,537 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:26,642 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:26,643 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:27,128 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:27,128 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:27,128 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:27,131 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:27,645 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:27,803 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:27,804 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:27,804 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:27,811 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:28,515 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:28,516 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:28,516 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:28,519 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:28,648 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:28,648 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:29,212 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:29,212 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:29,213 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:29,215 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:29,651 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:29,892 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:29,892 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:29,892 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:29,895 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:30,653 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:30,653 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:30,653 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:30,654 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:30,656 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:31,340 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:31,340 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:31,340 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:31,343 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:31,658 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:32,017 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:32,017 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:32,017 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:32,020 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:32,664 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:32,664 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:32,748 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:32,748 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:32,748 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:32,751 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:33,436 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:33,436 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:33,436 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:33,439 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:33,667 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:34,104 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:34,104 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:34,104 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:34,107 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:34,671 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:34,671 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:34,876 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:34,876 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:34,877 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:34,879 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:36,116 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:36,116 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:36,117 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:36,119 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:36,677 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:36,678 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:36,793 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:36,794 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:36,794 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:36,796 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:37,532 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:37,532 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:37,532 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:37,535 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:37,680 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:38,682 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:38,836 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:38,836 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:38,836 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:38,840 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:39,428 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:39,429 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:39,429 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:39,432 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:39,685 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:40,146 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:40,146 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:40,146 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:40,149 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:40,688 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:40,688 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:40,840 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:40,840 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:40,841 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:40,843 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:41,213 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: stop_status
+2022-09-20 02:57:41,213 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: stop_status
+2022-09-20 02:57:41,571 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:41,572 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:41,572 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:41,575 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:41,691 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:42,265 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:42,266 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:42,266 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:42,269 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:42,693 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:42,694 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:42,995 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:42,995 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:42,996 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:42,998 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:43,694 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: partial_history
+2022-09-20 02:57:43,695 DEBUG   SenderThread:614346 [sender.py:send():235] send: history
+2022-09-20 02:57:43,695 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:43,698 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:43,698 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:44,107 WARNING MainThread:614346 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-09-20 02:57:44,700 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:45,240 DEBUG   SenderThread:614346 [sender.py:send():235] send: telemetry
+2022-09-20 02:57:46,704 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:47,707 INFO    Thread-7  :614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/config.yaml
+2022-09-20 02:57:47,730 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:47,731 DEBUG   SenderThread:614346 [sender.py:send():235] send: exit
+2022-09-20 02:57:47,731 INFO    SenderThread:614346 [sender.py:send_exit():371] handling exit code: 255
+2022-09-20 02:57:47,731 INFO    SenderThread:614346 [sender.py:send_exit():373] handling runtime: 61
+2022-09-20 02:57:47,733 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:47,733 INFO    SenderThread:614346 [sender.py:send_exit():379] send defer
+2022-09-20 02:57:47,733 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:47,734 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,734 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 0
+2022-09-20 02:57:47,734 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,734 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 0
+2022-09-20 02:57:47,735 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 1
+2022-09-20 02:57:47,735 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,735 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 1
+2022-09-20 02:57:47,886 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:47,887 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,887 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 1
+2022-09-20 02:57:47,887 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 2
+2022-09-20 02:57:47,887 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:47,887 DEBUG   SenderThread:614346 [sender.py:send():235] send: stats
+2022-09-20 02:57:47,888 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,888 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 2
+2022-09-20 02:57:47,888 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,888 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 2
+2022-09-20 02:57:47,888 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 3
+2022-09-20 02:57:47,888 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,888 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 3
+2022-09-20 02:57:47,888 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,888 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 3
+2022-09-20 02:57:47,888 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 4
+2022-09-20 02:57:47,889 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,889 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 4
+2022-09-20 02:57:47,889 DEBUG   SenderThread:614346 [sender.py:send():235] send: summary
+2022-09-20 02:57:47,891 INFO    SenderThread:614346 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-09-20 02:57:47,891 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,891 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 4
+2022-09-20 02:57:47,892 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 5
+2022-09-20 02:57:47,892 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,892 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 5
+2022-09-20 02:57:47,892 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,892 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 5
+2022-09-20 02:57:47,892 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 6
+2022-09-20 02:57:47,892 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:47,892 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 6
+2022-09-20 02:57:47,892 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:47,892 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 6
+2022-09-20 02:57:47,892 INFO    SenderThread:614346 [dir_watcher.py:finish():336] shutting down directory watcher
+2022-09-20 02:57:47,988 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:48,711 INFO    SenderThread:614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:48,711 INFO    SenderThread:614346 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:48,712 INFO    SenderThread:614346 [dir_watcher.py:finish():366] scan: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log output.log
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/requirements.txt requirements.txt
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-metadata.json wandb-metadata.json
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/config.yaml config.yaml
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json wandb-summary.json
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/conda-environment.yaml conda-environment.yaml
+2022-09-20 02:57:48,713 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 7
+2022-09-20 02:57:48,713 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:48,714 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:48,714 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 7
+2022-09-20 02:57:48,715 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:48,715 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 7
+2022-09-20 02:57:48,715 INFO    SenderThread:614346 [file_pusher.py:finish():145] shutting down file pusher
+2022-09-20 02:57:48,815 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:48,815 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:48,916 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:48,916 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,017 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:49,017 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,072 INFO    Thread-14 :614346 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/config.yaml
+2022-09-20 02:57:49,074 INFO    Thread-12 :614346 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/output.log
+2022-09-20 02:57:49,119 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:49,119 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,119 INFO    Thread-13 :614346 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/requirements.txt
+2022-09-20 02:57:49,125 INFO    Thread-15 :614346 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/wandb-summary.json
+2022-09-20 02:57:49,143 INFO    Thread-16 :614346 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/files/conda-environment.yaml
+2022-09-20 02:57:49,220 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:49,220 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,321 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:49,321 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,343 INFO    Thread-6  :614346 [sender.py:transition_state():392] send defer: 8
+2022-09-20 02:57:49,344 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:49,344 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 8
+2022-09-20 02:57:49,344 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:49,344 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 8
+2022-09-20 02:57:49,422 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:49,575 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 9
+2022-09-20 02:57:49,576 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,576 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:49,576 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 9
+2022-09-20 02:57:49,577 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:49,577 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 9
+2022-09-20 02:57:49,577 INFO    SenderThread:614346 [sender.py:transition_state():392] send defer: 10
+2022-09-20 02:57:49,577 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: defer
+2022-09-20 02:57:49,577 INFO    HandlerThread:614346 [handler.py:handle_request_defer():164] handle defer: 10
+2022-09-20 02:57:49,577 DEBUG   SenderThread:614346 [sender.py:send():235] send: final
+2022-09-20 02:57:49,577 DEBUG   SenderThread:614346 [sender.py:send():235] send: footer
+2022-09-20 02:57:49,577 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: defer
+2022-09-20 02:57:49,577 INFO    SenderThread:614346 [sender.py:send_request_defer():388] handle sender defer: 10
+2022-09-20 02:57:49,677 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: poll_exit
+2022-09-20 02:57:49,677 DEBUG   SenderThread:614346 [sender.py:send_request():249] send_request: poll_exit
+2022-09-20 02:57:49,677 INFO    SenderThread:614346 [file_pusher.py:join():150] waiting for file pusher
+2022-09-20 02:57:50,038 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: sampled_history
+2022-09-20 02:57:50,039 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: get_summary
+2022-09-20 02:57:50,039 DEBUG   HandlerThread:614346 [handler.py:handle_request():141] handle_request: shutdown
+2022-09-20 02:57:50,040 INFO    HandlerThread:614346 [handler.py:finish():806] shutting down handler
+2022-09-20 02:57:50,577 INFO    WriterThread:614346 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/run-20220920_025643-taza2x1r/run-taza2x1r.wandb
+2022-09-20 02:57:50,938 INFO    SenderThread:614346 [sender.py:finish():1111] shutting down sender
+2022-09-20 02:57:50,938 INFO    SenderThread:614346 [file_pusher.py:finish():145] shutting down file pusher
+2022-09-20 02:57:50,938 INFO    SenderThread:614346 [file_pusher.py:join():150] waiting for file pusher
+2022-09-20 02:57:50,940 INFO    MainThread:614346 [internal.py:handle_exit():80] Internal process exited

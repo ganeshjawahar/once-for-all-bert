@@ -316,6 +316,8 @@ def get_best_mnli_ft_results(experiments, models, tasks, mm=False):
 # get_best_mnli_ft_results(["aug25_directfinetune_v1scratch_mnli_hardlogits"], models=[""], tasks=["mnli"], mm=False)
 # get_best_mnli_ft_results(["aug25_finetune_googlebert_mnli_cola_ckptneeded"], models=[""], tasks=["mnli", "cola", "sst2", "qnli", "qqp"], mm=False)
 # get_best_mnli_ft_results(["aug25_finetune_googlebert_mrpc_rte_stsb_ckptneeded"], models=[""], tasks=["mrpc", "rte"], mm=False)
+# get_best_mnli_ft_results(["sep17_directfinetune_v1sub_mnli_hardlogits"], models=[""], tasks=["mnli",], mm=False)
+# get_best_mnli_ft_results(["sep18_finetune_v1sub_moe_mnli_hardlogits"], models=[""], tasks=["mnli",], mm=False)
 
 def get_best_mnli_superft_results(experiments, models, tasks, mm=False):
     for model in models: 
@@ -463,6 +465,8 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
             best_score = None
             best_config = None
             for score in task2runs[task]:
+                if score is None:
+                    continue
                 cur_score = 100.0*float(score.split("'"+metric[task]+"': ")[1].split()[0][0:-1])
                 if best_score is None or cur_score > best_score:
                     best_score = cur_score
@@ -478,6 +482,7 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
         task2score = {}
         incomplete_tasks = {}
         cur_idx = 0
+        final_scores = []
         for exp in experiments:
             epoch, task = exp
             if task not in task2score:
@@ -486,12 +491,14 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
                 incomplete_tasks[task] = True
                 break
             cur_score = scores[cur_idx+epoch-1]
+            final_scores.append((cur_score, epoch))
             if task2score[task] is None or cur_score > task2score[task]:
                 task2score[task] = cur_score
             cur_idx += epoch
+        # print(final_scores)
         print(task2score)
         print("incomplete", incomplete_tasks)
-        finalscores = {task: 100.0*task2score[task] for task in task2score}
+        finalscores = {task: 100.0*task2score[task] for task in task2score if task2score[task] is not None}
     res = ""
     for task in ["mnli", "cola", "mrpc", "sst2", "qnli", "qqp", "rte", "stsb"]:
         if task in finalscores and finalscores[task] is not None:
@@ -517,8 +524,8 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_noretrain_125Ksteps_nonmnlicola_tasks/v1scratch")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_moe2e1rand_125Ksteps_mnli/moe2e1rand")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_inplkd_googlebert_loghard_125Ksteps_mnli/gooft")
-#for task in ["cola", "mnli", "sst2", "qnli", "qqp"]:
-#    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_directfinetune_v1scratch_%s_hardlogits/hl%s"%(task, task), supernet_finetune=True)
+# for task in ["cola", "mnli", "sst2", "qnli", "qqp"]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_directfinetune_v1scratch_%s_hardlogits/hl%s"%(task, task), supernet_finetune=True)
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_retrain_scratch_nonmnlicola_tasks/v1scratch")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_noretrain_125Ksteps_nonmnlicola_tasks/v1scratch")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_aca_v1_supernet_inplace_kd_hid1-12_nonmnli_8tasks/hid1-12")
@@ -554,7 +561,18 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep12_finetune_acadbertdata_supernet_v1_inplacekd_logits_moe2e/12-ikd")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep10_finetune_v1_subnetkdlogits_finetunekdlogits_67M/10s-f-kd", supernet_finetune=True)
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep12_finetune_subnethardlog_evosearch_supernet_v1_moe2e_67M/12-fsubmoe")
-
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep14_finetune_acadbertdata_supernet_v1_inplacekd_logits_moe2e_consistencyloss_for_max/14-ikdconst")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep14_finetune_v1_subnet_finetunekdlogits_60M/14-60Mft", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep14_directfinetune_v1scratch_mnli_hardlogits_saveckpt/sackmnli", supernet_finetune=True)
+get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep15_finetune_v1_subnet_finetunekdlogits_60M_14evoit/15-60Mft", supernet_finetune=True)
+# for it in [14, 29]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep15_finetune_v1_subnet_finetunekdlogits_67M_moe2e_%devoit/15moe%dft"%(it,it), supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep18_finetune_v1_subnet_finetunekdlogits_67M_14evoit/18-60Mft", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_v1_subnet_finetunekdlogits_67M_moe/19-67Mmoeft", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_moe_2xtrainbudget/19-moe250K")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_sandwich_2xtrainbudget/19-sand250K")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_moe_seed333/19-sdmoe")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_moe_seed333_useexpert2/19-2ndexp")
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)
