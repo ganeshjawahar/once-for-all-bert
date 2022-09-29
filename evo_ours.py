@@ -36,7 +36,7 @@ class EvoSearch:
         self.trial_run = args.trial_run
         self.finetune = args.finetune
         if self.trial_run == "yes":
-            self.population_size = 50
+            self.population_size = 10
             self.parent_size = 5
             self.mutation_size = 5
             self.crossover_size = 5
@@ -75,7 +75,6 @@ class EvoSearch:
         global_metrics = self.fitness_score(self.global_config, track_progress=True)
         if self.accelerator.is_main_process:
             print(global_metrics)
-        sys.exit(0)
 
         # set search space sampler
         self.sampler = Sampler("random", "none", args.mixing, self.global_config, search_space_id=self.search_space_id)
@@ -617,7 +616,7 @@ class EvoSearch:
 
     def get_elastic_keys(self):
         elastic_keys = []
-        if not self.search_space_id:
+        if not self.search_space_id or self.search_space_id in ["v1.1"]:
             elastic_keys = ["sample_hidden_size"]
         elif self.search_space_id == "hidden_layer_elastic":
             elastic_keys = ["sample_hidden_size", "sample_num_hidden_layers"]
@@ -682,7 +681,9 @@ class EvoSearch:
             num_hidden_layers = feat_config[self.elastickey2ranges["sample_num_hidden_layers"][0]]
             for key in self.sample_keys:
                 if key != "sample_num_hidden_layers":
-                    setattr(arch_config, key, getattr(arch_config, key)[0:num_hidden_layers])            
+                    setattr(arch_config, key, getattr(arch_config, key)[0:num_hidden_layers]) 
+        if self.search_space_id == "v1.1":
+            setattr(arch_config, "sample_intermediate_size", [ 4*getattr(arch_config, "sample_hidden_size")[i] for i in range(getattr(arch_config, "sample_num_hidden_layers")) ])
         return arch_config
 
     def satisfy_constraint(self, arch_config):

@@ -333,6 +333,11 @@ def main():
         print("Subnet info: elastickey2ranges=", elastickey2ranges)
         subnet_config.num_labels = num_labels
 
+        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_1L", "archrouting_2L"]:
+            for attr in ["max_experts", "expert_routing_type", "last_expert_averaging_expert", "sample_expert_ids"]:
+                setattr(subnet_config, attr, getattr(config, attr))
+
         # subnet_config.hidden_dropout_prob = 0.1
         model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
         # checkpoints = torch.load(
@@ -340,7 +345,6 @@ def main():
         #    map_location="cpu",
         # )
         
-        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         if hasattr(config, "max_experts"):
             if args.all_experts_average == 1:
                 print("perform simple parameter average of all experts in a given layer...")

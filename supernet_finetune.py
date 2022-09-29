@@ -23,6 +23,7 @@ import loss
 from loss import *
 import wandb
 from copy import deepcopy
+import shutil
 
 from xlrd import open_workbook
 import datasets
@@ -1015,6 +1016,23 @@ def main():
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(args.output_dir, save_function=accelerator.save)
+    if args.task_name == "mnli":
+        accelerator.wait_for_everyone()
+        best_ckpt_path = os.path.join(args.output_dir, "mnli_best")
+        best_acc = None
+        if os.path.exists(best_ckpt_path) and os.path.exists(best_ckpt_path + "/score"):
+            for line in open(best_ckpt_path + "/score"):
+                best_acc = float(line.strip())
+                break
+        if best_acc is None or best_acc < supernet_eval_metric['accuracy']:
+            if os.path.exists(best_ckpt_path):
+                shutil.rmtree(best_ckpt_path)
+            os.makedirs(best_ckpt_path)
+            w = open(best_ckpt_path + "/score", 'w')
+            w.write("%s\n"%(str(supernet_eval_metric['accuracy'])))
+            w.close()
+            unwrapped_model = accelerator.unwrap_model(model)
+            unwrapped_model.save_pretrained(best_ckpt_path, save_function=accelerator.save)
 
     logger.info(f"Training completed. Find your checkpoints at {args.output_dir}")
 

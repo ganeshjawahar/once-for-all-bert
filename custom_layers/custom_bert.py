@@ -1607,6 +1607,7 @@ class BertLayer(nn.Module):
             intermediate_output = self.intermediate(attention_output) if routes == 0 else self.other_intermediate_experts[routes - 1](attention_output)
             layer_output = self.output(intermediate_output, attention_output) if routes == 0 else self.other_output_experts[routes - 1](intermediate_output, attention_output)
             layer_output = route_prob_max * layer_output
+            print(route_prob_max)
         else:
             intermediate_output = self.intermediate(attention_output) if self.active_expert_id == 0 else self.other_intermediate_experts[self.active_expert_id - 1](attention_output)
             layer_output = self.output(intermediate_output, attention_output) if self.active_expert_id == 0 else self.other_output_experts[self.active_expert_id - 1](intermediate_output, attention_output)
