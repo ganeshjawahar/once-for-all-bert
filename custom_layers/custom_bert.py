@@ -1370,17 +1370,18 @@ class BertLayer(nn.Module):
                 self.output_bottleneck = CustomLinear(
                     config.hidden_size, config.hidden_size
                 )
-                if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_2L", "archrouting_1L"]:
+                if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_2L", "archrouting_1L", "archrouting_jack_2L", "archrouting_jack_1L"]:
                     self.arch_embeds = config.sample_hidden_size
                     self.arch_expert = None
-                    if config.expert_routing_type == "archrouting_2L":
+                    self.expert_routing_type = config.expert_routing_type
+                    if config.expert_routing_type == "archrouting_2L" or config.expert_routing_type == "archrouting_jack_2L":
                         self.arch_expert = torch.nn.Sequential(
                             torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
                             torch.nn.ReLU(),
                             torch.nn.Linear(config.hypernet_hidden_size, config.max_experts),
                             torch.nn.Softmax(dim=-1)
                         )
-                    elif config.expert_routing_type == "archrouting_1L":
+                    elif config.expert_routing_type == "archrouting_1L" or config.expert_routing_type == "archrouting_jack_1L":
                         self.arch_expert = torch.nn.Sequential(
                             torch.nn.Linear(len(self.arch_embeds), config.max_experts),
                             torch.nn.Softmax(dim=-1)
@@ -1604,13 +1605,32 @@ class BertLayer(nn.Module):
         elif hasattr(self, "arch_expert"):
             route_prob = self.arch_expert(self.active_arch_embed)
             route_prob_max, routes = torch.max(route_prob, dim=-1)
-            intermediate_output = self.intermediate(attention_output) if routes == 0 else self.other_intermediate_experts[routes - 1](attention_output)
-            layer_output = self.output(intermediate_output, attention_output) if routes == 0 else self.other_output_experts[routes - 1](intermediate_output, attention_output)
-            layer_output = route_prob_max * layer_output
-            print(route_prob_max)
+            if self.expert_routing_type == "archrouting_jack_1L" or self.expert_routing_type == "archrouting_jack_2L":
+                intermediate_weights = route_prob[0] * self.intermediate.dense.samples["weight"]
+                intermediate_bias = route_prob[0] * self.intermediate.dense.samples["bias"]
+                layer_output_weights = route_prob[0] * self.output.dense.samples["weight"]
+                layer_output_bias = route_prob[0] * self.output.dense.samples["bias"]
+                for expert_id in range(self.max_experts-1):
+                    intermediate_weights = intermediate_weights + (route_prob[expert_id+1] * self.other_intermediate_experts[expert_id].dense.samples["weight"])
+                    intermediate_bias = intermediate_bias + (route_prob[expert_id+1] * self.other_intermediate_experts[expert_id].dense.samples["bias"])
+                    layer_output_weights = layer_output_weights + (route_prob[expert_id+1] * self.other_output_experts[expert_id].dense.samples["weight"])
+                    layer_output_bias = layer_output_bias + (route_prob[expert_id+1] * self.other_output_experts[expert_id].dense.samples["bias"])
+                intermediate_weights = intermediate_weights / (self.max_experts)
+                intermediate_bias = intermediate_bias / (self.max_experts)
+                layer_output_weights = layer_output_weights / (self.max_experts)
+                layer_output_bias = layer_output_bias / (self.max_experts)
+                intermediate_output = F.linear(attention_output, intermediate_weights, intermediate_bias)
+                layer_output = F.linear(intermediate_output, layer_output_weights, layer_output_bias)
+                layer_output = self.output.dropout(layer_output)
+                layer_output = self.output.LayerNorm(layer_output + attention_output)
+            else:
+                intermediate_output = self.intermediate(attention_output) if routes == 0 else self.other_intermediate_experts[routes - 1](attention_output)
+                layer_output = self.output(intermediate_output, attention_output) if routes == 0 else self.other_output_experts[routes - 1](intermediate_output, attention_output)
+                layer_output = route_prob_max * layer_output
         else:
             intermediate_output = self.intermediate(attention_output) if self.active_expert_id == 0 else self.other_intermediate_experts[self.active_expert_id - 1](attention_output)
             layer_output = self.output(intermediate_output, attention_output) if self.active_expert_id == 0 else self.other_output_experts[self.active_expert_id - 1](intermediate_output, attention_output)
+            
         '''
         if self.config.rewire:
             if self.invert_importance_order and hasattr(

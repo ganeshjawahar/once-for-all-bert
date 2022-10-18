@@ -4,12 +4,12 @@ our evolutionary search
 + Supernet directly for calculating fitness
 '''
 
-import time, sys, os, datasets, random, copy, xlwt
+import time, sys, os, datasets, random, copy, xlwt, json
 import argparse
 from sampling import get_supertransformer_config
 import transformers
 from transformers import DataCollatorWithPadding
-from transformers import AutoTokenizer, DataCollatorForLanguageModeling, set_seed, AutoConfig, PretrainedConfig
+from transformers import AutoTokenizer, DataCollatorForLanguageModeling, set_seed, AutoConfig, PretrainedConfig, BertConfig
 from custom_layers import custom_bert
 import torch
 from torch.utils.data.dataloader import DataLoader
@@ -21,6 +21,13 @@ from utils.module_proxy_wrapper import ModuleProxyWrapper
 from sampling import Sampler
 from utils import calculate_params_from_config
 import numpy as np
+from xlrd import open_workbook
+
+def convert_to_dict(string):
+    _dict = json.loads(
+        string.replace("BertConfig ", "").replace("\n", "").replace('""', '"')
+    )
+    return BertConfig(**_dict)
 
 class EvoSearch:
     def __init__(self, args):
@@ -35,6 +42,11 @@ class EvoSearch:
         self.seed = args.seed
         self.trial_run = args.trial_run
         self.finetune = args.finetune
+        self.expert_search = args.expert_search
+        self.max_experts = args.max_experts
+        self.expert_routing_type = args.expert_routing_type
+        self.last_expert_averaging_expert = args.last_expert_averaging_expert
+        self.fixed_arch = args.fixed_arch
         if self.trial_run == "yes":
             self.population_size = 10
             self.parent_size = 5
@@ -222,7 +234,7 @@ class EvoSearch:
             print(f"Sample {index} of the training set: {eval_dataset[index]}.")
 
         # load supernet config
-        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id)
+        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id, max_experts=args.max_experts, expert_routing_type=args.expert_routing_type)
         # set defaults like max_seq_length
         self.global_config.max_seq_length = self.max_seq_length
         self.global_config.alpha_divergence = 0
@@ -416,8 +428,6 @@ class EvoSearch:
         eval_metric["perplexity"] = perplexity
         if hashcode:
             self.config_cache[hashcode] = eval_metric
-        
-        # print(timers)
 
         return eval_metric
 
@@ -593,7 +603,7 @@ class EvoSearch:
     def random_sample(self):
         print('creating initial population...')
         population = []
-        cand_archs = self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size)[ "random_subtransformers"]
+        cand_archs = self.generate_sample_subtransformers()
         self.seed_count += 1
         for arch_config in cand_archs:
             feat_config = self.arch2feature(arch_config)
@@ -604,6 +614,26 @@ class EvoSearch:
         print('initial population size = %d/%d'%(len(population), self.population_size))
         return population
     
+    def generate_sample_subtransformers(self):
+        if self.expert_search == "no":
+            return self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size)["random_subtransformers"]
+        return self.random_expert_croppings()
+    
+    def random_expert_croppings(self):
+        rb = open_workbook(args.fixed_arch, formatting_info=True)
+        best_config_sheet = rb.sheet_by_name("best_config")
+        print("Fixed Subnet info: Model-Size=%s, Val-PPL=%s"%(best_config_sheet.cell(2, 1).value, best_config_sheet.cell(3, 1).value))
+        print("Fixed Subnet info: Gene=%s"%(best_config_sheet.cell(1, 1).value))
+        self.subnet_moe_config = convert_to_dict(best_config_sheet.cell(4, 1).value)
+        for attr in ["max_experts", "expert_routing_type", "sample_expert_ids", "last_expert_averaging_expert"]:
+            setattr(self.subnet_moe_config, attr, getattr(self.global_config, attr))
+        popu = []
+        for pi in range(self.population_size):
+            sample_config = copy.deepcopy(self.subnet_moe_config)
+            setattr(sample_config, "sample_expert_ids", [random.randint(0, self.max_experts-1) for li in range(sample_config.num_hidden_layers)])
+            popu.append(sample_config)
+        return popu
+
     def notduplicategene(self, potential_gene_feat_config, cur_population, another_population=None):
         for cand in cur_population:
             if str(potential_gene_feat_config) == str(cand["feat_config"]):
@@ -629,6 +659,11 @@ class EvoSearch:
         return elastic_keys
     
     def get_gene_choices(self):
+        if self.expert_search == "yes":
+            gene_choices = [[eid for eid in range(0, self.max_experts)] for li in range(self.global_config.num_hidden_layers)]
+            gene_names = "sample_expert_ids_0"
+            elastickey2ranges = {"sample_expert_ids": [eid for eid in range(0, self.max_experts)]}
+            return gene_choices, gene_names, elastickey2ranges
         gene_choices = []
         gene_names = []
         sampler_choices = self.sampler.get_choices()
@@ -652,6 +687,8 @@ class EvoSearch:
         return gene_choices, gene_names, elastickey2ranges
 
     def arch2feature(self, arch_config):
+        if self.expert_search == "yes":
+            return getattr(arch_config, "sample_expert_ids")
         feature_config = []
         for key in self.elastic_keys:
             if key in ["sample_hidden_size", "sample_intermediate_size", "sample_num_attention_heads"]:
@@ -667,6 +704,10 @@ class EvoSearch:
         return feature_config
     
     def feature2arch(self, feat_config):
+        if self.expert_search == "yes":
+            arch_config = copy.deepcopy(self.subnet_moe_config)
+            setattr(arch_config, "sample_expert_ids", feat_config)
+            return arch_config
         arch_config = copy.deepcopy(self.global_config)
         for key in self.elastic_keys:
             start_idx = self.elastickey2ranges[key][0]
@@ -817,6 +858,41 @@ def parse_args():
         type=str,
         default="perplexity",
         help="pretraining accuracy metric: accuracy, val_loss, perplexity",
+    )
+
+    parser.add_argument(
+        "--expert_search",
+        type=str,
+        default="no",
+        help="yes for FFN cropping search for supernet",
+    )
+
+    parser.add_argument(
+        "--max_experts",
+        type=int,
+        default=-1,
+        help=f"number of experts for supernet training",
+    )
+
+    parser.add_argument(
+        "--expert_routing_type",
+        type=str,
+        default="sentence",
+        help=f"sentence (batch) or token level routing or sentence_single",
+    )
+
+    parser.add_argument(
+        "--last_expert_averaging_expert",
+        type=str,
+        default="no",
+        help=f"is last expert simply an average of rest of the experts?",
+    )
+
+    parser.add_argument(
+        "--fixed_arch",
+        type=str,
+        default=None,
+        help=f"path to searched architecture. works if expert_search=yes. searches only for experts to crop.",
     )
 
     # data 

@@ -216,6 +216,8 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug31_supernet_moe", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("4e_1rand", "ganayu/effbert/dns0jab5"), ("2e_1rand", "ganayu/effbert/1we400qi")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug31_supernet_moe_2rand", supernet_runids=[ ("4e_1rand", "ganayu/effbert/dns0jab5"), ("2e_1rand", "ganayu/effbert/1we400qi"), ("2e_2rand", "ganayu/effbert/x80tlkv1"), ("4e_2rand", "ganayu/effbert/319k7x8y")], standalone_runids=[], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/sep7_supernet_moe_jack", supernet_runids=[ ("2e", "ganayu/effbert/1we400qi"), ("2e+jack", "ganayu/effbert/i3w3y04e")], standalone_runids=[], every_x_steps=100)
+get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/oct18_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("randmoe", "ganayu/effbert/1we400qi"), ("archmoe_pavg_1L", "ganayu/effbert/runs/numd2vy3"), ("archmoe_pavg_2L", "ganayu/effbert/runs/nwito9f8"), ("archmoe_sinexp", "ganayu/effbert/runs/2avuv91k")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
+
 
 def wandb_locate_proj():
     import json
@@ -500,7 +502,7 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
         print("incomplete", incomplete_tasks)
         finalscores = {task: 100.0*task2score[task] for task in task2score if task2score[task] is not None}
     res = ""
-    for task in ["mnli", "cola", "mrpc", "sst2", "qnli", "qqp", "rte", "stsb"]:
+    for task in ["mnli", "cola", "mrpc", "sst2", "qnli", "qqp", "rte"]: # , "stsb"]:
         if task in finalscores and finalscores[task] is not None:
             res+= "%.2f,"%(finalscores[task])
         else:
@@ -573,10 +575,16 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_sandwich_2xtrainbudget/19-sand250K")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_moe_seed333/19-sdmoe")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep19_finetune_supernet_v1_moe_seed333_useexpert2/19-2ndexp")
-get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_moe_2e_kd/23-2ekd", supernet_finetune=True)
-get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd/23-kd", supernet_finetune=True)
-get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd/23-sckd", supernet_finetune=True)
-
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_moe_2e_kd/23-2ekd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd/23-kd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd/23-sckd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_v1_moe_archrouting_1L/archrouting_1L")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_v1_moe_archrouting_2L/archrouting_2L")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct16_finetune_v1_moe_archrouting_jack_1L/ftjack1L")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct16_finetune_v1_moe_archrouting_jack_2L/ftjack2L")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_v1_moe_archrouting_1L_setreqsgrad/archrouting_1L")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct17_finetune_rand2moe_ffncropping_evosearch/fcrps1")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct17_finetune_rand2moe_ffncropping_evosearch_seed333/fcrps2")
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)

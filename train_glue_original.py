@@ -324,7 +324,7 @@ def main():
         subnet_config = convert_to_dict(best_config_sheet.cell(4, 1).value)
         elastic_keys = eval(best_config_sheet.cell(7, 1).value)
         gene_choices = eval(best_config_sheet.cell(8, 1).value)
-        gene_names = eval(best_config_sheet.cell(9, 1).value)
+        gene_names = eval(best_config_sheet.cell(9, 1).value) if not isinstance(best_config_sheet.cell(9, 1).value, str) else best_config_sheet.cell(9, 1).value
         elastickey2ranges = eval(best_config_sheet.cell(10, 1).value)
         print("Subnet info: Search_space_id=%s"%(best_config_sheet.cell(6, 1).value))
         print("Subnet info: elastic_keys=", elastic_keys)
@@ -334,7 +334,7 @@ def main():
         subnet_config.num_labels = num_labels
 
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
-        if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_1L", "archrouting_2L"]:
+        if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L", "archrouting_1L", "archrouting_2L"]:
             for attr in ["max_experts", "expert_routing_type", "last_expert_averaging_expert", "sample_expert_ids"]:
                 setattr(subnet_config, attr, getattr(config, attr))
 
@@ -344,6 +344,26 @@ def main():
         #    os.path.join(args.model_name_or_path, "pytorch_model.bin"),
         #    map_location="cpu",
         # )
+        if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L"]:
+            for layer_id in range(config.num_hidden_layers):
+                model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.weight.requires_grad = False
+                model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.bias.requires_grad = False
+        if hasattr(subnet_config, "sample_expert_ids"):
+            for layer_id, routes in enumerate(subnet_config.sample_expert_ids):
+                if routes != 0:
+                    model.bert.encoder.layer[layer_id].output.LayerNorm.weight.requires_grad = False
+                    model.bert.encoder.layer[layer_id].output.LayerNorm.bias.requires_grad = False
+                    model.bert.encoder.layer[layer_id].output.dense.bias.requires_grad = False
+                    model.bert.encoder.layer[layer_id].output.dense.weight.requires_grad = False
+                    model.bert.encoder.layer[layer_id].intermediate.dense.bias.requires_grad = False
+                    model.bert.encoder.layer[layer_id].intermediate.dense.weight.requires_grad = False
+                else:
+                    model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.weight.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.bias.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_output_experts[0].dense.bias.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_output_experts[0].dense.weight.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_intermediate_experts[0].dense.bias.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_intermediate_experts[0].dense.weight.requires_grad = False
         
         if hasattr(config, "max_experts"):
             if args.all_experts_average == 1:
@@ -383,6 +403,41 @@ def main():
                         model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(interested_expert)
                 del interested_expert
                 del actual_model
+            elif hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_1L", "archrouting_2L"]:
+                # select the right expert for each expert layer
+                actual_model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
+                subnet_moeconfig = deepcopy(subnet_config)
+                for attr in ["max_experts", "expert_routing_type", "last_expert_averaging_expert", "sample_expert_ids"]:
+                    setattr(subnet_moeconfig, attr, getattr(config, attr))
+                actual_model.set_sample_config(subnet_moeconfig)
+                active_arch_embed = actual_model.bert.encoder.layer[0].active_arch_embed
+                selected_experts = []
+                for layer_id in range(len(actual_model.bert.encoder.layer)):
+                    route_prob = actual_model.bert.encoder.layer[layer_id].arch_expert(active_arch_embed)
+                    route_prob_max, routes = torch.max(route_prob, dim=-1)
+                    selected_experts.append(routes.item())
+                    # for main_expert, other_experts in [("bert.encoder.layer.<layer_id>.intermediate.dense.weight", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.intermediate.dense.bias", "bert.encoder.layer.<layer_id>.other_intermediate_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.dense.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.weight"), ("bert.encoder.layer.<layer_id>.output.dense.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.dense.bias"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.weight", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.weight"), ("bert.encoder.layer.<layer_id>.output.LayerNorm.bias", "bert.encoder.layer.<layer_id>.other_output_experts.<expert_id>.LayerNorm.bias")]:
+                    if routes != 0:
+                        # interested_expert = actual_model.state_dict()[other_experts.replace("<layer_id>", str(layer_id)).replace("<expert_id>", str(routes.item()-1))].data
+                        # model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(interested_expert)
+                        model.bert.encoder.layer[layer_id].output.LayerNorm.weight.requires_grad = False
+                        model.bert.encoder.layer[layer_id].output.LayerNorm.bias.requires_grad = False
+                        model.bert.encoder.layer[layer_id].output.dense.bias.requires_grad = False
+                        model.bert.encoder.layer[layer_id].output.dense.weight.requires_grad = False
+                        model.bert.encoder.layer[layer_id].intermediate.dense.bias.requires_grad = False
+                        model.bert.encoder.layer[layer_id].intermediate.dense.weight.requires_grad = False
+                    else:
+                        model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.weight.requires_grad = False
+                        model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.bias.requires_grad = False
+                        model.bert.encoder.layer[layer_id].other_output_experts[0].dense.bias.requires_grad = False
+                        model.bert.encoder.layer[layer_id].other_output_experts[0].dense.weight.requires_grad = False
+                        model.bert.encoder.layer[layer_id].other_intermediate_experts[0].dense.bias.requires_grad = False
+                        model.bert.encoder.layer[layer_id].other_intermediate_experts[0].dense.weight.requires_grad = False
+
+                print("selected experts per layer", selected_experts)
+                # del interested_expert
+                del actual_model
+            #elif hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L"]:
 
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
             
