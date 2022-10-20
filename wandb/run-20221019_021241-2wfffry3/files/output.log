@@ -1,0 +1,26 @@
+
+pre-initialized with BERT weights
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "train_mlm.py", line 2352, in <module>
+    main()
+  File "train_mlm.py", line 1275, in main
+    model = custom_bert.BertForMaskedLM.from_pretrained(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1385, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2658, in __init__
+    self.bert = BertModel(config, add_pooling_layer=False)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 2147, in __init__
+    self.encoder = BertEncoder(config)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1663, in __init__
+    [layer_function(config) for _ in range(config.sample_num_hidden_layers)] # changed to sample_num_hidden_layers (finetuning bug)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1663, in <listcomp>
+    [layer_function(config) for _ in range(config.sample_num_hidden_layers)] # changed to sample_num_hidden_layers (finetuning bug)
+  File "/fsx/ganayu/code/SuperShaper/custom_layers/custom_bert.py", line 1378, in __init__
+    self.arch_expert = torch.nn.Sequential(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/container.py", line 91, in __init__
+    self.add_module(str(idx), module)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/torch/nn/modules/module.py", line 381, in add_module
+    raise TypeError("{} is not a Module subclass".format(
+TypeError: torch._C._nn.gelu is not a Module subclass

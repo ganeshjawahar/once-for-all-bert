@@ -1,0 +1,150 @@
+2022-10-18 23:25:00,462 INFO    MainThread:4040336 [internal.py:wandb_internal():90] W&B internal server running at pid: 4040336, started at: 2022-10-18 23:25:00.459018
+2022-10-18 23:25:00,464 INFO    WriterThread:4040336 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/run-2xhginq9.wandb
+2022-10-18 23:25:00,472 DEBUG   SenderThread:4040336 [sender.py:send():235] send: header
+2022-10-18 23:25:00,472 DEBUG   SenderThread:4040336 [sender.py:send():235] send: run
+2022-10-18 23:25:00,603 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: check_version
+2022-10-18 23:25:00,607 INFO    SenderThread:4040336 [dir_watcher.py:__init__():205] watching files in: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files
+2022-10-18 23:25:00,607 INFO    SenderThread:4040336 [sender.py:_start_run_threads():812] run started: 2xhginq9 with start time 1666135498
+2022-10-18 23:25:00,607 DEBUG   SenderThread:4040336 [sender.py:send():235] send: summary
+2022-10-18 23:25:00,611 INFO    SenderThread:4040336 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-10-18 23:25:00,612 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: check_version
+2022-10-18 23:25:00,647 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: run_start
+2022-10-18 23:25:00,655 DEBUG   HandlerThread:4040336 [meta.py:__init__():35] meta init
+2022-10-18 23:25:00,655 DEBUG   HandlerThread:4040336 [meta.py:__init__():49] meta init done
+2022-10-18 23:25:00,655 DEBUG   HandlerThread:4040336 [meta.py:probe():209] probe
+2022-10-18 23:25:00,665 DEBUG   HandlerThread:4040336 [meta.py:_setup_git():199] setup git
+2022-10-18 23:25:00,736 DEBUG   HandlerThread:4040336 [meta.py:_setup_git():206] setup git done
+2022-10-18 23:25:00,736 DEBUG   HandlerThread:4040336 [meta.py:_save_pip():53] save pip
+2022-10-18 23:25:00,740 DEBUG   HandlerThread:4040336 [meta.py:_save_pip():67] save pip done
+2022-10-18 23:25:00,741 DEBUG   HandlerThread:4040336 [meta.py:_save_conda():74] save conda
+2022-10-18 23:25:01,613 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/conda-environment.yaml
+2022-10-18 23:25:01,613 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/requirements.txt
+2022-10-18 23:25:01,614 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/wandb-summary.json
+2022-10-18 23:25:06,628 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:08,631 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:13,237 DEBUG   HandlerThread:4040336 [meta.py:_save_conda():84] save conda done
+2022-10-18 23:25:13,238 DEBUG   HandlerThread:4040336 [meta.py:probe():247] probe done
+2022-10-18 23:25:13,650 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/conda-environment.yaml
+2022-10-18 23:25:13,650 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/wandb-metadata.json
+2022-10-18 23:25:13,851 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: stop_status
+2022-10-18 23:25:13,851 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: stop_status
+2022-10-18 23:25:13,908 DEBUG   SenderThread:4040336 [sender.py:send():235] send: telemetry
+2022-10-18 23:25:13,908 DEBUG   SenderThread:4040336 [sender.py:send():235] send: files
+2022-10-18 23:25:13,908 INFO    SenderThread:4040336 [sender.py:_save_file():949] saving file wandb-metadata.json with policy now
+2022-10-18 23:25:14,268 INFO    Thread-11 :4040336 [upload_job.py:push():132] Uploaded file /tmp/tmptve9vmxxwandb/1wrafnkd-wandb-metadata.json
+2022-10-18 23:25:16,655 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:18,000 DEBUG   SenderThread:4040336 [sender.py:send():235] send: telemetry
+2022-10-18 23:25:20,662 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:25,336 DEBUG   SenderThread:4040336 [sender.py:send():235] send: telemetry
+2022-10-18 23:25:26,674 INFO    Thread-7  :4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:27,831 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:27,831 DEBUG   SenderThread:4040336 [sender.py:send():235] send: exit
+2022-10-18 23:25:27,831 INFO    SenderThread:4040336 [sender.py:send_exit():371] handling exit code: 1
+2022-10-18 23:25:27,831 INFO    SenderThread:4040336 [sender.py:send_exit():373] handling runtime: 27
+2022-10-18 23:25:27,835 INFO    SenderThread:4040336 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-10-18 23:25:27,835 INFO    SenderThread:4040336 [sender.py:send_exit():379] send defer
+2022-10-18 23:25:27,836 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:27,836 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:27,836 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 0
+2022-10-18 23:25:27,837 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:27,837 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 0
+2022-10-18 23:25:27,837 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 1
+2022-10-18 23:25:27,837 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:27,837 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 1
+2022-10-18 23:25:27,947 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:27,947 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:27,947 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 1
+2022-10-18 23:25:27,947 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 2
+2022-10-18 23:25:27,947 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:27,947 DEBUG   SenderThread:4040336 [sender.py:send():235] send: stats
+2022-10-18 23:25:27,948 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:27,948 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 2
+2022-10-18 23:25:27,948 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:27,948 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 2
+2022-10-18 23:25:27,948 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 3
+2022-10-18 23:25:27,948 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:27,949 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 3
+2022-10-18 23:25:27,949 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:27,949 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 3
+2022-10-18 23:25:27,949 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 4
+2022-10-18 23:25:27,949 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:27,949 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 4
+2022-10-18 23:25:27,949 DEBUG   SenderThread:4040336 [sender.py:send():235] send: summary
+2022-10-18 23:25:27,952 INFO    SenderThread:4040336 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-10-18 23:25:27,953 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:27,953 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 4
+2022-10-18 23:25:27,953 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 5
+2022-10-18 23:25:27,954 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:27,954 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 5
+2022-10-18 23:25:27,954 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:27,954 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 5
+2022-10-18 23:25:28,036 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 6
+2022-10-18 23:25:28,037 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:28,037 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 6
+2022-10-18 23:25:28,037 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:28,037 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 6
+2022-10-18 23:25:28,037 INFO    SenderThread:4040336 [dir_watcher.py:finish():336] shutting down directory watcher
+2022-10-18 23:25:28,048 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:28,681 INFO    SenderThread:4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/wandb-summary.json
+2022-10-18 23:25:28,681 INFO    SenderThread:4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/config.yaml
+2022-10-18 23:25:28,681 INFO    SenderThread:4040336 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:28,682 INFO    SenderThread:4040336 [dir_watcher.py:finish():366] scan: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files
+2022-10-18 23:25:28,684 INFO    SenderThread:4040336 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/config.yaml config.yaml
+2022-10-18 23:25:28,684 INFO    SenderThread:4040336 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/wandb-metadata.json wandb-metadata.json
+2022-10-18 23:25:28,684 INFO    SenderThread:4040336 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log output.log
+2022-10-18 23:25:28,684 INFO    SenderThread:4040336 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/conda-environment.yaml conda-environment.yaml
+2022-10-18 23:25:28,684 INFO    SenderThread:4040336 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/requirements.txt requirements.txt
+2022-10-18 23:25:28,685 INFO    SenderThread:4040336 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/wandb-summary.json wandb-summary.json
+2022-10-18 23:25:28,685 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 7
+2022-10-18 23:25:28,685 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:28,685 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:28,685 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 7
+2022-10-18 23:25:28,686 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:28,686 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 7
+2022-10-18 23:25:28,686 INFO    SenderThread:4040336 [file_pusher.py:finish():145] shutting down file pusher
+2022-10-18 23:25:28,786 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:28,786 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:28,887 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:28,887 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:28,988 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:28,989 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:29,050 INFO    Thread-12 :4040336 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/config.yaml
+2022-10-18 23:25:29,052 INFO    Thread-13 :4040336 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/output.log
+2022-10-18 23:25:29,065 INFO    Thread-14 :4040336 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/conda-environment.yaml
+2022-10-18 23:25:29,077 INFO    Thread-15 :4040336 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/requirements.txt
+2022-10-18 23:25:29,082 INFO    Thread-16 :4040336 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/files/wandb-summary.json
+2022-10-18 23:25:29,090 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:29,090 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:29,191 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:29,191 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:29,282 INFO    Thread-6  :4040336 [sender.py:transition_state():392] send defer: 8
+2022-10-18 23:25:29,283 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:29,283 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 8
+2022-10-18 23:25:29,283 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:29,283 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 8
+2022-10-18 23:25:29,292 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:29,441 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 9
+2022-10-18 23:25:29,441 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:29,442 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:29,442 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 9
+2022-10-18 23:25:29,442 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:29,442 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 9
+2022-10-18 23:25:29,442 INFO    SenderThread:4040336 [sender.py:transition_state():392] send defer: 10
+2022-10-18 23:25:29,442 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: defer
+2022-10-18 23:25:29,442 INFO    HandlerThread:4040336 [handler.py:handle_request_defer():164] handle defer: 10
+2022-10-18 23:25:29,443 DEBUG   SenderThread:4040336 [sender.py:send():235] send: final
+2022-10-18 23:25:29,443 DEBUG   SenderThread:4040336 [sender.py:send():235] send: footer
+2022-10-18 23:25:29,443 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: defer
+2022-10-18 23:25:29,443 INFO    SenderThread:4040336 [sender.py:send_request_defer():388] handle sender defer: 10
+2022-10-18 23:25:29,543 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: poll_exit
+2022-10-18 23:25:29,543 DEBUG   SenderThread:4040336 [sender.py:send_request():249] send_request: poll_exit
+2022-10-18 23:25:29,543 INFO    SenderThread:4040336 [file_pusher.py:join():150] waiting for file pusher
+2022-10-18 23:25:29,776 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: sampled_history
+2022-10-18 23:25:29,776 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: get_summary
+2022-10-18 23:25:29,777 DEBUG   HandlerThread:4040336 [handler.py:handle_request():141] handle_request: shutdown
+2022-10-18 23:25:29,777 INFO    HandlerThread:4040336 [handler.py:finish():806] shutting down handler
+2022-10-18 23:25:30,443 INFO    WriterThread:4040336 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/run-20221018_232458-2xhginq9/run-2xhginq9.wandb
+2022-10-18 23:25:30,676 INFO    SenderThread:4040336 [sender.py:finish():1111] shutting down sender
+2022-10-18 23:25:30,676 INFO    SenderThread:4040336 [file_pusher.py:finish():145] shutting down file pusher
+2022-10-18 23:25:30,676 INFO    SenderThread:4040336 [file_pusher.py:join():150] waiting for file pusher
+2022-10-18 23:25:30,677 INFO    MainThread:4040336 [internal.py:handle_exit():80] Internal process exited

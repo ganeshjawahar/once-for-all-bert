@@ -805,6 +805,13 @@ def parse_args():
         help=f"use consistency loss for max",
     )
 
+    parser.add_argument(
+        "--fixed_hypernet_input",
+        type=str,
+        default="no",
+        help=f"fix architecture input for hypernet",
+    )
+
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
     # )
@@ -1092,7 +1099,8 @@ def main():
             search_space_id=args.search_space_id,
             max_experts=args.max_experts,
             expert_routing_type=args.expert_routing_type,
-            last_expert_averaging_expert=args.last_expert_averaging_expert
+            last_expert_averaging_expert=args.last_expert_averaging_expert,
+            fixed_hypernet_input = args.fixed_hypernet_input
         )
     else:
         global_config = get_supertransformer_config(
@@ -1102,7 +1110,8 @@ def main():
             random_layer_selection_probability=args.random_layer_selection_probability,
             max_experts=args.max_experts,
             expert_routing_type=args.expert_routing_type,
-            last_expert_averaging_expert=args.last_expert_averaging_expert
+            last_expert_averaging_expert=args.last_expert_averaging_expert,
+            fixed_hypernet_input = args.fixed_hypernet_input
         )
 
     if args.tokenizer_name:

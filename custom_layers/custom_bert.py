@@ -1435,7 +1435,10 @@ class BertLayer(nn.Module):
                 if hasattr(self, "arch_expert"):
                     norm_active_arch_embed = min_max_normalization(config.master_sample_hidden_size, self.min_hidden_size, self.max_hidden_size)
                     for i in range(len(norm_active_arch_embed)):
-                        self.active_arch_embed[i] = norm_active_arch_embed[i]
+                        if hasattr(config, "fixed_hypernet_input") and config.fixed_hypernet_input == "yes":
+                            self.active_arch_embed[i] = 0.5
+                        else:
+                            self.active_arch_embed[i] = norm_active_arch_embed[i]
             else:
                 arch_embed = config.sample_hidden_size
                 self.input_bottleneck.set_sample_config(
@@ -1615,11 +1618,12 @@ class BertLayer(nn.Module):
                     intermediate_bias = intermediate_bias + (route_prob[expert_id+1] * self.other_intermediate_experts[expert_id].dense.samples["bias"])
                     layer_output_weights = layer_output_weights + (route_prob[expert_id+1] * self.other_output_experts[expert_id].dense.samples["weight"])
                     layer_output_bias = layer_output_bias + (route_prob[expert_id+1] * self.other_output_experts[expert_id].dense.samples["bias"])
-                intermediate_weights = intermediate_weights / (self.max_experts)
-                intermediate_bias = intermediate_bias / (self.max_experts)
-                layer_output_weights = layer_output_weights / (self.max_experts)
-                layer_output_bias = layer_output_bias / (self.max_experts)
+                intermediate_weights = intermediate_weights 
+                intermediate_bias = intermediate_bias 
+                layer_output_weights = layer_output_weights 
+                layer_output_bias = layer_output_bias 
                 intermediate_output = F.linear(attention_output, intermediate_weights, intermediate_bias)
+                intermediate_output = self.intermediate.intermediate_act_fn(intermediate_output)
                 layer_output = F.linear(intermediate_output, layer_output_weights, layer_output_bias)
                 layer_output = self.output.dropout(layer_output)
                 layer_output = self.output.LayerNorm(layer_output + attention_output)

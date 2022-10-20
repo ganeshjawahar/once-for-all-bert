@@ -545,7 +545,8 @@ def get_supertransformer_config(
     max_experts=-1,
     expert_routing_type="sentence",
     last_expert_averaging_expert="no",
-    consistency_loss="no"
+    consistency_loss="no",
+    fixed_hypernet_input="no"
 ):
     config = AutoConfig.from_pretrained(model_name_or_path)
 
@@ -557,6 +558,7 @@ def get_supertransformer_config(
     config.sample_hidden_size = config.hidden_size
     config.sample_num_hidden_layers = config.num_hidden_layers
     config.hypernet_hidden_size = hypernet_hidden_size
+    config.fixed_hypernet_input = fixed_hypernet_input
 
     if mixing == "bert-bottleneck":
         config.sample_hidden_size = [
