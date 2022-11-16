@@ -217,6 +217,8 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/aug31_supernet_moe_2rand", supernet_runids=[ ("4e_1rand", "ganayu/effbert/dns0jab5"), ("2e_1rand", "ganayu/effbert/1we400qi"), ("2e_2rand", "ganayu/effbert/x80tlkv1"), ("4e_2rand", "ganayu/effbert/319k7x8y")], standalone_runids=[], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/sep7_supernet_moe_jack", supernet_runids=[ ("2e", "ganayu/effbert/1we400qi"), ("2e+jack", "ganayu/effbert/i3w3y04e")], standalone_runids=[], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/oct18_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("randmoe", "ganayu/effbert/1we400qi"), ("archmoe_pavg_1L", "ganayu/effbert/runs/numd2vy3"),  ("archmoe_sinexp", "ganayu/effbert/runs/2avuv91k")], standalone_runids=[], every_x_steps=100) # , standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")] ("archmoe_pavg_2L", "ganayu/effbert/runs/nwito9f8"),
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/oct21_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("archmoe_hid64", "ganayu/effbert/5ou0wyus"), ("fixedarchmoe_hid64", "ganayu/effbert/6d5mmpk7")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/nov15_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("arch experts", "ganayu/effbert/92ojue4d"), ("neuron experts", "ganayu/effbert/20fwsb8z") ], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
 
 def wandb_locate_proj():
     import json
@@ -426,7 +428,7 @@ def get_best_ft_sweep_space():
         print(fold.split("/")[-1], best_dev_scores)
 # get_best_ft_sweep_space()
 
-def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folder, supernet_finetune=False, num_gpus=8):
+def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folder, supernet_finetune=False, num_gpus=8, new_supernet_finetune=False):
     experiments = []
     for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/shell.sh"):
         line = line.strip()
@@ -436,7 +438,20 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
             experiments.append([epochs, task])
 
     finalscores = {}
-    if not supernet_finetune:
+    if new_supernet_finetune:
+        task2scores = {}
+        for line in open("/fsx/ganayu/experiments/supershaper/" + folder + "/sys.out"):
+            line = line.strip()      
+            if "Val Accuracy" in line and "task" in line and "num_train_epochs" in line:
+                result = eval(line[2:])
+                if result['epoch'] == result['num_train_epochs']-1:
+                    result['SuperTransformer Val Accuracy'] = result['SuperTransformer Val Accuracy']*100.0
+                    if result['task'] not in task2scores:
+                        task2scores[result['task']] = result['SuperTransformer Val Accuracy']
+                    elif task2scores[result['task']] <  result['SuperTransformer Val Accuracy']:
+                        task2scores[result['task']] = result['SuperTransformer Val Accuracy']
+        finalscores = task2scores
+    elif not supernet_finetune:
         cur_exp = -1
         prev_epoch = -1
         task2runs = {}
@@ -480,6 +495,8 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
             line = line.strip()
             if "SuperTransformer Val Accuracy" in line:
                 scores.append(float(line.split("'SuperTransformer Val Accuracy'")[1].split(":")[1][0:-1]))
+        print(scores)
+        print(len(scores))
         task2score = {}
         incomplete_tasks = {}
         cur_idx = 0
@@ -584,6 +601,67 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_v1_moe_archrouting_1L_setreqsgrad/archrouting_1L")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct17_finetune_rand2moe_ffncropping_evosearch/fcrps1")
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct17_finetune_rand2moe_ffncropping_evosearch_seed333/fcrps2")
+
+# slide 114
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct20_finetune_moe_archrouting_jack_2L_64/2L_64")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct20_finetune_moe_archrouting_jack_2L_128/2L_128")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct20_finetune_moe_archrouting_jack_2L_seed333/2L_64")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct20_finetune_moe_archrouting_jack_2L_fixedarch_64/2L_64")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct20_finetune_moe_archrouting_jack_2L_fixedarch_128/2L_128")
+
+# different finetuning seed
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_retrain_subnet_125Ksteps_retrain_scratch_nonmnlicola_tasks/v1scratch") # scratch
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("aug29_finetune_acadbertdata_supernet_noretrain_125Ksteps_nonmnlicola_tasks/v1scratch") # supernet
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct21_finetune_moe_archrouting_jack_2L_128_seed333/2L_128")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct21_finetune_scratch_seed333/scratch")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct21_finetune_supernet_seed333/supernet")
+
+# different num_experts
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct21_finetune_moe_archrouting_jack_2L_moreexperts_exp4/exp4")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct21_finetune_moe_archrouting_jack_2L_moreexperts_exp6/exp6")
+
+# seed 444
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct27_finetune_scratch_seed444/scratch")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct27_finetune_supernet_seed444/supernet")
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct27_finetune_moe_archrouting_jack_2L_128_seed444/2L_128")
+
+# kd ft
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd/23-sckd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd/23-kd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_moe_2e_kd/23-2ekd", supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333/28-archkd", supernet_finetune=True)
+
+# v1.1 ft
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep25_finetune_supernet_v1p1_67M/25-1p16-7M", supernet_finetune=True)
+
+# kd_corrected
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd_corrected/23-sckd", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd_corrected/23-kd", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333_corrected/28-archkd", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archpavg_2e_onehot_kd_seed333/28-onehot", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archpavg_2e_onehot_kd_seed333_part2/28-onehot", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd_corrected_part2/scratch", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd_corrected_part2/supernet", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333_corrected_part2/archmoe", new_supernet_finetune=True)
+# neuronrouting_jack_2L
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov12_finetune_neuron_2L_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+# neuronrouting_jack_2L
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov12_finetune_standalone_67M_3xbudget_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
+# 50M
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov6_finetune_archmoe_50M/6-p1", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov6_finetune_archmoe_50M_part2/6-p2", new_supernet_finetune=True)
+
+# seed analysis on small datasets
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd_corrected_cola_seed444/23-sckd", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_scratch_kd_corrected_part2_mrpc_rte_seed444/scratch", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd_corrected_cola_seed444/23-kd", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("sep23_finetune_supernet_kd_corrected_part2_mrpc_rte_seed444/supernet", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333_corrected_cola_seed444/28-archkd", new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333_corrected_part2_mrpc_rte_seed444/archmoe", new_supernet_finetune=True)
+
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)

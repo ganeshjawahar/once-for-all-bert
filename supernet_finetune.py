@@ -495,11 +495,24 @@ def main():
                 subnet_config.add_distill_linear_layer = True # adds 
             else:
                 subnet_config.add_distill_linear_layer = False
+        
+        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
+        if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L", "archrouting_1L", "archrouting_2L", "neuronrouting_jack_2L"]:
+            for attr in ["max_experts", "expert_routing_type", "last_expert_averaging_expert", "sample_expert_ids", "fixed_hypernet_input", "hypernet_hidden_size", "hypernet_input_format"]:
+                if hasattr(config, attr):
+                    setattr(subnet_config, attr, getattr(config, attr))
 
         model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes="mnli" in args.model_name_or_path) # todo: mnli dynamic
-        config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         print(f"Number of parameters in custom config is {millify(calculate_params_from_config(subnet_config, scaling_laws=False, add_output_emb_layer=False))}")
         # config.hidden_dropout_prob = 0.1
+
+        if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L", "neuronrouting_jack_2L"]:
+            for layer_id in range(config.num_hidden_layers):
+                for exp_id in range(len(model.bert.encoder.layer[layer_id].other_output_experts)):
+                    model.bert.encoder.layer[layer_id].other_output_experts[exp_id].LayerNorm.weight.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_output_experts[exp_id].LayerNorm.bias.requires_grad = False
+        
+    # print(subnet_config)
     print(summary(model, depth=4, verbose=0))
 
     if args.teacher_model_path is not None:
@@ -909,6 +922,7 @@ def main():
                     sampled_student_loss = loss / args.gradient_accumulation_steps
 
                 accelerator.backward(sampled_student_loss)
+            
             # cleanup
             if args.inplace_distillation or args.distillation_type:
                 del teacher_info
@@ -982,7 +996,7 @@ def main():
             )
         supernet_eval_metric = metric.compute()
         print(supernet_eval_metric)
-        wandb_log = {"SuperTransformer Val Accuracy": supernet_eval_metric['accuracy'] if "accuracy" in supernet_eval_metric else supernet_eval_metric['matthews_correlation']}
+        wandb_log = {"SuperTransformer Val Accuracy": supernet_eval_metric['accuracy'] if "accuracy" in supernet_eval_metric else supernet_eval_metric['matthews_correlation'], "task": args.task_name, "epoch": epoch, "num_train_epochs": args.num_train_epochs}
 
         if args.sampling_type != "none":
             # valid acc for subnet
@@ -1025,9 +1039,9 @@ def main():
                 best_acc = float(line.strip())
                 break
         if best_acc is None or best_acc < supernet_eval_metric['accuracy']:
-            if os.path.exists(best_ckpt_path):
-                shutil.rmtree(best_ckpt_path)
-            os.makedirs(best_ckpt_path)
+            # if os.path.exists(best_ckpt_path):
+            #    shutil.rmtree(best_ckpt_path)
+            os.makedirs(best_ckpt_path, exist_ok=True)
             w = open(best_ckpt_path + "/score", 'w')
             w.write("%s\n"%(str(supernet_eval_metric['accuracy'])))
             w.close()

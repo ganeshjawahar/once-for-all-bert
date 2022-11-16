@@ -484,7 +484,7 @@ class Sampler:
         self.prev_subtransformer_configs = configs
         output_configs = { "smallest_subtransformer": smallest_config, "random_subtransformers": configs}
         
-        if hasattr(self.config, "max_experts"):
+        if hasattr(self.config, "max_experts") and self.config is not None and smallest_config is not None:
             moe_biggest_config = copy.deepcopy(self.config)
             setattr(moe_biggest_config, "sample_expert_ids", [random.randint(0, getattr(moe_biggest_config, "max_experts")-1) for i in range(getattr(moe_biggest_config, "num_hidden_layers"))] if self.collapsed_training == "no" else [0]*getattr(moe_biggest_config, "num_hidden_layers"))
             moe_smallest_config = copy.deepcopy(smallest_config)
@@ -546,7 +546,8 @@ def get_supertransformer_config(
     expert_routing_type="sentence",
     last_expert_averaging_expert="no",
     consistency_loss="no",
-    fixed_hypernet_input="no"
+    fixed_hypernet_input="no",
+    hypernet_input_format="standard"
 ):
     config = AutoConfig.from_pretrained(model_name_or_path)
 
@@ -559,6 +560,7 @@ def get_supertransformer_config(
     config.sample_num_hidden_layers = config.num_hidden_layers
     config.hypernet_hidden_size = hypernet_hidden_size
     config.fixed_hypernet_input = fixed_hypernet_input
+    config.hypernet_input_format = hypernet_input_format
 
     if mixing == "bert-bottleneck":
         config.sample_hidden_size = [

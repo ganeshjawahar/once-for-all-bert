@@ -1,0 +1,146 @@
+loading configuration file /fsx/ganayu/experiments/supershaper/nov10_neuronrouting_jack_2L/neuron/best_model/config.json
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+Model config BertConfig {
+  "_name_or_path": "bert-base-uncased",
+  "additional_random_softmaxing": false,
+  "alpha_divergence": 0,
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bottleneck_rank": 50,
+  "classifier_dropout": null,
+  "expert_routing_type": "neuronrouting_jack_2L",
+  "fixed_hypernet_input": "no",
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0,
+  "hidden_size": 768,
+  "hypernet_hidden_size": 128,
+  "hypernet_input_format": "standard",
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "last_expert_averaging_expert": "no",
+  "layer_drop_prob": 0.0,
+  "layer_norm_eps": 1e-12,
+  "max_experts": 2,
+  "max_position_embeddings": 512,
+  "max_seq_length": 128,
+  "mixing": "bert-bottleneck",
+  "model_type": "bert",
+  "normalization_type": "layer_norm",
+  "num_attention_heads": 12,
+  "num_feedforward_networks": 1,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "random_layer_selection_probability": 0.1,
+  "rewire": 0,
+  "sample_expert_ids": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "sample_hidden_size": [
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768,
+    768
+  ],
+  "sample_intermediate_size": [
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072,
+    3072
+  ],
+  "sample_num_attention_heads": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "sample_num_hidden_layers": 12,
+  "search_space_id": null,
+  "torch_dtype": "float32",
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "use_hypernet_w_low_rank": 0,
+  "vocab_size": 30522
+}
+Traceback (most recent call last):
+  File "supernet_finetune.py", line 1055, in <module>
+    main()
+  File "supernet_finetune.py", line 464, in main
+    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 457, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/models/auto/tokenization_auto.py", line 323, in get_tokenizer_config
+    resolved_config_file = cached_path(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/file_utils.py", line 1402, in cached_path
+    output_path = get_from_cache(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/file_utils.py", line 1573, in get_from_cache
+    r = requests.head(url, headers=headers, allow_redirects=False, proxies=proxies, timeout=etag_timeout)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/requests/api.py", line 102, in head
+    return request('head', url, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/requests/sessions.py", line 529, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/requests/sessions.py", line 645, in send
+    r = adapter.send(request, **kwargs)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/requests/adapters.py", line 440, in send
+    resp = conn.urlopen(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/urllib3/connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/urllib3/connectionpool.py", line 1040, in _validate_conn
+    conn.connect()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/urllib3/connection.py", line 414, in connect
+    self.sock = ssl_wrap_socket(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/urllib3/util/ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/urllib3/util/ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+KeyboardInterrupt

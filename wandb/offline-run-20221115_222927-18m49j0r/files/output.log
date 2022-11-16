@@ -1,0 +1,58 @@
+Subnet info: Model-Size=59703168, Val-PPL=6.445852735972403
+Subnet info: Gene=[360, 240, 240, 240, 360, 360, 360, 360, 360, 480, 480, 480]
+Subnet info: Search_space_id=
+Subnet info: elastic_keys= ['sample_hidden_size']
+Subnet info: gene_choices= [[120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768], [120, 240, 360, 480, 540, 600, 768]]
+Subnet info: gene_names= ['sample_hidden_size_0', 'sample_hidden_size_1', 'sample_hidden_size_2', 'sample_hidden_size_3', 'sample_hidden_size_4', 'sample_hidden_size_5', 'sample_hidden_size_6', 'sample_hidden_size_7', 'sample_hidden_size_8', 'sample_hidden_size_9', 'sample_hidden_size_10', 'sample_hidden_size_11']
+Subnet info: elastickey2ranges= {'sample_hidden_size': [0, 12]}
+pre-initialized with BERT weights
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+11/15/2022 22:29:33 - INFO - __main__ -   ==================================================================
+11/15/2022 22:29:33 - INFO - __main__ -   Number of parameters in custom config is 60 Million
+11/15/2022 22:29:33 - INFO - __main__ -   ==================================================================
+Traceback (most recent call last):
+  File "train_mlm.py", line 2363, in <module>
+    main()
+  File "train_mlm.py", line 1286, in main
+    model = custom_bert.BertForMaskedLM.from_pretrained(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1424, in from_pretrained
+    model, missing_keys, unexpected_keys, mismatched_keys, error_msgs = cls._load_state_dict_into_model(
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/modeling_utils.py", line 1576, in _load_state_dict_into_model
+    raise RuntimeError(f"Error(s) in loading state_dict for {model.__class__.__name__}:\n\t{error_msg}")
+RuntimeError: Error(s) in loading state_dict for BertForMaskedLM:
+	size mismatch for bert.encoder.layer.0.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.0.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.0.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.1.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.1.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.1.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.2.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.2.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.2.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.3.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.3.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.3.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.4.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.4.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.4.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.5.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.5.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.5.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.6.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.6.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.6.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.7.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.7.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.7.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.8.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.8.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.8.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.9.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.9.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.9.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.10.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.10.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).
+	size mismatch for bert.encoder.layer.10.arch_expert.2.weight: copying a param with shape torch.Size([2, 128]) from checkpoint, the shape in current model is torch.Size([2, 64]).
+	size mismatch for bert.encoder.layer.11.arch_expert.0.weight: copying a param with shape torch.Size([128, 12]) from checkpoint, the shape in current model is torch.Size([64, 12]).
+	size mismatch for bert.encoder.layer.11.arch_expert.0.bias: copying a param with shape torch.Size([128]) from checkpoint, the shape in current model is torch.Size([64]).

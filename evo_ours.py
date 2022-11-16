@@ -48,7 +48,7 @@ class EvoSearch:
         self.last_expert_averaging_expert = args.last_expert_averaging_expert
         self.fixed_arch = args.fixed_arch
         if self.trial_run == "yes":
-            self.population_size = 10
+            # self.population_size = 10
             self.parent_size = 5
             self.mutation_size = 5
             self.crossover_size = 5
@@ -234,7 +234,7 @@ class EvoSearch:
             print(f"Sample {index} of the training set: {eval_dataset[index]}.")
 
         # load supernet config
-        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id, max_experts=args.max_experts, expert_routing_type=args.expert_routing_type)
+        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id, max_experts=args.max_experts, expert_routing_type=args.expert_routing_type, hypernet_hidden_size=self.hypernet_hidden_size)
         # set defaults like max_seq_length
         self.global_config.max_seq_length = self.max_seq_length
         self.global_config.alpha_divergence = 0

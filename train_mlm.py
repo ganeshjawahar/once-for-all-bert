@@ -812,6 +812,13 @@ def parse_args():
         help=f"fix architecture input for hypernet",
     )
 
+    parser.add_argument(
+        "--hypernet_input_format",
+        type=str,
+        default="standard",
+        help=f"input format: standard or onehot",
+    )
+
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
     # )
@@ -1100,7 +1107,8 @@ def main():
             max_experts=args.max_experts,
             expert_routing_type=args.expert_routing_type,
             last_expert_averaging_expert=args.last_expert_averaging_expert,
-            fixed_hypernet_input = args.fixed_hypernet_input
+            fixed_hypernet_input = args.fixed_hypernet_input,
+            hypernet_input_format = args.hypernet_input_format
         )
     else:
         global_config = get_supertransformer_config(
@@ -1111,7 +1119,8 @@ def main():
             max_experts=args.max_experts,
             expert_routing_type=args.expert_routing_type,
             last_expert_averaging_expert=args.last_expert_averaging_expert,
-            fixed_hypernet_input = args.fixed_hypernet_input
+            fixed_hypernet_input = args.fixed_hypernet_input,
+            hypernet_input_format = args.hypernet_input_format
         )
 
     if args.tokenizer_name:
@@ -1220,8 +1229,12 @@ def main():
             print("Subnet info: gene_choices=", gene_choices)
             print("Subnet info: gene_names=", gene_names)
             print("Subnet info: elastickey2ranges=", elastickey2ranges)
+            print(subnet_config)
             for key in elastic_keys:
                 setattr(global_config, key, getattr(subnet_config, key))
+            for key in ["expert_routing_type", "fixed_hypernet_input", "hypernet_hidden_size", "hypernet_input_format"]:
+                if hasattr(subnet_config, key):
+                    setattr(global_config, key, getattr(subnet_config, key))
 
         logger.info(
             "=================================================================="
@@ -2032,7 +2045,7 @@ def main():
             if args.inplace_distillation or args.distillation_type:
                 del teacher_info
                 del outputs
-            
+                
             if (
                 step % args.gradient_accumulation_steps == 0
                 or step == len(train_dataloader) - 1

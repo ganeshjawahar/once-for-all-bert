@@ -335,8 +335,9 @@ def main():
 
         config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=num_labels, finetuning_task=args.task_name)
         if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L", "archrouting_1L", "archrouting_2L"]:
-            for attr in ["max_experts", "expert_routing_type", "last_expert_averaging_expert", "sample_expert_ids"]:
-                setattr(subnet_config, attr, getattr(config, attr))
+            for attr in ["max_experts", "expert_routing_type", "last_expert_averaging_expert", "sample_expert_ids", "fixed_hypernet_input", "hypernet_hidden_size"]:
+                if hasattr(config, attr):
+                    setattr(subnet_config, attr, getattr(config, attr))
 
         # subnet_config.hidden_dropout_prob = 0.1
         model = custom_bert.BertForSequenceClassification.from_pretrained(args.model_name_or_path, config=subnet_config, ignore_mismatched_sizes=args.is_mnli_checkpoint)
@@ -346,8 +347,9 @@ def main():
         # )
         if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L"]:
             for layer_id in range(config.num_hidden_layers):
-                model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.weight.requires_grad = False
-                model.bert.encoder.layer[layer_id].other_output_experts[0].LayerNorm.bias.requires_grad = False
+                for exp_id in range(len(model.bert.encoder.layer[layer_id].other_output_experts)):
+                    model.bert.encoder.layer[layer_id].other_output_experts[exp_id].LayerNorm.weight.requires_grad = False
+                    model.bert.encoder.layer[layer_id].other_output_experts[exp_id].LayerNorm.bias.requires_grad = False
         if hasattr(subnet_config, "sample_expert_ids"):
             for layer_id, routes in enumerate(subnet_config.sample_expert_ids):
                 if routes != 0:

@@ -1,0 +1,32 @@
+2022-11-10 09:44:46,277 INFO    MainThread:2309264 [wandb_setup.py:_flush():76] Loading settings from /data/home/ganayu/.config/wandb/settings
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_setup.py:_flush():76] Loading settings from /fsx/ganayu/code/SuperShaper/wandb/settings
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train_mlm.py', 'program': 'train_mlm.py'}
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_init.py:_log_setup():428] Logging user logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221110_094446-1kmze3da/logs/debug.log
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_init.py:_log_setup():429] Logging internal logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221110_094446-1kmze3da/logs/debug-internal.log
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_init.py:init():462] calling init triggers
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_init.py:init():465] wandb.init called with sweep_config: {}
+config: {}
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [wandb_init.py:init():515] starting backend
+2022-11-10 09:44:46,278 INFO    MainThread:2309264 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-11-10 09:44:46,306 INFO    MainThread:2309264 [backend.py:ensure_launched():217] starting backend process...
+2022-11-10 09:44:46,321 INFO    MainThread:2309264 [backend.py:ensure_launched():222] started backend process with pid: 2309340
+2022-11-10 09:44:46,341 INFO    MainThread:2309264 [wandb_init.py:init():525] backend started and connected
+2022-11-10 09:44:46,357 INFO    MainThread:2309264 [wandb_init.py:init():596] updated telemetry
+2022-11-10 09:44:46,439 INFO    MainThread:2309264 [wandb_init.py:init():662] starting run threads in backend
+2022-11-10 09:44:51,444 INFO    MainThread:2309264 [wandb_run.py:_console_start():1898] atexit reg
+2022-11-10 09:44:51,447 INFO    MainThread:2309264 [wandb_run.py:_redirect():1771] redirect: SettingsConsole.REDIRECT
+2022-11-10 09:44:51,448 INFO    MainThread:2309264 [wandb_run.py:_redirect():1776] Redirecting console.
+2022-11-10 09:44:51,476 INFO    MainThread:2309264 [wandb_run.py:_redirect():1832] Redirects installed.
+2022-11-10 09:44:51,477 INFO    MainThread:2309264 [wandb_init.py:init():688] run started, returning control to user process
+2022-11-10 09:45:10,791 INFO    MainThread:2309264 [wandb_run.py:_atexit_cleanup():1867] got exitcode: 1
+2022-11-10 09:45:10,794 INFO    MainThread:2309264 [wandb_run.py:_restore():1839] restore
+2022-11-10 09:45:13,290 INFO    MainThread:2309264 [wandb_run.py:_on_finish():1996] got exit ret: 
+2022-11-10 09:45:13,391 INFO    MainThread:2309264 [wandb_run.py:_on_finish():1996] got exit ret: done: true
+exit_result {
+}
+local_info {
+}
+
+2022-11-10 09:45:14,545 INFO    MainThread:2309264 [wandb_run.py:_footer_history_summary_info():3104] rendering history
+2022-11-10 09:45:14,545 INFO    MainThread:2309264 [wandb_run.py:_footer_history_summary_info():3136] rendering summary
