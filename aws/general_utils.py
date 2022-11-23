@@ -662,6 +662,40 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333_corrected_cola_seed444/28-archkd", new_supernet_finetune=True)
 # get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("oct28_finetune_archmoe_pavg_2e_kd_seed333_corrected_part2_mrpc_rte_seed444/archmoe", new_supernet_finetune=True)
 
+# mnli as proxy task (archmoe)
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#   get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov16_finetune_evosearch_archmoe_supernet_proxy_mnli_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+
+# comparison to nas-bert
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov16_finetune_standalone_archmoe_60M_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+
+# collapse_experts_before_ft==1
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov19_collapse_and_finetune_neuronmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov19_collapse_and_finetune_archmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+
+# collapse and finetune
+# neuronrouting_jack_2L
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov19_collapse_and_finetune_neuronmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+# arch. moe
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov19_collapse_and_finetune_archmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+# autodistill - 50M
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov20_collapse_and_finetune_archmoe_50M_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+# nasbert - 60M
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov20_collapse_and_finetune_standalone_archmoe_60M_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+
+# comparison to autodistill
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov19_finetune_archmoe_50M_%s_largerepochs/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov22_finetune_neuronmoe_50M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)

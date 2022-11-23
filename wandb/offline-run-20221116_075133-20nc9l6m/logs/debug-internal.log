@@ -1,0 +1,20 @@
+2022-11-16 07:51:35,662 INFO    MainThread:2457119 [internal.py:wandb_internal():90] W&B internal server running at pid: 2457119, started at: 2022-11-16 07:51:35.659422
+2022-11-16 07:51:35,665 INFO    WriterThread:2457119 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221116_075133-20nc9l6m/run-20nc9l6m.wandb
+2022-11-16 07:51:35,665 DEBUG   HandlerThread:2457119 [handler.py:handle_request():141] handle_request: run_start
+2022-11-16 07:51:35,690 DEBUG   HandlerThread:2457119 [meta.py:__init__():35] meta init
+2022-11-16 07:51:35,690 DEBUG   HandlerThread:2457119 [meta.py:__init__():49] meta init done
+2022-11-16 07:51:35,690 DEBUG   HandlerThread:2457119 [meta.py:probe():209] probe
+2022-11-16 07:51:35,706 DEBUG   HandlerThread:2457119 [meta.py:_setup_git():199] setup git
+2022-11-16 07:51:35,827 DEBUG   HandlerThread:2457119 [meta.py:_setup_git():206] setup git done
+2022-11-16 07:51:35,827 DEBUG   HandlerThread:2457119 [meta.py:_save_pip():53] save pip
+2022-11-16 07:51:35,830 DEBUG   HandlerThread:2457119 [meta.py:_save_pip():67] save pip done
+2022-11-16 07:51:35,832 DEBUG   HandlerThread:2457119 [meta.py:_save_conda():74] save conda
+2022-11-16 07:51:55,657 DEBUG   HandlerThread:2457119 [meta.py:_save_conda():84] save conda done
+2022-11-16 07:51:55,657 DEBUG   HandlerThread:2457119 [meta.py:probe():247] probe done
+2022-11-16 07:52:01,877 WARNING MainThread:2457119 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2022-11-16 07:52:02,125 WARNING MainThread:2457119 [internal.py:wandb_internal():153] Internal process interrupt: 2
+2022-11-16 07:52:02,125 ERROR   MainThread:2457119 [internal.py:wandb_internal():156] Internal process interrupted.
+2022-11-16 07:52:02,683 INFO    SenderThread:2457119 [sender.py:finish():1111] shutting down sender
+2022-11-16 07:52:02,742 INFO    HandlerThread:2457119 [handler.py:finish():806] shutting down handler
+2022-11-16 07:52:02,743 INFO    WriterThread:2457119 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221116_075133-20nc9l6m/run-20nc9l6m.wandb
+2022-11-16 07:52:02,745 INFO    MainThread:2457119 [internal.py:handle_exit():80] Internal process exited

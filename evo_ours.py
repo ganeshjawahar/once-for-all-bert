@@ -22,6 +22,7 @@ from sampling import Sampler
 from utils import calculate_params_from_config
 import numpy as np
 from xlrd import open_workbook
+from torchinfo import summary
 
 def convert_to_dict(string):
     _dict = json.loads(
@@ -131,17 +132,17 @@ class EvoSearch:
         sentence1_key, sentence2_key = task_to_keys[self.finetune]
 
         # load supernet config
-        self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id)
+        # self.global_config = get_supertransformer_config(self.bert_backbone, mixing=self.mixing, search_space_id=self.search_space_id)
         # set defaults like max_seq_length
-        self.global_config.max_seq_length = self.max_seq_length
-        self.global_config.alpha_divergence = 0
-        self.global_config.rewire = 0
-        self.global_config.layer_drop_prob = 0.0
-        self.global_config.hidden_dropout_prob = 0
+        # self.global_config.max_seq_length = self.max_seq_length
+        # self.global_config.alpha_divergence = 0
+        # self.global_config.rewire = 0
+        # self.global_config.layer_drop_prob = 0.0
+        # self.global_config.hidden_dropout_prob = 0
 
         # Load pretrained model and tokenizer
         self.tokenizer = AutoTokenizer.from_pretrained(self.bert_backbone, use_fast=True)
-        self.config = AutoConfig.from_pretrained(self.bert_backbone, num_labels=num_labels, finetuning_task=self.finetune)
+        self.global_config = AutoConfig.from_pretrained(self.supernet_ckpt_dir, num_labels=num_labels, finetuning_task=self.finetune)
         self.global_config.num_labels = num_labels
         self.model = custom_bert.BertForSequenceClassification.from_pretrained(self.supernet_ckpt_dir, config=self.global_config)
 
