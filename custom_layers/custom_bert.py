@@ -1413,23 +1413,38 @@ class BertLayer(nn.Module):
                     self.max_hidden_size = float(768) 
                     self.min_hidden_size = float(120)
                     self.register_buffer("active_arch_embed", torch.zeros(len(self.arch_embeds)))
-                elif hasattr(config, "expert_routing_type") and config.expert_routing_type in ["neuronrouting_jack_2L"]:
+                elif hasattr(config, "expert_routing_type") and config.expert_routing_type in ["neuronrouting_jack_2L", "neuronrouting_jack_drop_2L"]:
                     self.arch_embeds = config.sample_hidden_size
                     if hasattr(config, "hypernet_input_format") and config.hypernet_input_format == "onehot":
                         self.arch_embeds = standard2onehot(self.arch_embeds)
                     self.expert_routing_type = config.expert_routing_type
                     self.arch_expert = None
-                    self.arch_expert_fc1 = torch.nn.Sequential(
-                        torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
-                        torch.nn.ReLU(),
-                        torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
-                    )
-                    self.arch_expert_fc2 = torch.nn.Sequential(
-                        torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
-                        torch.nn.ReLU(),
-                        CustomLinear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
-                        # torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
-                    )
+                    if config.expert_routing_type == "neuronrouting_jack_2L":
+                        self.arch_expert_fc1 = torch.nn.Sequential(
+                            torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                            torch.nn.ReLU(),
+                            # torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
+                            CustomLinear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
+                        )
+                        self.arch_expert_fc2 = torch.nn.Sequential(
+                            torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                            torch.nn.ReLU(),
+                            CustomLinear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
+                            # torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
+                        )
+                    elif config.expert_routing_type == "neuronrouting_jack_drop_2L":
+                        self.arch_expert_fc1 = torch.nn.Sequential(
+                            torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                            torch.nn.ReLU(),
+                            torch.nn.Dropout(0.1),
+                            torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
+                        )
+                        self.arch_expert_fc2 = torch.nn.Sequential(
+                            torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                            torch.nn.ReLU(),
+                            torch.nn.Dropout(0.1),
+                            CustomLinear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
+                        )
                     self.max_hidden_size = float(768) 
                     self.min_hidden_size = float(120)
                     self.register_buffer("active_arch_embed", torch.zeros(len(self.arch_embeds)))
@@ -1526,9 +1541,9 @@ class BertLayer(nn.Module):
             self.active_expert_id = config.master_sample_expert_id
             self.last_expert_averaging_expert = config.last_expert_averaging_expert
             
-            if self.expert_routing_type == "neuronrouting_jack_2L":
+            if self.expert_routing_type in ["neuronrouting_jack_2L", "neuronrouting_jack_drop_2L"]:
                 self.arch_expert_fc2[-1].set_sample_config(config.hypernet_hidden_size, self.max_experts*config.sample_hidden_size)
-                
+                self.arch_expert_fc1[-1].set_sample_config(config.hypernet_hidden_size, self.max_experts*config.sample_intermediate_size)
 
     def get_active_subnet(self, config):
         sublayer = BertLayer(config)
@@ -1676,7 +1691,7 @@ class BertLayer(nn.Module):
                 layer_output = F.linear(intermediate_output, layer_output_weights, layer_output_bias)
                 layer_output = self.output.dropout(layer_output)
                 layer_output = self.output.LayerNorm(layer_output + attention_output)
-            elif self.expert_routing_type in ["neuronrouting_jack_2L"]:
+            elif self.expert_routing_type in ["neuronrouting_jack_2L", "neuronrouting_jack_drop_2L"]:
                 fc1_expert_out = self.arch_expert_fc1(self.active_arch_embed)
                 fc1_expert_out = fc1_expert_out.view(-1, self.max_experts)
                 fc1_expert_out = torch.nn.Softmax(dim=-1)(fc1_expert_out)

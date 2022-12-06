@@ -215,6 +215,9 @@ def calculate_params_from_config(
 
 # print(calculate_params(768, [12]*12, [3072]*12, 12, 30522, add_output_emb_layer=False, add_embs_dim=True, bottleneck=False, merged_bottleneck=False, depth_features=None))
 # print(calculate_params([120]*12, [12]*12, [3072]*12, 12, 30522, add_output_emb_layer=False, add_embs_dim=True, bottleneck=True, merged_bottleneck=True, depth_features=None))
+# print(calculate_params([120]*12, [12]*12, [1024]*12, 12, 30522, add_output_emb_layer=False, add_embs_dim=True, bottleneck=True, merged_bottleneck=True, depth_features=None))
+# print(calculate_params(120, [12]*12, [1024]*12, 12, 30522, add_output_emb_layer=False, add_embs_dim=True, bottleneck=False, merged_bottleneck=False, depth_features=None))
+# print(calculate_params([120]*12, [12]*12, [512]*12, 12, 30522, add_output_emb_layer=False, add_embs_dim=True, bottleneck=True, merged_bottleneck=True, depth_features=None))
 
 def check_path(path, error_message_template="Specified path - {} does not exist"):
     assert os.path.exists(path), error_message_template.format(path)

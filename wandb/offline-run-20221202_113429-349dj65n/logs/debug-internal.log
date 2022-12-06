@@ -1,0 +1,18 @@
+2022-12-02 11:34:31,944 INFO    MainThread:1548641 [internal.py:wandb_internal():90] W&B internal server running at pid: 1548641, started at: 2022-12-02 11:34:31.941486
+2022-12-02 11:34:31,969 INFO    WriterThread:1548641 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221202_113429-349dj65n/run-349dj65n.wandb
+2022-12-02 11:34:31,969 DEBUG   HandlerThread:1548641 [handler.py:handle_request():141] handle_request: run_start
+2022-12-02 11:34:31,997 DEBUG   HandlerThread:1548641 [meta.py:__init__():35] meta init
+2022-12-02 11:34:31,997 DEBUG   HandlerThread:1548641 [meta.py:__init__():49] meta init done
+2022-12-02 11:34:31,997 DEBUG   HandlerThread:1548641 [meta.py:probe():209] probe
+2022-12-02 11:34:32,007 DEBUG   HandlerThread:1548641 [meta.py:_setup_git():199] setup git
+2022-12-02 11:34:32,131 DEBUG   HandlerThread:1548641 [meta.py:_setup_git():206] setup git done
+2022-12-02 11:34:32,131 DEBUG   HandlerThread:1548641 [meta.py:_save_pip():53] save pip
+2022-12-02 11:34:32,135 DEBUG   HandlerThread:1548641 [meta.py:_save_pip():67] save pip done
+2022-12-02 11:34:32,135 DEBUG   HandlerThread:1548641 [meta.py:_save_conda():74] save conda
+2022-12-02 11:34:50,357 DEBUG   HandlerThread:1548641 [meta.py:_save_conda():84] save conda done
+2022-12-02 11:34:50,358 DEBUG   HandlerThread:1548641 [meta.py:probe():247] probe done
+2022-12-02 11:35:13,179 DEBUG   HandlerThread:1548641 [handler.py:handle_request():141] handle_request: shutdown
+2022-12-02 11:35:13,179 INFO    HandlerThread:1548641 [handler.py:finish():806] shutting down handler
+2022-12-02 11:35:13,974 INFO    SenderThread:1548641 [sender.py:finish():1111] shutting down sender
+2022-12-02 11:35:13,992 INFO    WriterThread:1548641 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221202_113429-349dj65n/run-349dj65n.wandb
+2022-12-02 11:35:14,019 INFO    MainThread:1548641 [internal.py:handle_exit():80] Internal process exited

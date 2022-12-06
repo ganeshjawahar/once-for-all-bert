@@ -219,6 +219,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/oct18_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("randmoe", "ganayu/effbert/1we400qi"), ("archmoe_pavg_1L", "ganayu/effbert/runs/numd2vy3"),  ("archmoe_sinexp", "ganayu/effbert/runs/2avuv91k")], standalone_runids=[], every_x_steps=100) # , standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")] ("archmoe_pavg_2L", "ganayu/effbert/runs/nwito9f8"),
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/oct21_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("archmoe_hid64", "ganayu/effbert/5ou0wyus"), ("fixedarchmoe_hid64", "ganayu/effbert/6d5mmpk7")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/nov15_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("arch experts", "ganayu/effbert/92ojue4d"), ("neuron experts", "ganayu/effbert/20fwsb8z") ], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
+# get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/dec6_supernet_archexperts_difflr", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("neuronexp5e-4", "ganayu/effbert/20fwsb8z"), ("neuronexp8e-4", "ganayu/effbert/1vr5wzx5") ], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
 
 def wandb_locate_proj():
     import json
@@ -682,7 +683,7 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 #  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov19_collapse_and_finetune_neuronmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
 # arch. moe
 # for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
-#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov19_collapse_and_finetune_archmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+# get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov19_collapse_and_finetune_archmoe_2L_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
 # autodistill - 50M
 # for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
 #  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov20_collapse_and_finetune_archmoe_50M_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
@@ -696,6 +697,21 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
 #  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov22_finetune_neuronmoe_50M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
 
+# larger lr 
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov26_finetune_neuronmoe_67M_%s_lr8e-4/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
+# neuronrouting_jack_drop_2L
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov26_finetune_neuronmoe_drop_67M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
+# nas-bert comparison 67M (neuron_moe)
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("nov21_finetune_standalone_neuronmoe_60M_%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+
+# comparison to autodistill - 50M
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov22_finetune_neuronmoe_50M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
 
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)

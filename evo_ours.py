@@ -48,6 +48,7 @@ class EvoSearch:
         self.expert_routing_type = args.expert_routing_type
         self.last_expert_averaging_expert = args.last_expert_averaging_expert
         self.fixed_arch = args.fixed_arch
+        self.include_smallest_arch_into_initial_popu = args.include_smallest_arch_into_initial_popu
         if self.trial_run == "yes":
             # self.population_size = 10
             self.parent_size = 5
@@ -604,20 +605,32 @@ class EvoSearch:
     def random_sample(self):
         print('creating initial population...')
         population = []
-        cand_archs = self.generate_sample_subtransformers()
-        self.seed_count += 1
-        for arch_config in cand_archs:
-            feat_config = self.arch2feature(arch_config)
-            assert(isinstance(feat_config, list))
-            assert(isinstance(arch_config, transformers.models.bert.configuration_bert.BertConfig))
-            if self.satisfy_constraint(arch_config) and self.notduplicategene(feat_config, population):
-                population.append({"arch_config": arch_config, "feat_config": feat_config})
+        is_done = False
+        tries = 0
+        while is_done == False:
+            cand_archs = self.generate_sample_subtransformers()
+            self.seed_count += 1
+            for arch_config in cand_archs:
+                feat_config = self.arch2feature(arch_config)
+                assert(isinstance(feat_config, list))
+                assert(isinstance(arch_config, transformers.models.bert.configuration_bert.BertConfig))
+                if self.satisfy_constraint(arch_config) and self.notduplicategene(feat_config, population):
+                    population.append({"arch_config": arch_config, "feat_config": feat_config})
+            # if len(population) >= self.population_size:
+            #    is_done = True
+            #    population = population[0:self.population_size]
+            # tries += 1
+            is_done = True
         print('initial population size = %d/%d'%(len(population), self.population_size))
         return population
     
     def generate_sample_subtransformers(self):
         if self.expert_search == "no":
-            return self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size)["random_subtransformers"]
+            random_archs = self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size)["random_subtransformers"]
+            if self.include_smallest_arch_into_initial_popu == "yes":
+                print(self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size, sample_one_arch="yes")["smallest_subtransformer"])
+                random_archs += [self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size, sample_one_arch="yes")["smallest_subtransformer"]]
+            return random_archs
         return self.random_expert_croppings()
     
     def random_expert_croppings(self):
@@ -651,7 +664,7 @@ class EvoSearch:
             elastic_keys = ["sample_hidden_size"]
         elif self.search_space_id == "hidden_layer_elastic":
             elastic_keys = ["sample_hidden_size", "sample_num_hidden_layers"]
-        elif self.search_space_id == "ffn_intermediate_ratio_elastic":
+        elif self.search_space_id in ["ffn_intermediate_ratio_elastic", "v1.2"]:
             elastic_keys = ["sample_hidden_size", "sample_intermediate_size"] # inter_ratio
         elif self.search_space_id == "v2":
             elastic_keys = ["sample_hidden_size", "sample_intermediate_size", "sample_num_hidden_layers"]
@@ -732,8 +745,11 @@ class EvoSearch:
         cur_params = calculate_params_from_config(arch_config, search_space_id=self.search_space_id)
         if cur_params < self.params_min or cur_params > self.params_max:
             return False
+        if self.search_space_id == "v1.2":
+            for hid_size, inter_size in zip(getattr(arch_config, "sample_hidden_size"), getattr(arch_config, "sample_intermediate_size")):
+                if inter_size < 2*hid_size:
+                    return False
         return True
-        
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -887,6 +903,13 @@ def parse_args():
         type=str,
         default="no",
         help=f"is last expert simply an average of rest of the experts?",
+    )
+
+    parser.add_argument(
+        "--include_smallest_arch_into_initial_popu",
+        type=str,
+        default="no",
+        help=f"should we include smallest arch. into initial population?",
     )
 
     parser.add_argument(

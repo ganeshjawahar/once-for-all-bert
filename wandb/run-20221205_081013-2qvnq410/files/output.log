@@ -1,0 +1,160 @@
+
+pre-initialized with BERT weights
+/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/transformers/configuration_utils.py:336: UserWarning: Passing `gradient_checkpointing` to a config initialization is deprecated and will be removed in v5 Transformers. Using `model.gradient_checkpointing_enable()` instead, or if you are using the `Trainer` API, pass `gradient_checkpointing=True` in your `TrainingArguments`.
+  warnings.warn(
+12/05/2022 08:10:34 - INFO - __main__ -   BERT-Bottleneck Initiliazed with BERT-base
+12/05/2022 08:10:34 - INFO - __main__ -   Other experts Initiliazed with BERT-base
+12/05/2022 08:10:35 - INFO - __main__ -   setting bottlenecks to identity and bias to zero
+12/05/2022 08:10:36 - INFO - __main__ -   =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+BertForMaskedLM                                              --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─CustomEmbedding: 3-1                             23,440,896
+│    │    └─CustomEmbedding: 3-2                             393,216
+│    │    └─CustomEmbedding: 3-3                             1,536
+│    │    └─CustomLayerNorm: 3-4                             1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  --
+│    │    │    └─BertLayer: 4-1                              13,987,072
+│    │    │    └─BertLayer: 4-2                              13,987,072
+│    │    │    └─BertLayer: 4-3                              13,987,072
+│    │    │    └─BertLayer: 4-4                              13,987,072
+│    │    │    └─BertLayer: 4-5                              13,987,072
+│    │    │    └─BertLayer: 4-6                              13,987,072
+│    │    │    └─BertLayer: 4-7                              13,987,072
+│    │    │    └─BertLayer: 4-8                              13,987,072
+│    │    │    └─BertLayer: 4-9                              13,987,072
+│    │    │    └─BertLayer: 4-10                             13,987,072
+│    │    │    └─BertLayer: 4-11                             13,987,072
+│    │    │    └─BertLayer: 4-12                             13,987,072
+├─BertOnlyMLMHead: 1-2                                       --
+│    └─BertLMPredictionHead: 2-3                             --
+│    │    └─BertPredictionHeadTransform: 3-7                 --
+│    │    │    └─CustomLinear: 4-13                          590,592
+│    │    │    └─CustomLayerNorm: 4-14                       1,536
+│    │    └─CustomLinear: 3-8                                23,471,418
+=====================================================================================
+Total params: 192,304,698
+Trainable params: 192,304,698
+Non-trainable params: 0
+=====================================================================================
+12/05/2022 08:10:36 - INFO - __main__ -   Skipping tokenization! as we have the tokenized dataset is already loaded from /fsx/ganayu/data/academic_bert_dataset/final_bert_preproc_128
+12/05/2022 08:10:36 - INFO - __main__ -   Sample 7471301 of the training set: {'input_ids': [101, 4448, 2003, 1037, 2883, 1011, 4351, 2173, 1006, 8561, 1007, 1999, 16222, 9626, 3600, 2221, 1010, 3448, 1012, 2004, 1997, 1996, 2230, 2883, 1010, 2049, 2313, 2001, 6564, 2475, 1012, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+12/05/2022 08:10:36 - INFO - __main__ -   Sample 1678443 of the training set: {'input_ids': [101, 1012, 2009, 2790, 2008, 2016, 2018, 1037, 3167, 8406, 1999, 2010, 3437, 1012, 1000, 2331, 2003, 8552, 1012, 2111, 2006, 3011, 7166, 2000, 2228, 2008, 2331, 2003, 2345, 1010, 2030, 2008, 1037, 2117, 2166, 3310, 2044, 2331, 1012, 1045, 2123, 1005, 1056, 2156, 2331, 1999, 2593, 1997, 2216, 3971, 1012, 2108, 2757, 2003, 2074, 2178, 2126, 2008, 2057, 4671, 2054, 2057, 2024, 2081, 1997, 1012, 1996, 7209, 2126, 1997, 6595, 4142, 1999, 1996, 3151, 3168, 2003, 2000, 3413, 2006, 2256, 9165, 2011, 2383, 2336, 1012, 2008, 1005, 1055, 2339, 2057, 3280, 1010, 4312, 1012, 1000, 1000, 2054, 2079, 2017, 2812, 1029, 1000, 1000, 1996, 3114, 2057, 3280, 2003, 2138, 2057, 3413, 2006, 2256, 9165, 1010, 2000, 2191, 2488, 4617, 1997, 9731, 2612, 1997, 29486, 2075, 2256, 102], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+12/05/2022 08:10:36 - INFO - __main__ -   Sample 18456905 of the training set: {'input_ids': [101, 2006, 2538, 2233, 2889, 1010, 1996, 8773, 2864, 2049, 10494, 3462, 1012, 2206, 2006, 2013, 2049, 2034, 3462, 1010, 2009, 2506, 2000, 2022, 2109, 2005, 3231, 7599, 2005, 2070, 2051, 1010, 14313, 2119, 1996, 16736, 1997, 1996, 4145, 1998, 1997, 1996, 2047, 24264, 2072, 1011, 6377, 3001, 1012, 2096, 1996, 10003, 7160, 2064, 4232, 9563, 1997, 1996, 2250, 15643, 2018, 2042, 6025, 1010, 5604, 2001, 4208, 2588, 1996, 2047, 20704, 3258, 6558, 5361, 1010, 2029, 2020, 2056, 2011, 24264, 2072, 2000, 2191, 2005, 1037, 4659, 2715, 4959, 2948, 1012, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}.
+12/05/2022 08:10:45 - INFO - __main__ -   Number of steps/updates per epoch: 72436
+12/05/2022 08:10:45 - INFO - __main__ -   ***** Running training *****
+12/05/2022 08:10:45 - INFO - __main__ -     Num examples = 37087091
+12/05/2022 08:10:45 - INFO - __main__ -     Num Epochs = 2
+12/05/2022 08:10:45 - INFO - __main__ -     Instantaneous batch size per device = 128
+12/05/2022 08:10:45 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 512
+12/05/2022 08:10:45 - INFO - __main__ -     Gradient Accumulation steps = 2
+12/05/2022 08:10:45 - INFO - __main__ -     Total optimization steps = 125000, 0 steps completed so far
+  0%|                                                                                                          | 0/125000 [00:00<?, ?it/s]12/05/2022 08:10:46 - INFO - __main__ -   =============================
+12/05/2022 08:10:46 - INFO - __main__ -   Starting training from epoch 0
+12/05/2022 08:10:46 - INFO - __main__ -   Training till epoch  2
+12/05/2022 08:10:46 - INFO - __main__ -   =============================
+BertConfig {
+  "_name_or_path": "bert-base-uncased",
+  "additional_random_softmaxing": false,
+  "alpha_divergence": 0,
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bottleneck_rank": 50,
+  "classifier_dropout": null,
+  "expert_routing_type": "neuronrouting_jack_2L",
+  "fixed_hypernet_input": "no",
+  "gradient_checkpointing": false,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0,
+  "hidden_size": 768,
+  "hypernet_hidden_size": 128,
+  "hypernet_input_format": "standard",
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "last_expert_averaging_expert": "no",
+  "layer_drop_prob": 0.0,
+  "layer_norm_eps": 1e-12,
+  "max_experts": 2,
+  "max_position_embeddings": 512,
+  "max_seq_length": 128,
+  "mixing": "bert-bottleneck",
+  "model_type": "bert",
+  "normalization_type": "layer_norm",
+  "num_attention_heads": 12,
+  "num_feedforward_networks": 1,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "random_layer_selection_probability": 0.1,
+  "rewire": 0,
+  "sample_expert_ids": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "sample_hidden_size": [
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120
+  ],
+  "sample_intermediate_size": [
+    240,
+    240,
+    240,
+    240,
+    240,
+    240,
+    240,
+    240,
+    240,
+    240,
+    240,
+    240
+  ],
+  "sample_num_attention_heads": [
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12,
+    12
+  ],
+  "sample_num_hidden_layers": 12,
+  "search_space_id": "v1.2",
+  "transformers_version": "4.11.0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "use_hypernet_w_low_rank": 0,
+  "vocab_size": 30522
+}
+  0%|                                                                                                          | 0/125000 [00:12<?, ?it/s]

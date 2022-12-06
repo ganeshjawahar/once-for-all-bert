@@ -184,6 +184,13 @@ class Sampler:
                         "sample_intermediate_size": [3072],
                         "sample_num_hidden_layers": [12],
                     }
+                elif self.search_space_id == "v1.2":
+                    choices = {
+                        "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
+                        "sample_num_attention_heads": [12],
+                        "sample_intermediate_size": [256, 512, 1024, 2048, 3072],
+                        "sample_num_hidden_layers": [12],
+                    }
             else:
                 choices = {
                     "sample_hidden_size": [120, 240, 360, 480, 540, 600, 768],
@@ -342,6 +349,10 @@ class Sampler:
                         for key in config_dict.keys():
                             config_dict[key] = config_dict[key][:-1]
                         continue
+                    if config_dict["sample_intermediate_size"][i] < 2*config.sample_hidden_size[i]:
+                        for key in config_dict.keys():
+                            config_dict[key] = config_dict[key][:-1]
+                        continue
                 else:
                     if (
                         config.sample_hidden_size
@@ -422,9 +433,12 @@ class Sampler:
 
             config_dict[choice] = [min(choices[choice])] * config_dict["sample_num_hidden_layers"] if not v1_small else [max(choices[choice])] * config_dict["sample_num_hidden_layers"] # todo: make this dynamic
         
-        if not v1_small and self.search_space_id == "v1.1":
-            config_dict["sample_intermediate_size"] = [4*config_dict["sample_hidden_size"][i] for i in range(config_dict["sample_num_hidden_layers"]) ]
-
+        if not v1_small:
+            if self.search_space_id == "v1.1":
+                config_dict["sample_intermediate_size"] = [4*config_dict["sample_hidden_size"][i] for i in range(config_dict["sample_num_hidden_layers"]) ]
+            elif self.search_space_id == "v1.2":
+                config_dict["sample_intermediate_size"] = [2*config_dict["sample_hidden_size"][i] for i in range(config_dict["sample_num_hidden_layers"]) ]
+                
         for key in config_dict.keys():
             setattr(config, key, config_dict[key])
             

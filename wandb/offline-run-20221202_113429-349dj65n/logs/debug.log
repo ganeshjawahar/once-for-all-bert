@@ -1,0 +1,46 @@
+2022-12-02 11:34:29,823 INFO    MainThread:1548532 [wandb_setup.py:_flush():76] Loading settings from /data/home/ganayu/.config/wandb/settings
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_setup.py:_flush():76] Loading settings from /fsx/ganayu/code/SuperShaper/wandb/settings
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train_mlm.py', 'program': 'train_mlm.py'}
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_init.py:_log_setup():428] Logging user logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221202_113429-349dj65n/logs/debug.log
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_init.py:_log_setup():429] Logging internal logs to /fsx/ganayu/code/SuperShaper/wandb/offline-run-20221202_113429-349dj65n/logs/debug-internal.log
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_init.py:init():462] calling init triggers
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_init.py:init():465] wandb.init called with sweep_config: {}
+config: {}
+2022-12-02 11:34:29,825 INFO    MainThread:1548532 [wandb_init.py:init():515] starting backend
+2022-12-02 11:34:29,826 INFO    MainThread:1548532 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-12-02 11:34:29,849 INFO    MainThread:1548532 [backend.py:ensure_launched():217] starting backend process...
+2022-12-02 11:34:29,858 INFO    MainThread:1548532 [backend.py:ensure_launched():222] started backend process with pid: 1548641
+2022-12-02 11:34:29,869 INFO    MainThread:1548532 [wandb_init.py:init():525] backend started and connected
+2022-12-02 11:34:29,891 INFO    MainThread:1548532 [wandb_init.py:init():596] updated telemetry
+2022-12-02 11:34:29,979 INFO    MainThread:1548532 [wandb_init.py:init():662] starting run threads in backend
+2022-12-02 11:34:34,983 INFO    MainThread:1548532 [wandb_run.py:_console_start():1898] atexit reg
+2022-12-02 11:34:34,986 INFO    MainThread:1548532 [wandb_run.py:_redirect():1771] redirect: SettingsConsole.REDIRECT
+2022-12-02 11:34:34,987 INFO    MainThread:1548532 [wandb_run.py:_redirect():1776] Redirecting console.
+2022-12-02 11:34:35,029 INFO    MainThread:1548532 [wandb_run.py:_redirect():1832] Redirects installed.
+2022-12-02 11:34:35,029 INFO    MainThread:1548532 [wandb_init.py:init():688] run started, returning control to user process
+2022-12-02 11:34:54,780 INFO    MainThread:1548532 [wandb_watch.py:watch():47] Watching
+2022-12-02 11:35:10,562 INFO    MainThread:1548532 [wandb_run.py:_atexit_cleanup():1867] got exitcode: 0
+2022-12-02 11:35:10,569 INFO    MainThread:1548532 [wandb_run.py:_restore():1839] restore
+2022-12-02 11:35:13,177 INFO    MainThread:1548532 [wandb_run.py:_restore():1839] restore
+2022-12-02 11:35:14,181 ERROR   MainThread:1548532 [wandb_run.py:_atexit_cleanup():1888] Problem finishing run
+Traceback (most recent call last):
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 1876, in _atexit_cleanup
+    self._on_finish()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 1977, in _on_finish
+    self._console_stop()  # TODO: there's a race here with jupyter console logging
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 1916, in _console_stop
+    self._restore()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 1845, in _restore
+    self._err_redir.uninstall()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/lib/redirect.py", line 740, in uninstall
+    self._emulator_write_thread.join(timeout=5)
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/threading.py", line 1015, in join
+    self._wait_for_tstate_lock(timeout=max(timeout, 0))
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/threading.py", line 1027, in _wait_for_tstate_lock
+    elif lock.acquire(block, timeout):
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/lib/redirect.py", line 642, in handler
+    self.handle_window_size_change()
+  File "/data/home/ganayu/miniconda/envs/basic/lib/python3.8/site-packages/wandb/sdk/lib/redirect.py", line 673, in handle_window_size_change
+    fcntl.ioctl(fd, termios.TIOCSWINSZ, win_size)
+OSError: [Errno 9] Bad file descriptor

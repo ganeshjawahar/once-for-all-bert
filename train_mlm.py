@@ -2014,7 +2014,6 @@ def main():
 
                     if args.sampling_type != "none":
                         super_config = super_configs[idx]
-                        
                         model.set_sample_config(super_config, drop_layers=True)
 
                         #for layer_idx, hidden_size in enumerate(
