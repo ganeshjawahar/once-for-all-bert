@@ -207,6 +207,23 @@ class Sampler:
                         "sample_intermediate_size": [2, 3, 4],
                         "sample_num_hidden_layers": [12],
                     }
+                if self.search_space_id == "v5.1":
+                    # homogeneous
+                    choices = {
+                        # "sample_hidden_size": [120, 160, 192, 224, 256, 288, 320, 352, 544, 576, 608, 640, 768],
+                        "sample_hidden_size": [i for i in range(120, 780, 12)],
+                        "sample_num_attention_heads": [6, 12],
+                        "sample_intermediate_size": [2, 2.5, 3, 3.5, 4],
+                        "sample_num_hidden_layers": [12],
+                    }
+                elif self.search_space_id == "v5.2":
+                    # homogeneous
+                    choices = {
+                        "sample_hidden_size": [i for i in range(120, 780, 12)],
+                        "sample_num_attention_heads": [6, 12],
+                        "sample_intermediate_size": [2, 2.5, 3, 3.5, 4],
+                        "sample_num_hidden_layers": [2, 4, 6, 8, 10, 12],
+                    }
 
         return choices
 
@@ -294,6 +311,19 @@ class Sampler:
 
         choices = self.get_choices()
         normalized_probs = self.calc_probs(choices)
+
+        if self.search_space_id.startswith("v5."):
+            config_dict = {}
+            config_dict["sample_num_hidden_layers"] = random.choice(choices["sample_num_hidden_layers"])
+            hidden_size = random.choice(choices["sample_hidden_size"])
+            config_dict["sample_hidden_size"] = hidden_size
+            num_attention_heads = random.choice(choices["sample_num_attention_heads"])
+            config_dict["sample_num_attention_heads"] = [num_attention_heads] * config_dict["sample_num_hidden_layers"]
+            intermediate_size = random.choice(choices["sample_intermediate_size"])
+            config_dict["sample_intermediate_size"] = [int(intermediate_size * hidden_size)] * config_dict["sample_num_hidden_layers"]
+            for key in config_dict.keys():
+                setattr(config, key, config_dict[key])
+            return config
 
         ### Figuring the number of hidden layers
         hidden_layers_list = choices["sample_num_hidden_layers"]
@@ -386,9 +416,19 @@ class Sampler:
         return config
 
     def get_small_config(self, v1_small=False):
-
+        # sample_num_hidden_layers, sample_hidden_size, sample_num_attention_heads, sample_intermediate_size
         config = copy.deepcopy(self.config)
         choices = self.get_choices()
+
+        if self.search_space_id.startswith("v5."):
+            config_dict = {}
+            config_dict["sample_num_hidden_layers"] = min(choices["sample_num_hidden_layers"])
+            config_dict["sample_hidden_size"] = min(choices["sample_hidden_size"]) #  [min(choices["sample_hidden_size"])] * config_dict["sample_num_hidden_layers"]
+            config_dict["sample_num_attention_heads"] = [min(choices["sample_num_attention_heads"])] * config_dict["sample_num_hidden_layers"]
+            config_dict["sample_intermediate_size"] = [int(min(choices["sample_intermediate_size"]) *  min(choices["sample_hidden_size"]))] * config_dict["sample_num_hidden_layers"]
+            for key in config_dict.keys():
+                setattr(config, key, config_dict[key])
+            return config
 
         config_dict = {}
         config_dict["sample_num_hidden_layers"] = min(choices["sample_num_hidden_layers"]) if not v1_small else 12 # todo: make this dynamic
@@ -444,12 +484,31 @@ class Sampler:
             
         return config
 
-    def sample_subtransformer(self, randomize=True, rand_seed=0, pop_size=1, sample_one_arch="none", v1_small=False):
+    def sample_subtransformer(self, randomize=True, rand_seed=0, pop_size=1, sample_one_arch="none", v1_small=False, enumerate_all=False):
         # we store the previous subtransformer configs so that we can do random
         # walks (ie change some parameters on previous configs) instead of uniform
         # sampling
         if randomize:
             random.seed(rand_seed)
+
+        if enumerate_all == True:
+            configs = {}
+            choices = self.get_choices()
+            all_models = []
+            # "sample_hidden_size": [i for i in range(120, 780, 12)],
+            # "sample_num_attention_heads": [6, 12],
+            # "sample_intermediate_size": [2, 2.5, 3, 3.5, 4],
+            # "sample_num_hidden_layers": [12],
+            num_hidden_layers = 12
+            for hidden_size in choices["sample_hidden_size"]:
+                for num_attention_heads in choices["sample_num_attention_heads"]:
+                    for intermediate_size in choices["sample_intermediate_size"]:
+                        config = copy.deepcopy(self.config)
+                        for key, value in [("sample_num_hidden_layers", num_hidden_layers), ("sample_hidden_size", hidden_size), ("sample_num_attention_heads", [num_attention_heads] * num_hidden_layers), ("sample_intermediate_size", [int(intermediate_size * hidden_size)] * num_hidden_layers)]:
+                            setattr(config, key, value)
+                        all_models.append(config)
+            configs["all_models"] = all_models
+            return configs
 
         smallest_config = None
 
@@ -509,7 +568,7 @@ class Sampler:
                 moe_biggest_config_2 = copy.deepcopy(self.config)
                 setattr(moe_biggest_config_2, "sample_expert_ids", [random.randint(0, getattr(moe_biggest_config_2, "max_experts")-1) for i in range(getattr(moe_biggest_config_2, "num_hidden_layers"))] if self.collapsed_training == "no" else [0]*getattr(moe_biggest_config_2, "num_hidden_layers"))
             output_configs["moe_biggest_config_2"] = moe_smallest_config
-                
+
         return output_configs
 
     def calc_probs(self, choices_dictionary):

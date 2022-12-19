@@ -1436,13 +1436,13 @@ class BertLayer(nn.Module):
                         self.arch_expert_fc1 = torch.nn.Sequential(
                             torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
                             torch.nn.ReLU(),
-                            torch.nn.Dropout(0.1),
+                            # torch.nn.Dropout(0.1),
                             torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
                         )
                         self.arch_expert_fc2 = torch.nn.Sequential(
                             torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
                             torch.nn.ReLU(),
-                            torch.nn.Dropout(0.1),
+                            # torch.nn.Dropout(0.1),
                             CustomLinear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
                         )
                     self.max_hidden_size = float(768) 
@@ -1453,6 +1453,43 @@ class BertLayer(nn.Module):
                 self.output_bottleneck = HyperNetDynamicLinear(config.hidden_size, config.hidden_size, config.bottleneck_rank, config.sample_hidden_size, config.hypernet_hidden_size)
                 self.max_hidden_size = float(768)  # max(config.sample_hidden_size))
                 self.min_hidden_size = float(120)  # min(config.sample_hidden_size))
+        elif config.search_space_id.startswith("v5."):
+            self.arch_embeds = [float(config.hidden_size)/768.0, float(config.num_attention_heads)/12.0, float(config.intermediate_size)/2560.0]
+            if config.search_space_id == "v5.2":
+                self.arch_embeds.append(float(config.num_hidden_layers)/12.0)
+            if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_2L"]:
+                self.arch_expert = None
+                self.expert_routing_type = config.expert_routing_type
+                if config.expert_routing_type == "archrouting_jack_2L":
+                    self.arch_expert = torch.nn.Sequential(
+                        torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                        torch.nn.ReLU(),
+                        torch.nn.Linear(config.hypernet_hidden_size, config.max_experts),
+                        torch.nn.Softmax(dim=-1)
+                    )
+                # todo
+                self.max_hidden_size = float(768) 
+                self.min_hidden_size = float(120)
+                self.register_buffer("active_arch_embed", torch.zeros(len(self.arch_embeds)))
+            elif hasattr(config, "expert_routing_type") and config.expert_routing_type in ["neuronrouting_jack_2L", "neuronrouting_jack_drop_2L"]:
+                self.expert_routing_type = config.expert_routing_type
+                self.arch_expert = None
+                if config.expert_routing_type == "neuronrouting_jack_2L":
+                    self.arch_expert_fc1 = torch.nn.Sequential(
+                        torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                        torch.nn.ReLU(),
+                        # torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
+                        CustomLinear(config.hypernet_hidden_size, config.max_experts*config.intermediate_size)
+                    )
+                    self.arch_expert_fc2 = torch.nn.Sequential(
+                        torch.nn.Linear(len(self.arch_embeds), config.hypernet_hidden_size),
+                        torch.nn.ReLU(),
+                        CustomLinear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
+                        # torch.nn.Linear(config.hypernet_hidden_size, config.max_experts*config.hidden_size)
+                    )
+                self.max_hidden_size = float(768) 
+                self.min_hidden_size = float(120)
+                self.register_buffer("active_arch_embed", torch.zeros(len(self.arch_embeds)))
 
         self.attention = BertAttention(config)
         self.is_decoder = config.is_decoder
@@ -1508,6 +1545,13 @@ class BertLayer(nn.Module):
                     config.sample_hidden_size, config.hidden_size, min_max_normalization(config.master_sample_hidden_size, self.min_hidden_size, self.max_hidden_size)
                 )
             # todo: set arch_encoding
+        elif hasattr(self, "active_arch_embed"):
+            self.active_arch_embed[0] = config.sample_hidden_size / 768.0
+            self.active_arch_embed[1] = config.sample_num_attention_heads / 12.0
+            self.active_arch_embed[2] = config.sample_intermediate_size / 3072.0
+            if config.search_space_id == "v5.2":
+                self.active_arch_embed[3] = config.num_hidden_layers / 12.0
+
         self.attention.set_sample_config(config)
         if hasattr(self, "crossattention"):
             self.crossattention.set_sample_config(config)

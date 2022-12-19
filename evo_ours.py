@@ -55,6 +55,7 @@ class EvoSearch:
             self.mutation_size = 5
             self.crossover_size = 5
             self.evo_iter = 3
+        self.enumerate_all = args.enumerate_all
             
         # model hyperparams
         self.mixing = args.mixing
@@ -439,6 +440,30 @@ class EvoSearch:
     def run_evo_search(self):
         if self.accelerator.is_main_process:
             start_time = time.time()
+        if self.enumerate_all == "yes":
+            all_models = self.sampler.sample_subtransformer(randomize=True, rand_seed=self.seed_count, pop_size=self.population_size, enumerate_all=True)["all_models"]
+            popu = []
+            for arch_config in all_models:
+                feat_config = [arch_config.sample_hidden_size, arch_config.sample_num_attention_heads[0], arch_config.sample_intermediate_size[0]]
+                if self.satisfy_constraint(arch_config):
+                    popu.append({"arch_config": arch_config, "feat_config": feat_config})
+            print("%d out of %d architectures meet the contraints"%(len(popu), len(all_models)))
+            popu_scores = self.get_scores(popu)
+            parents_popu = self.identify_parents(popu_scores)
+            best_config = parents_popu[0]
+            it = 0
+            print("iteration %d, best gene: "%(it), best_config["feat_config"])
+            print("iteration %d, best gene: "%(it), best_config["arch_config"])
+            print("iteration %d, best gene: model size = %d, fitness score (%s) = %.2f"%(it, calculate_params_from_config(best_config["arch_config"], search_space_id=self.search_space_id), self.fitness_metric, best_config["metrics"][self.fitness_metric]))
+
+            # write the best config and pareto front at each iteration
+            self.write_to_workbook(it, best_config, [parents_popu])
+
+            if self.accelerator.is_main_process:
+                print("Evolutonary search time: %s seconds"%(time.time()-start_time))
+                
+            return
+            
         popu = self.random_sample()
         all_iter_parents = []
         best_config = None
@@ -783,7 +808,7 @@ def parse_args():
     )
     parser.add_argument(
         "--mutation_prob",
-        type=str,
+        type=float,
         default=0.3,
         help="Mutation Probability",
     )
@@ -805,6 +830,13 @@ def parse_args():
         default="no",
         help="trial run for debugging",
     )
+    parser.add_argument(
+        "--enumerate_all",
+        type=str,
+        default="no",
+        help="enumerate all architectures",
+    )
+
 
     # model
     parser.add_argument(

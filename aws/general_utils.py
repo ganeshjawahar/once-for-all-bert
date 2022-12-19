@@ -713,6 +713,22 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
 #  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/nov22_finetune_neuronmoe_50M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
 
+# v1.2 - supernet training -- ffn elastic
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec6_finetune_neuronmoe_27M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
+# neuron jack drop 2L - dropout layer removed
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec7_finetune_neuronmoe_drop_corrected_67M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
+# neuron jack 2L - autodistil - 27M
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec8_finetune_neuronmoe_corrected_27M_%s/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
+# neuron jack 2L - autodistil - 50M
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec8_finetune_neuronmoe_50M_%s_lr8e-4/%s"%(exp_name, exp_name), new_supernet_finetune=True)
+
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)
 
