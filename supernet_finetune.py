@@ -515,7 +515,7 @@ def main():
             # config.hidden_dropout_prob = 0.1
 
             if hasattr(config, "expert_routing_type") and config.expert_routing_type in ["archrouting_jack_1L", "archrouting_jack_2L", "neuronrouting_jack_2L"]:
-                for layer_id in range(config.num_hidden_layers):
+                for layer_id in range(subnet_config.sample_num_hidden_layers):
                     for exp_id in range(len(model.bert.encoder.layer[layer_id].other_output_experts)):
                         # set layernorm weight to False
                         model.bert.encoder.layer[layer_id].other_output_experts[exp_id].LayerNorm.weight.requires_grad = False

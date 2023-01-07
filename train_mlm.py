@@ -818,6 +818,13 @@ def parse_args():
         default="standard",
         help=f"input format: standard or onehot",
     )
+    
+    parser.add_argument(
+        "--collapse_experts_before_ft",
+        type=int,
+        default=0,
+        help=f"collapse experts before additional training",
+    )
 
     # parser.add_argument(
     #     "--max_grad_norm", default=1.0, type=float, help="Max gradient norm."
@@ -1120,7 +1127,8 @@ def main():
             expert_routing_type=args.expert_routing_type,
             last_expert_averaging_expert=args.last_expert_averaging_expert,
             fixed_hypernet_input = args.fixed_hypernet_input,
-            hypernet_input_format = args.hypernet_input_format
+            hypernet_input_format = args.hypernet_input_format,
+            search_space_id=args.search_space_id
         )
 
     if args.tokenizer_name:
@@ -1230,6 +1238,8 @@ def main():
             print("Subnet info: gene_names=", gene_names)
             print("Subnet info: elastickey2ranges=", elastickey2ranges)
             print(subnet_config)
+            if best_config_sheet.cell(6, 1).value.startswith("v5.1"):
+                elastic_keys += ["sample_hidden_size", "sample_intermediate_size", "sample_num_attention_heads", "sample_num_hidden_layers"]
             for key in elastic_keys:
                 setattr(global_config, key, getattr(subnet_config, key))
             for key in ["expert_routing_type", "fixed_hypernet_input", "hypernet_hidden_size", "hypernet_input_format"]:
@@ -1315,6 +1325,61 @@ def main():
                             first_expert = first_expert / float(global_config.max_experts)
                             model.state_dict()[main_expert.replace("<layer_id>", str(layer_id))].data.copy_(first_expert)
                     del first_expert
+            elif args.collapse_experts_before_ft == 1:
+                logger.info("Collapsed experts before additional training...")
+                new_global_config = deepcopy(global_config)
+                if hasattr(new_global_config, "max_experts"):
+                    delattr(new_global_config, "max_experts")
+                    delattr(new_global_config, "expert_routing_type")
+                
+                model.set_sample_config(global_config)
+                actual_model = custom_bert.BertForMaskedLM.from_pretrained(args.model_name_or_path, config=new_global_config) 
+                actual_model.set_sample_config(new_global_config)
+                print(f"Number of parameters in new custom config is {millify(calculate_params_from_config(new_global_config, scaling_laws=False, add_output_emb_layer=False))}")
+
+                active_arch_embed = model.bert.encoder.layer[0].active_arch_embed
+                print("active_arch_embed", active_arch_embed)
+                for layer_id in range(global_config.sample_num_hidden_layers):
+                    if global_config.expert_routing_type == "archrouting_jack_1L" or global_config.expert_routing_type == "archrouting_jack_2L":
+                        route_prob = model.bert.encoder.layer[layer_id].arch_expert(active_arch_embed)
+                        route_prob_max, routes = torch.max(route_prob, dim=-1)
+                        intermediate_weights = route_prob[0] * model.bert.encoder.layer[layer_id].intermediate.dense.samples["weight"]
+                        intermediate_bias = route_prob[0] * model.bert.encoder.layer[layer_id].intermediate.dense.samples["bias"]
+                        layer_output_weights = route_prob[0] * model.bert.encoder.layer[layer_id].output.dense.samples["weight"]
+                        layer_output_bias = route_prob[0] * model.bert.encoder.layer[layer_id].output.dense.samples["bias"]
+                        for expert_id in range(global_config.max_experts-1):
+                            intermediate_weights = intermediate_weights + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["weight"])
+                            intermediate_bias = intermediate_bias + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["bias"])
+                            layer_output_weights = layer_output_weights + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["weight"])
+                            layer_output_bias = layer_output_bias + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["bias"])
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.weight".replace("<layer_id>", str(layer_id))].data[0:intermediate_weights.size(0), 0:intermediate_weights.size(1)] = intermediate_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.bias".replace("<layer_id>", str(layer_id))].data[0:intermediate_bias.size(0)] = intermediate_bias
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.weight".replace("<layer_id>", str(layer_id))].data.data[0:layer_output_weights.size(0), 0:layer_output_weights.size(1)] = layer_output_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.bias".replace("<layer_id>", str(layer_id))].data[0:layer_output_bias.size(0)] = layer_output_bias
+                    elif global_config.expert_routing_type in ["neuronrouting_jack_2L"]:
+                        fc1_expert_out = model.bert.encoder.layer[layer_id].arch_expert_fc1(active_arch_embed)
+                        fc1_expert_out = fc1_expert_out.view(-1, global_config.max_experts)
+                        fc1_expert_out = torch.nn.Softmax(dim=-1)(fc1_expert_out)
+                        fc2_expert_out = model.bert.encoder.layer[layer_id].arch_expert_fc2(active_arch_embed)
+                        fc2_expert_out = fc2_expert_out.view(-1, global_config.max_experts)
+                        fc2_expert_out = torch.nn.Softmax(dim=-1)(fc2_expert_out)
+                        intermediate_weights = model.bert.encoder.layer[layer_id].intermediate.dense.samples["weight"] * fc1_expert_out[:, 0].view(-1,1)
+                        intermediate_bias = model.bert.encoder.layer[layer_id].intermediate.dense.samples["bias"] * fc1_expert_out[:, 0]
+                        layer_output_weights = model.bert.encoder.layer[layer_id].output.dense.samples["weight"] * fc2_expert_out[:, 0].view(-1,1)
+                        layer_output_bias = model.bert.encoder.layer[layer_id].output.dense.samples["bias"] * fc2_expert_out[:, 0]
+                        for expert_id in range(global_config.max_experts-1):
+                            intermediate_weights = intermediate_weights + (model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["weight"] * fc1_expert_out[:, expert_id+1].view(-1,1))
+                            intermediate_bias = intermediate_bias + (model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["bias"] * fc1_expert_out[:, expert_id+1] )
+                            layer_output_weights = layer_output_weights + (model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["weight"] * fc2_expert_out[:, expert_id+1].view(-1,1))
+                            layer_output_bias = layer_output_bias + (model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["bias"] * fc2_expert_out[:, expert_id+1] )
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.weight".replace("<layer_id>", str(layer_id))].data[0:intermediate_weights.size(0), 0:intermediate_weights.size(1)] = intermediate_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.bias".replace("<layer_id>", str(layer_id))].data[0:intermediate_bias.size(0)] = intermediate_bias
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.weight".replace("<layer_id>", str(layer_id))].data.data[0:layer_output_weights.size(0), 0:layer_output_weights.size(1)] = layer_output_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.bias".replace("<layer_id>", str(layer_id))].data[0:layer_output_bias.size(0)] = layer_output_bias
+                del model
+                model = actual_model
+                global_config = new_global_config
+
         else:
             print('initialized with random BERT weights')
             model = custom_bert.BertForMaskedLM(global_config)
@@ -1340,6 +1405,61 @@ def main():
         if args.initialize_pretrained_weights == "yes":
             print('pre-initialized with BERT weights')
             model = custom_bert.BertForMaskedLM.from_pretrained(args.model_name_or_path, config=global_config)
+            
+            if args.collapse_experts_before_ft == 1:
+                logger.info("Collapsed experts before additional training...")
+                new_global_config = deepcopy(global_config)
+                if hasattr(new_global_config, "max_experts"):
+                    delattr(new_global_config, "max_experts")
+                    delattr(new_global_config, "expert_routing_type")
+
+                model.set_sample_config(global_config)
+                actual_model = custom_bert.BertForMaskedLM.from_pretrained(args.model_name_or_path, config=new_global_config) 
+                actual_model.set_sample_config(new_global_config)
+                print(f"Number of parameters in new custom config is {millify(calculate_params_from_config(new_global_config, scaling_laws=False, add_output_emb_layer=False))}")
+
+                active_arch_embed = model.bert.encoder.layer[0].active_arch_embed
+                print("active_arch_embed", active_arch_embed)
+                for layer_id in range(global_config.sample_num_hidden_layers):
+                    if global_config.expert_routing_type == "archrouting_jack_1L" or global_config.expert_routing_type == "archrouting_jack_2L":
+                        route_prob = model.bert.encoder.layer[layer_id].arch_expert(active_arch_embed)
+                        route_prob_max, routes = torch.max(route_prob, dim=-1)
+                        intermediate_weights = route_prob[0] * model.bert.encoder.layer[layer_id].intermediate.dense.samples["weight"]
+                        intermediate_bias = route_prob[0] * model.bert.encoder.layer[layer_id].intermediate.dense.samples["bias"]
+                        layer_output_weights = route_prob[0] * model.bert.encoder.layer[layer_id].output.dense.samples["weight"]
+                        layer_output_bias = route_prob[0] * model.bert.encoder.layer[layer_id].output.dense.samples["bias"]
+                        for expert_id in range(global_config.max_experts-1):
+                            intermediate_weights = intermediate_weights + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["weight"])
+                            intermediate_bias = intermediate_bias + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["bias"])
+                            layer_output_weights = layer_output_weights + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["weight"])
+                            layer_output_bias = layer_output_bias + (route_prob[expert_id+1] * model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["bias"])
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.weight".replace("<layer_id>", str(layer_id))].data[0:intermediate_weights.size(0), 0:intermediate_weights.size(1)] = intermediate_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.bias".replace("<layer_id>", str(layer_id))].data[0:intermediate_bias.size(0)] = intermediate_bias
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.weight".replace("<layer_id>", str(layer_id))].data.data[0:layer_output_weights.size(0), 0:layer_output_weights.size(1)] = layer_output_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.bias".replace("<layer_id>", str(layer_id))].data[0:layer_output_bias.size(0)] = layer_output_bias
+                    elif global_config.expert_routing_type in ["neuronrouting_jack_2L"]:
+                        fc1_expert_out = model.bert.encoder.layer[layer_id].arch_expert_fc1(active_arch_embed)
+                        fc1_expert_out = fc1_expert_out.view(-1, global_config.max_experts)
+                        fc1_expert_out = torch.nn.Softmax(dim=-1)(fc1_expert_out)
+                        fc2_expert_out = model.bert.encoder.layer[layer_id].arch_expert_fc2(active_arch_embed)
+                        fc2_expert_out = fc2_expert_out.view(-1, global_config.max_experts)
+                        fc2_expert_out = torch.nn.Softmax(dim=-1)(fc2_expert_out)
+                        intermediate_weights = model.bert.encoder.layer[layer_id].intermediate.dense.samples["weight"] * fc1_expert_out[:, 0].view(-1,1)
+                        intermediate_bias = model.bert.encoder.layer[layer_id].intermediate.dense.samples["bias"] * fc1_expert_out[:, 0]
+                        layer_output_weights = model.bert.encoder.layer[layer_id].output.dense.samples["weight"] * fc2_expert_out[:, 0].view(-1,1)
+                        layer_output_bias = model.bert.encoder.layer[layer_id].output.dense.samples["bias"] * fc2_expert_out[:, 0]
+                        for expert_id in range(global_config.max_experts-1):
+                            intermediate_weights = intermediate_weights + (model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["weight"] * fc1_expert_out[:, expert_id+1].view(-1,1))
+                            intermediate_bias = intermediate_bias + (model.bert.encoder.layer[layer_id].other_intermediate_experts[expert_id].dense.samples["bias"] * fc1_expert_out[:, expert_id+1] )
+                            layer_output_weights = layer_output_weights + (model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["weight"] * fc2_expert_out[:, expert_id+1].view(-1,1))
+                            layer_output_bias = layer_output_bias + (model.bert.encoder.layer[layer_id].other_output_experts[expert_id].dense.samples["bias"] * fc2_expert_out[:, expert_id+1] )
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.weight".replace("<layer_id>", str(layer_id))].data[0:intermediate_weights.size(0), 0:intermediate_weights.size(1)] = intermediate_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.intermediate.dense.bias".replace("<layer_id>", str(layer_id))].data[0:intermediate_bias.size(0)] = intermediate_bias
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.weight".replace("<layer_id>", str(layer_id))].data.data[0:layer_output_weights.size(0), 0:layer_output_weights.size(1)] = layer_output_weights
+                        actual_model.state_dict()["bert.encoder.layer.<layer_id>.output.dense.bias".replace("<layer_id>", str(layer_id))].data[0:layer_output_bias.size(0)] = layer_output_bias
+                del model
+                model = actual_model
+                global_config = new_global_config
         else:
             print('initialized with random BERT weights')
             print(global_config)

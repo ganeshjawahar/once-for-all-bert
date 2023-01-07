@@ -1830,8 +1830,8 @@ class BertEncoder(nn.Module):
             layers_to_drop = dropout_layers(
                 config.sample_num_hidden_layers, config.layer_drop_prob
             )
-
-        for i, (drop, layer) in enumerate(zip(layers_to_drop, self.layer)):
+        # for i, (drop, layer) in enumerate(zip(layers_to_drop, self.layer)): # to check
+        for i, layer in enumerate(self.layer):
             layer_config = deepcopy(config)
             layer_config.master_sample_hidden_size = layer_config.sample_hidden_size
             if hasattr(config, "sample_expert_ids"):
@@ -1846,11 +1846,11 @@ class BertEncoder(nn.Module):
                     # for bert-bottleneck, use diff hidden size for each layer
                     layer_config.sample_hidden_size = sample_hidden_size[i]
 
-                if drop and drop_layers:
-                    layer.set_sample_config(layer_config, is_identity_layer=True)
-                    self.layer_drop_counts[i] += 1
-                else:
-                    layer.set_sample_config(layer_config, is_identity_layer=False)
+                # if drop and drop_layers:
+                #     layer.set_sample_config(layer_config, is_identity_layer=True)
+                #    self.layer_drop_counts[i] += 1
+                #else:
+                layer.set_sample_config(layer_config, is_identity_layer=False)
             else:
                 layer.set_sample_config(layer_config, is_identity_layer=True)
 

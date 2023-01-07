@@ -219,10 +219,10 @@ class Sampler:
                 elif self.search_space_id == "v5.2":
                     # homogeneous
                     choices = {
-                        "sample_hidden_size": [i for i in range(120, 780, 12)],
+                        "sample_hidden_size": [i for i in range(120, 780, 24)],
                         "sample_num_attention_heads": [6, 12],
                         "sample_intermediate_size": [2, 2.5, 3, 3.5, 4],
-                        "sample_num_hidden_layers": [2, 4, 6, 8, 10, 12],
+                        "sample_num_hidden_layers": [6, 9, 12],
                     }
 
         return choices
@@ -312,7 +312,8 @@ class Sampler:
         choices = self.get_choices()
         normalized_probs = self.calc_probs(choices)
 
-        if self.search_space_id.startswith("v5."):
+        
+        if hasattr(self, "search_space_id") and self.search_space_id is not None and self.search_space_id.startswith("v5."):
             config_dict = {}
             config_dict["sample_num_hidden_layers"] = random.choice(choices["sample_num_hidden_layers"])
             hidden_size = random.choice(choices["sample_hidden_size"])
@@ -420,7 +421,8 @@ class Sampler:
         config = copy.deepcopy(self.config)
         choices = self.get_choices()
 
-        if self.search_space_id.startswith("v5."):
+        
+        if hasattr(self, "search_space_id") and self.search_space_id is not None and self.search_space_id.startswith("v5."):
             config_dict = {}
             config_dict["sample_num_hidden_layers"] = min(choices["sample_num_hidden_layers"])
             config_dict["sample_hidden_size"] = min(choices["sample_hidden_size"]) #  [min(choices["sample_hidden_size"])] * config_dict["sample_num_hidden_layers"]
@@ -499,14 +501,14 @@ class Sampler:
             # "sample_num_attention_heads": [6, 12],
             # "sample_intermediate_size": [2, 2.5, 3, 3.5, 4],
             # "sample_num_hidden_layers": [12],
-            num_hidden_layers = 12
-            for hidden_size in choices["sample_hidden_size"]:
-                for num_attention_heads in choices["sample_num_attention_heads"]:
-                    for intermediate_size in choices["sample_intermediate_size"]:
-                        config = copy.deepcopy(self.config)
-                        for key, value in [("sample_num_hidden_layers", num_hidden_layers), ("sample_hidden_size", hidden_size), ("sample_num_attention_heads", [num_attention_heads] * num_hidden_layers), ("sample_intermediate_size", [int(intermediate_size * hidden_size)] * num_hidden_layers)]:
-                            setattr(config, key, value)
-                        all_models.append(config)
+            for num_hidden_layers in choices["sample_num_hidden_layers"]:
+                for hidden_size in choices["sample_hidden_size"]:
+                    for num_attention_heads in choices["sample_num_attention_heads"]:
+                        for intermediate_size in choices["sample_intermediate_size"]:
+                            config = copy.deepcopy(self.config)
+                            for key, value in [("sample_num_hidden_layers", num_hidden_layers), ("sample_hidden_size", hidden_size), ("sample_num_attention_heads", [num_attention_heads] * num_hidden_layers), ("sample_intermediate_size", [int(intermediate_size * hidden_size)] * num_hidden_layers)]:
+                                setattr(config, key, value)
+                            all_models.append(config)
             configs["all_models"] = all_models
             return configs
 

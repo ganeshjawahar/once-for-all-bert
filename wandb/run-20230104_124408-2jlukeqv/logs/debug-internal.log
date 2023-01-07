@@ -1,0 +1,153 @@
+2023-01-04 12:44:10,918 INFO    MainThread:3347917 [internal.py:wandb_internal():90] W&B internal server running at pid: 3347917, started at: 2023-01-04 12:44:10.915969
+2023-01-04 12:44:10,952 DEBUG   SenderThread:3347917 [sender.py:send():235] send: header
+2023-01-04 12:44:10,952 INFO    WriterThread:3347917 [datastore.py:open_for_write():75] open: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/run-2jlukeqv.wandb
+2023-01-04 12:44:10,953 DEBUG   SenderThread:3347917 [sender.py:send():235] send: run
+2023-01-04 12:44:11,087 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: check_version
+2023-01-04 12:44:11,136 INFO    SenderThread:3347917 [dir_watcher.py:__init__():205] watching files in: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files
+2023-01-04 12:44:11,136 INFO    SenderThread:3347917 [sender.py:_start_run_threads():812] run started: 2jlukeqv with start time 1672836248
+2023-01-04 12:44:11,136 DEBUG   SenderThread:3347917 [sender.py:send():235] send: summary
+2023-01-04 12:44:11,140 INFO    SenderThread:3347917 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2023-01-04 12:44:11,141 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: check_version
+2023-01-04 12:44:11,192 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: run_start
+2023-01-04 12:44:11,212 DEBUG   HandlerThread:3347917 [meta.py:__init__():35] meta init
+2023-01-04 12:44:11,212 DEBUG   HandlerThread:3347917 [meta.py:__init__():49] meta init done
+2023-01-04 12:44:11,212 DEBUG   HandlerThread:3347917 [meta.py:probe():209] probe
+2023-01-04 12:44:11,229 DEBUG   HandlerThread:3347917 [meta.py:_setup_git():199] setup git
+2023-01-04 12:44:11,358 DEBUG   HandlerThread:3347917 [meta.py:_setup_git():206] setup git done
+2023-01-04 12:44:11,358 DEBUG   HandlerThread:3347917 [meta.py:_save_pip():53] save pip
+2023-01-04 12:44:11,361 DEBUG   HandlerThread:3347917 [meta.py:_save_pip():67] save pip done
+2023-01-04 12:44:11,362 DEBUG   HandlerThread:3347917 [meta.py:_save_conda():74] save conda
+2023-01-04 12:44:12,141 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/wandb-summary.json
+2023-01-04 12:44:12,141 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/conda-environment.yaml
+2023-01-04 12:44:12,141 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/requirements.txt
+2023-01-04 12:44:17,152 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/output.log
+2023-01-04 12:44:19,156 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/output.log
+2023-01-04 12:44:23,168 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/conda-environment.yaml
+2023-01-04 12:44:23,195 DEBUG   HandlerThread:3347917 [meta.py:_save_conda():84] save conda done
+2023-01-04 12:44:23,196 DEBUG   HandlerThread:3347917 [meta.py:probe():247] probe done
+2023-01-04 12:44:23,811 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: stop_status
+2023-01-04 12:44:23,812 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: stop_status
+2023-01-04 12:44:23,870 DEBUG   SenderThread:3347917 [sender.py:send():235] send: telemetry
+2023-01-04 12:44:23,870 DEBUG   SenderThread:3347917 [sender.py:send():235] send: files
+2023-01-04 12:44:23,871 INFO    SenderThread:3347917 [sender.py:_save_file():949] saving file wandb-metadata.json with policy now
+2023-01-04 12:44:23,873 DEBUG   SenderThread:3347917 [sender.py:send():235] send: telemetry
+2023-01-04 12:44:24,162 INFO    Thread-11 :3347917 [upload_job.py:push():132] Uploaded file /tmp/tmpnwznm22wwandb/2rh7drzl-wandb-metadata.json
+2023-01-04 12:44:24,172 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_created():256] file/dir created: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/wandb-metadata.json
+2023-01-04 12:44:25,174 INFO    Thread-7  :3347917 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/output.log
+2023-01-04 12:44:26,323 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:26,323 DEBUG   SenderThread:3347917 [sender.py:send():235] send: exit
+2023-01-04 12:44:26,323 INFO    SenderThread:3347917 [sender.py:send_exit():371] handling exit code: 0
+2023-01-04 12:44:26,323 INFO    SenderThread:3347917 [sender.py:send_exit():373] handling runtime: 15
+2023-01-04 12:44:26,327 INFO    SenderThread:3347917 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2023-01-04 12:44:26,329 INFO    SenderThread:3347917 [sender.py:send_exit():379] send defer
+2023-01-04 12:44:26,329 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:26,330 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,330 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 0
+2023-01-04 12:44:26,331 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,331 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 0
+2023-01-04 12:44:26,331 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 1
+2023-01-04 12:44:26,331 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,331 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 1
+2023-01-04 12:44:26,417 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,417 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 1
+2023-01-04 12:44:26,417 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 2
+2023-01-04 12:44:26,417 DEBUG   SenderThread:3347917 [sender.py:send():235] send: stats
+2023-01-04 12:44:26,417 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,417 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 2
+2023-01-04 12:44:26,417 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,417 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 2
+2023-01-04 12:44:26,417 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 3
+2023-01-04 12:44:26,418 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,418 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 3
+2023-01-04 12:44:26,418 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,418 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 3
+2023-01-04 12:44:26,418 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 4
+2023-01-04 12:44:26,418 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,418 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 4
+2023-01-04 12:44:26,418 DEBUG   SenderThread:3347917 [sender.py:send():235] send: summary
+2023-01-04 12:44:26,421 INFO    SenderThread:3347917 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2023-01-04 12:44:26,422 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,422 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 4
+2023-01-04 12:44:26,422 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 5
+2023-01-04 12:44:26,422 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,422 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 5
+2023-01-04 12:44:26,423 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,423 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 5
+2023-01-04 12:44:26,431 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:26,509 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 6
+2023-01-04 12:44:26,510 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:26,510 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:26,510 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 6
+2023-01-04 12:44:26,511 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:26,511 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 6
+2023-01-04 12:44:26,511 INFO    SenderThread:3347917 [dir_watcher.py:finish():336] shutting down directory watcher
+2023-01-04 12:44:26,611 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,180 INFO    SenderThread:3347917 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/config.yaml
+2023-01-04 12:44:27,180 INFO    SenderThread:3347917 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/output.log
+2023-01-04 12:44:27,180 INFO    SenderThread:3347917 [dir_watcher.py:_on_file_modified():269] file/dir modified: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/wandb-summary.json
+2023-01-04 12:44:27,181 INFO    SenderThread:3347917 [dir_watcher.py:finish():366] scan: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files
+2023-01-04 12:44:27,183 INFO    SenderThread:3347917 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/conda-environment.yaml conda-environment.yaml
+2023-01-04 12:44:27,183 INFO    SenderThread:3347917 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/requirements.txt requirements.txt
+2023-01-04 12:44:27,184 INFO    SenderThread:3347917 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/config.yaml config.yaml
+2023-01-04 12:44:27,184 INFO    SenderThread:3347917 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/wandb-metadata.json wandb-metadata.json
+2023-01-04 12:44:27,184 INFO    SenderThread:3347917 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/output.log output.log
+2023-01-04 12:44:27,184 INFO    SenderThread:3347917 [dir_watcher.py:finish():380] scan save: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/wandb-summary.json wandb-summary.json
+2023-01-04 12:44:27,185 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 7
+2023-01-04 12:44:27,185 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,185 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:27,185 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 7
+2023-01-04 12:44:27,186 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:27,186 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 7
+2023-01-04 12:44:27,186 INFO    SenderThread:3347917 [file_pusher.py:finish():145] shutting down file pusher
+2023-01-04 12:44:27,286 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,286 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,387 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,387 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,483 INFO    Thread-12 :3347917 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/conda-environment.yaml
+2023-01-04 12:44:27,488 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,488 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,499 INFO    Thread-14 :3347917 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/config.yaml
+2023-01-04 12:44:27,505 INFO    Thread-15 :3347917 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/output.log
+2023-01-04 12:44:27,533 INFO    Thread-16 :3347917 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/wandb-summary.json
+2023-01-04 12:44:27,590 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,590 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,691 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,692 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,793 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,793 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,863 INFO    Thread-13 :3347917 [upload_job.py:push():132] Uploaded file /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/files/requirements.txt
+2023-01-04 12:44:27,895 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,895 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:27,996 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:27,996 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:28,063 INFO    Thread-6  :3347917 [sender.py:transition_state():392] send defer: 8
+2023-01-04 12:44:28,064 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:28,064 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 8
+2023-01-04 12:44:28,064 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:28,064 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 8
+2023-01-04 12:44:28,097 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:28,564 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 9
+2023-01-04 12:44:28,564 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:28,565 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:28,565 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 9
+2023-01-04 12:44:28,565 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:28,565 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 9
+2023-01-04 12:44:28,565 INFO    SenderThread:3347917 [sender.py:transition_state():392] send defer: 10
+2023-01-04 12:44:28,566 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: defer
+2023-01-04 12:44:28,566 INFO    HandlerThread:3347917 [handler.py:handle_request_defer():164] handle defer: 10
+2023-01-04 12:44:28,566 DEBUG   SenderThread:3347917 [sender.py:send():235] send: final
+2023-01-04 12:44:28,566 DEBUG   SenderThread:3347917 [sender.py:send():235] send: footer
+2023-01-04 12:44:28,566 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: defer
+2023-01-04 12:44:28,566 INFO    SenderThread:3347917 [sender.py:send_request_defer():388] handle sender defer: 10
+2023-01-04 12:44:28,666 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: poll_exit
+2023-01-04 12:44:28,666 DEBUG   SenderThread:3347917 [sender.py:send_request():249] send_request: poll_exit
+2023-01-04 12:44:28,666 INFO    SenderThread:3347917 [file_pusher.py:join():150] waiting for file pusher
+2023-01-04 12:44:28,880 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: sampled_history
+2023-01-04 12:44:28,881 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: get_summary
+2023-01-04 12:44:28,881 DEBUG   HandlerThread:3347917 [handler.py:handle_request():141] handle_request: shutdown
+2023-01-04 12:44:28,881 INFO    HandlerThread:3347917 [handler.py:finish():806] shutting down handler
+2023-01-04 12:44:29,566 INFO    WriterThread:3347917 [datastore.py:close():279] close: /fsx/ganayu/code/SuperShaper/wandb/run-20230104_124408-2jlukeqv/run-2jlukeqv.wandb
+2023-01-04 12:44:29,780 INFO    SenderThread:3347917 [sender.py:finish():1111] shutting down sender
+2023-01-04 12:44:29,780 INFO    SenderThread:3347917 [file_pusher.py:finish():145] shutting down file pusher
+2023-01-04 12:44:29,780 INFO    SenderThread:3347917 [file_pusher.py:join():150] waiting for file pusher
+2023-01-04 12:44:29,781 INFO    MainThread:3347917 [internal.py:handle_exit():80] Internal process exited

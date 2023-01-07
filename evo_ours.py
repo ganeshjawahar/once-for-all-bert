@@ -445,6 +445,8 @@ class EvoSearch:
             popu = []
             for arch_config in all_models:
                 feat_config = [arch_config.sample_hidden_size, arch_config.sample_num_attention_heads[0], arch_config.sample_intermediate_size[0]]
+                if self.search_space_id == "v5.2":
+                    feat_config.append(arch_config.sample_num_hidden_layers)
                 if self.satisfy_constraint(arch_config):
                     popu.append({"arch_config": arch_config, "feat_config": feat_config})
             print("%d out of %d architectures meet the contraints"%(len(popu), len(all_models)))

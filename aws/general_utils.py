@@ -729,6 +729,37 @@ def get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3(folde
 # for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
 #  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec8_finetune_neuronmoe_50M_%s_lr8e-4/%s"%(exp_name, exp_name), new_supernet_finetune=True)
 
+'''
+# neuron jack 2L - "5M", "10M", "27M", "50M"
+for model_size in ["5M", "27M", "10M", "50M"]:
+  print(model_size)
+  for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec19_finetune_neuronmoe_v5/%s_%s/%s"%(model_size, exp_name, exp_name), new_supernet_finetune=True)
+'''
+
+'''
+for model_size in ["30M", "60M", "67M"]:
+  print(model_size)
+  for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec21_finetune_neuronmoe_v5/%s_%s/%s"%(model_size, exp_name, exp_name), new_supernet_finetune=True)
+'''
+
+'''
+for model_size in ["27M",  "10M"]:
+  print(model_size)
+  for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec24_finetune_neuronmoe_v5p2/%s_%s/%s"%(model_size, exp_name, exp_name), new_supernet_finetune=True)
+'''
+
+# for model_size in ["27M",  "50M"]:
+#  print(model_size)
+#  for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#    get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/dec26_finetune_neuronmoe_v5p1_250Ksteps/%s_%s/%s"%(model_size, exp_name, exp_name), new_supernet_finetune=True)
+
+# for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+#  get_scores_for_create_finetuning_experiments_standalone_vs_supernet_v3("/jan3_finetune_archmoe_jack_2L_fixedarch/%s/%s"%(exp_name,exp_name), new_supernet_finetune=True)
+
+
 def get_pareto_curve(plot_output=None, iteration=None, experiments=None, sheet_name=None):
     os.makedirs(plot_output, exist_ok=True)
 
