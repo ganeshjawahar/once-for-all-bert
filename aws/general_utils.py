@@ -68,7 +68,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
     import numpy as np
     import matplotlib.pyplot as plt
     import seaborn as sns
-    sns.set_theme(style="darkgrid")
+    # sns.set_theme(style="darkgrid")
     api = wandb.Api()
 
     os.makedirs(plot_output, exist_ok=True)
@@ -159,7 +159,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                 valloss_scores[name][0].append(row['_step'])
                 valloss_scores[name][1].append(row['SuperTransformer Val loss']) # todo: add subtransformer val loss
     
-    scores_list = [("train_loss", trainloss_scores), ("val_loss", valloss_scores)]
+    scores_list = [("train_loss", trainloss_scores), ("Validation MLM Loss", valloss_scores)]
     if inpl_kd:
         if "logits" in inpl_kd:
             scores_list.append(("distill_loss", distillloss_scores))
@@ -167,6 +167,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
             scores_list.append(("hidden_loss", hiddenloss_scores))
         if "attention" in inpl_kd:
             scores_list.append(("attention_loss", attentionloss_scores))
+    good_names = {"arch experts-big": "Arch. Experts (Big)", "arch experts-small": "Arch. Experts (Small)", "neuron experts-big": "Neuron Experts (Big)", "neuron experts-small": "Neuron Experts (Small)", "standalone-big": "Standalone (Big)", "standalone-small": "Standalone (Small)", "supernet-big": "Supernet (Big)", "supernet-small": "Supernet (Small)"}
     for name, scores in scores_list:
         fig = plt.figure(figsize=(13,7))
         colors = ['b', "springgreen", "indigo", "olive", "firebrick", 'c', "gold", "violet", 'm', 'r', 'g', 'k', 'y', 'fuchsia', 'maroon', 'sienna', 'orange', 'coral']
@@ -181,13 +182,13 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                     if j % every_x_steps == 0: # and (ignore_first_x_steps is None or int(model[0][j]) >= ignore_first_x_steps):
                         cur_x.append(scores[model][0][j])
                         cur_y.append(scores[model][1][j])
-                sns.lineplot(x=cur_x, y=cur_y, color=colors[ei], label=model)
+                sns.lineplot(x=cur_x, y=cur_y, color=colors[ei], label=good_names[model])
             ei += 1
-        plt.xlabel("Steps", fontsize=15)
-        plt.ylabel("%s"%(name), fontsize=15)
-        plt.legend(loc="upper right", ncol=2, fontsize=15)
-        plt.xticks(fontsize=15)
-        plt.yticks(fontsize=15)
+        plt.xlabel("Steps", fontsize=18)
+        plt.ylabel("%s"%(name), fontsize=18)
+        plt.legend(loc="upper right", ncol=2, fontsize=16)
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
         fig.savefig("%s/%s.png"%(plot_output, name))
 
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/jul18_plots", supernet_runids=[("supernet-base", "ganayu/effbert/37tipjbc"), ("supernet-swichrelaxed", "ganayu/effbert/28flai6f")], standalone_runids=[("standalone-12L-120H", "ganayu/effbert/q6fsxzge"), ("standalone-12L-768H", "ganayu/effbert/3roltlci")])
@@ -220,6 +221,8 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/oct21_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("archmoe_hid64", "ganayu/effbert/5ou0wyus"), ("fixedarchmoe_hid64", "ganayu/effbert/6d5mmpk7")], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/nov15_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("arch experts", "ganayu/effbert/92ojue4d"), ("neuron experts", "ganayu/effbert/20fwsb8z") ], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
 # get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/dec6_supernet_archexperts_difflr", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("neuronexp5e-4", "ganayu/effbert/20fwsb8z"), ("neuronexp8e-4", "ganayu/effbert/1vr5wzx5") ], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
+get_learning_curve_fromwandb(plot_output="/fsx/ganayu/experiments/supershaper/summary_plots/jan10_paper_supernet_archexperts", supernet_runids=[ ("supernet", "ganayu/effbert/2hismi0h"), ("arch experts", "ganayu/effbert/92ojue4d"), ("neuron experts", "ganayu/effbert/20fwsb8z") ], standalone_runids=[("standalone-big", "ganayu/effbert/2yyuo4mm"), ("standalone-small", "ganayu/effbert/39bn06ci")], every_x_steps=100)
+
 
 def wandb_locate_proj():
     import json
