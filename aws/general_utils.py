@@ -159,7 +159,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                 valloss_scores[name][0].append(row['_step'])
                 valloss_scores[name][1].append(row['SuperTransformer Val loss']) # todo: add subtransformer val loss
     
-    scores_list = [("train_loss", trainloss_scores), ("Validation MLM Loss", valloss_scores)]
+    scores_list = [("train_loss", trainloss_scores), ("val_loss", valloss_scores)]
     if inpl_kd:
         if "logits" in inpl_kd:
             scores_list.append(("distill_loss", distillloss_scores))
@@ -185,7 +185,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
                 sns.lineplot(x=cur_x, y=cur_y, color=colors[ei], label=good_names[model])
             ei += 1
         plt.xlabel("Steps", fontsize=18)
-        plt.ylabel("%s"%(name), fontsize=18)
+        plt.ylabel("%s"%(name) if "val" not in name else "Validation MLM Loss", fontsize=18)
         plt.legend(loc="upper right", ncol=2, fontsize=16)
         plt.xticks(fontsize=18)
         plt.yticks(fontsize=18)
