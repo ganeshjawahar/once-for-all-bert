@@ -174,7 +174,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
         ei = 0
         for model in sorted(scores):
             if name == "val_loss" or every_x_steps == -1:
-                sns.lineplot(x=scores[model][0], y=scores[model][1], color=colors[ei], label=model)
+                sns.lineplot(x=scores[model][0], y=scores[model][1], color=colors[ei], label=good_names[model])
             else:
                 cur_x, cur_y = [], []
                 print(name, model)
