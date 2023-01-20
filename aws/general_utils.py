@@ -168,6 +168,7 @@ def get_learning_curve_fromwandb(plot_output, supernet_runids=None, standalone_r
         if "attention" in inpl_kd:
             scores_list.append(("attention_loss", attentionloss_scores))
     good_names = {"arch experts-big": "Arch. Experts (Big)", "arch experts-small": "Arch. Experts (Small)", "neuron experts-big": "Neuron Experts (Big)", "neuron experts-small": "Neuron Experts (Small)", "standalone-big": "Standalone (Big)", "standalone-small": "Standalone (Small)", "supernet-big": "Supernet (Big)", "supernet-small": "Supernet (Small)"}
+    good_names = {"arch experts-big": "Layer-wise MoS (Big)", "arch experts-small": "Layer-wise MoS (Small)", "neuron experts-big": "Neuron-wise MoS (Big)", "neuron experts-small": "Neuron-wise MoS (Small)", "standalone-big": "Standalone (Big)", "standalone-small": "Standalone (Small)", "supernet-big": "Supernet (Big)", "supernet-small": "Supernet (Small)"}
     for name, scores in scores_list:
         fig = plt.figure(figsize=(13,7))
         colors = ['b', "springgreen", "indigo", "olive", "firebrick", 'c', "gold", "violet", 'm', 'r', 'g', 'k', 'y', 'fuchsia', 'maroon', 'sienna', 'orange', 'coral']
