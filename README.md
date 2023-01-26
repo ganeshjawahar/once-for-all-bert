@@ -22,36 +22,35 @@ Set the path to where the model files and other outputs need to be stored:
 
 #### (2b) Path to code
 Set the path to parent directory of the codebase:
-'''
-def get_code_dir():
-    return "/fsx/ganayu/code/SuperShaper"
-'''
+
+    def get_code_dir():
+        return "/fsx/ganayu/code/SuperShaper"
+    
 
 #### (2c) Path to preprocessed data
 Download preprocessed data from [here]() and extract. Set the path to extracted preprocessed data:
-'''
-def dataset_factory(name):
-    datasets = {}
-    datasets["wikibooks_acabert_bertbaseuncased_128len"] = "/fsx/ganayu/data/academic_bert_dataset/final_bert_preproc_128" 
-    return datasets[name]
-'''
+
+    def dataset_factory(name):
+        datasets = {}
+        datasets["wikibooks_acabert_bertbaseuncased_128len"] = "/fsx/ganayu/data/academic_bert_dataset/final_bert_preproc_128" 
+        return datasets[name]
 
 #### (2d) Path to finetuned BERT-Base GLUE models 
 Download finetuned models from [here]() and extract. Set the path to extracted finetuned models:
-'''
-def task_specific_trained_teacher(name):
-    teacher_models = {}
 
-    teacher_models["bertbase"] = {"cola": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/32_bertbase_cola_2e-5_16_4", "mnli": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/6_bertbase_mnli_3e-5_16_2", "sst2": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/43_bertbase_sst2_3e-5_16_3", "qnli": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/60_bertbase_qnli_3e-5_16_2", "qqp": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/77_bertbase_qqp_5e-5_32_4", "mrpc": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mrpc_rte_stsb_ckptneeded/1_bertbase_mrpc_5e-5_16_3", "rte": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mrpc_rte_stsb_ckptneeded/22_bertbase_rte_5e-5_32_3"}
+    def task_specific_trained_teacher(name):
+        teacher_models = {}
 
-    return teacher_models[name]
-'''
+        teacher_models["bertbase"] = {"cola": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/32_bertbase_cola_2e-5_16_4", "mnli": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/6_bertbase_mnli_3e-5_16_2", "sst2": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/43_bertbase_sst2_3e-5_16_3", "qnli": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/60_bertbase_qnli_3e-5_16_2", "qqp": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mnli_cola_ckptneeded/77_bertbase_qqp_5e-5_32_4", "mrpc": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mrpc_rte_stsb_ckptneeded/1_bertbase_mrpc_5e-5_16_3", "rte": "/fsx/ganayu/experiments/supershaper/aug25_finetune_googlebert_mrpc_rte_stsb_ckptneeded/22_bertbase_rte_5e-5_32_3"}
+
+        return teacher_models[name]
+        
 
 ### (3) Pretrain MoS supernet
 Pretrain MoS supernet by adding the following command in  `aws/start_jobs.py`:
-'''
-script_creator(get_experiments_dir() + "/nov10_neuronrouting_jack_2L", [ {"exp_name": "neuron", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "nov10_neuronrouting_jack_2L", "tokenized_c4_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "tokenizer_name": "bert-base-uncased", "max_experts": 2, "hypernet_hidden_size": 128, "pop_size": 1, "expert_routing_type": "neuronrouting_jack_2L", "max_train_steps": 125000})}]}  ], time_in_mins=10000, wandb="online")
-'''
+
+
+    script_creator(get_experiments_dir() + "/nov10_neuronrouting_jack_2L", [ {"exp_name": "neuron", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "nov10_neuronrouting_jack_2L", "tokenized_c4_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "tokenizer_name": "bert-base-uncased", "max_experts": 2, "hypernet_hidden_size": 128, "pop_size": 1, "expert_routing_type": "neuronrouting_jack_2L", "max_train_steps": 125000})}]}  ], time_in_mins=10000, wandb="online")
 
 where,
 * `nov10_neuronrouting_jack_2L` - experiment name
@@ -69,9 +68,8 @@ where,
 
 ### (3) Run evolutionary search
 Run evolutionary search by adding the following command in  `aws/start_jobs.py`:
-'''
-script_creator(get_experiments_dir() + "/nov21_neuronmoe_50M", [ {"exp_name": name, "runs": [ {"pyfile": "evo_ours.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.evosearch"), {"supernet_ckpt_dir": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "mixing": "bert-bottleneck", "params_constraints": constraint, "data_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "max_experts": 2, "expert_routing_type": "neuronrouting_jack_2L", "last_expert_averaging_expert": "no", "hypernet_hidden_size": 128})}]} for name, constraint in [("50M", "45000000,50000000")] ], time_in_mins=8000, wandb="no", num_gpus=4, generate_port=True)
-'''
+
+    script_creator(get_experiments_dir() + "/nov21_neuronmoe_50M", [ {"exp_name": name, "runs": [ {"pyfile": "evo_ours.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.evosearch"), {"supernet_ckpt_dir": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "mixing": "bert-bottleneck", "params_constraints": constraint, "data_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "max_experts": 2, "expert_routing_type": "neuronrouting_jack_2L", "last_expert_averaging_expert": "no", "hypernet_hidden_size": 128})}]} for name, constraint in [("50M", "45000000,50000000")] ], time_in_mins=8000, wandb="no", num_gpus=4, generate_port=True)
 
 where,
 * `nov21_neuronmoe_50M` - experiment name
@@ -88,10 +86,10 @@ where,
 
 ### (3) Finetune best subnet on downstream task
 Run finetuning best subnet on all GLUE downstream tasks by adding the following command in  `aws/start_jobs.py`:
-'''
-for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
-  script_creator(get_experiments_dir() + "/nov22_finetune_neuronmoe_50M_%s"%exp_name, create_finetuning_experiments_standalone_vs_supernet_v3(num_gpus=2, tasks=tasks, glue_config="supernetbasev3.standard.distill.supernet_finetune", sweep=get_finetuning_sweeps("bert"), models=[ {"exp_name": exp_name, "model_name_or_path": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "subtransformer_config_path": get_experiments_dir() + "/nov21_neuronmoe_50M/50M/evo_results_29.xls", "tokenizer_name": "bert-base-uncased", "mixing": "bert-bottleneck"} ], kd_teacher=task_specific_trained_teacher("bertbase"), kd_config=finetuning_kd_config("std_logits")), time_in_mins=15000, wandb="offline", num_gpus=2, generate_port=True)
-'''
+
+    for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
+        script_creator(get_experiments_dir() + "/nov22_finetune_neuronmoe_50M_%s"%exp_name, create_finetuning_experiments_standalone_vs_supernet_v3(num_gpus=2, tasks=tasks, glue_config="supernetbasev3.standard.distill.supernet_finetune", sweep=get_finetuning_sweeps("bert"), models=[ {"exp_name": exp_name, "model_name_or_path": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "subtransformer_config_path": get_experiments_dir() + "/nov21_neuronmoe_50M/50M/evo_results_29.xls", "tokenizer_name": "bert-base-uncased", "mixing": "bert-bottleneck"} ], kd_teacher=task_specific_trained_teacher("bertbase"), kd_config=finetuning_kd_config("std_logits")), time_in_mins=15000, wandb="offline", num_gpus=2, generate_port=True)
+        
 
 where,
 * `nov22_finetune_neuronmoe_50M_` - experiment name
