@@ -15,10 +15,10 @@ Set the paths in the `aws/start_jobs.py` file
 
 #### (2a) Path to model files and other outputs
 Set the path to where the model files and other outputs need to be stored:
-'''
+
     def get_experiments_dir():
         return "/fsx/ganayu/experiments/supershaper"
-'''
+        
 
 #### (2b) Path to code
 Set the path to parent directory of the codebase:
