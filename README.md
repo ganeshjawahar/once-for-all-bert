@@ -6,10 +6,9 @@ This repository contains code used in Mixture-of-Supernet (MoS) work. This repos
 
 ### (1) Install
 Run the following commands to install MoS:
-
-'''
+```
 pip install -r requirements.txt
-'''
+```
 
 ### (2) Set the paths to code, data and output
 Set the paths in the `aws/start_jobs.py` file
