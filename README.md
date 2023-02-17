@@ -66,6 +66,8 @@ where,
 * `max_train_steps` - maximum number of train steps (e.g., `125000`)
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `10000`)
 
+The best checkpoint is at `<experiment_name>/checkpoint_best.pt`.
+
 ### (3) Run evolutionary search
 Run evolutionary search by adding the following command in  `aws/start_jobs.py`:
 
@@ -84,7 +86,9 @@ where,
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `10000`)
 * `num_gpus` - number of GPUs (e.g., `4`)
 
-### (3) Finetune best subnet on downstream task
+The config for the best architecture is at `<experiment_name>/evo_results_29.xls`.
+
+### (4) Finetune best subnet on downstream task
 Run finetuning best subnet on all GLUE downstream tasks by adding the following command in  `aws/start_jobs.py`:
 
     for exp_name, tasks in [("mnli_mrpc_rte", ["mnli", "mrpc", "rte"]), ("cola_qqp", ["cola", "qqp"]), ("sst2_qnli", ["sst2", "qnli"])]:
@@ -102,8 +106,34 @@ where,
 * `subtransformer_config_path` - path to the best subnet config (e.g., `get_experiments_dir() + "/nov21_neuronmoe_50M/50M/evo_results_29.xls"`)
 * `tokenizer_name` - tokenizer name (e.g., `bert-base-uncased`)
 * `kd_teacher` - path to the finetuned BERT-base models on GLUE tasks (e.g., `task_specific_trained_teacher("bertbase")`)
-* `kd_config` - config for distillation (e.g., `finetuning_kd_config("std_logits"))`)
+* `kd_config` - config for distillation (e.g., `finetuning_kd_config("std_logits")`)
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `10000`)
 * `num_gpus` - number of GPUs (e.g., `4`)
+
+
+### (5) Re-pretrain best subnet
+Re-pretrain best subnet by adding the following command in `aws/start_jobs.py`:
+
+    script_creator(get_experiments_dir() + "/nov22_standalone_neuronmoe_50M", [ {"exp_name": "stand_50M", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "nov22_standalone_neuronmoe_50M", "max_train_steps": 125000, "sampling_type": "none", "num_warmup_steps": 0, "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "subtransformer_config_path": get_experiments_dir() + "/nov21_neuronmoe_50M/50M/evo_results_29.xls", "tokenized_c4_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "tokenizer_name": "bert-base-uncased", "mixing": "bert-bottleneck"})}]} ], time_in_mins=8000, wandb="online", generate_port=True, num_gpus=8)
+
+where,
+* `nov22_standalone_neuronmoe_50M` - experiment name
+* `pyfile` - supernet re-pretraining script (e.g., `train_mlm.py`)
+* `params` - parameters for the run
+* `experiment_name` - experiment name (e.g., `nov22_standalone_neuronmoe_50M`)
+* `tokenized_c4_dir` - path to preprocessed directory (e.g., `dataset_factory("wikibooks_acabert_bertbaseuncased_128len")`)
+* `tokenizer_name` - tokenizer name (e.g., `bert-base-uncased`)
+* `max_train_steps` - maximum number of train steps (e.g., `125000`)
+* `time_in_mins` - maximum number of minutes for the job to run (e.g., `8000`)
+* `num_gpus` - number of GPUs (e.g., `8`)
+
+
+
+
+
+
+
+
+
 
 
