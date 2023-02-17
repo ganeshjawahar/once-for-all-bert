@@ -53,10 +53,11 @@ Pretrain MoS supernet by adding the following command in  `aws/start_jobs.py`:
     script_creator(get_experiments_dir() + "/nov10_neuronrouting_jack_2L", [ {"exp_name": "neuron", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "nov10_neuronrouting_jack_2L", "tokenized_c4_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "tokenizer_name": "bert-base-uncased", "max_experts": 2, "hypernet_hidden_size": 128, "pop_size": 1, "expert_routing_type": "neuronrouting_jack_2L", "max_train_steps": 125000})}]}  ], time_in_mins=10000, wandb="online")
 
 where,
-* `nov10_neuronrouting_jack_2L` - experiment name
+* `parent_experiment_name` - parent experiment name (e.g., `nov10_neuronrouting_jack_2L`)
+* `exp_name` - child experiment name (e.g., `neuron`)
 * `pyfile` - supernet pretraining script (e.g., `train_mlm.py`)
 * `params` - parameters for the run
-* `experiment_name` - experiment name (e.g., `nov10_neuronrouting_jack_2L`)
+* `experiment_name` - experiment name that can be ignored
 * `tokenized_c4_dir` - path to preprocessed directory (e.g., `dataset_factory("wikibooks_acabert_bertbaseuncased_128len")`)
 * `tokenizer_name` - tokenizer name (e.g., `bert-base-uncased`)
 * `max_experts` - number of expert weights (e.g., `2`)
@@ -66,7 +67,7 @@ where,
 * `max_train_steps` - maximum number of train steps (e.g., `125000`)
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `10000`)
 
-The best checkpoint is at `<experiment_name>/checkpoint_best.pt`.
+The best checkpoint is at `<parent_experiment_name>/<exp_name>/checkpoint_best.pt`.
 
 ### (3) Run evolutionary search
 Run evolutionary search by adding the following command in  `aws/start_jobs.py`:
@@ -74,7 +75,8 @@ Run evolutionary search by adding the following command in  `aws/start_jobs.py`:
     script_creator(get_experiments_dir() + "/nov21_neuronmoe_50M", [ {"exp_name": name, "runs": [ {"pyfile": "evo_ours.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.evosearch"), {"supernet_ckpt_dir": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "mixing": "bert-bottleneck", "params_constraints": constraint, "data_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "max_experts": 2, "expert_routing_type": "neuronrouting_jack_2L", "last_expert_averaging_expert": "no", "hypernet_hidden_size": 128})}]} for name, constraint in [("50M", "45000000,50000000")] ], time_in_mins=8000, wandb="no", num_gpus=4, generate_port=True)
 
 where,
-* `nov21_neuronmoe_50M` - experiment name
+* `nov21_neuronmoe_50M` - parent experiment name
+* `exp_name` - child experiment name
 * `pyfile` - evolutionary search script (e.g., `evo_ours.py`)
 * `params` - parameters for the run (e.g., `modify_config_and_to_string(config_factory("supernetbasev3.evosearch")`)
 * `supernet_ckpt_dir` - path to best supernet checkpoint (e.g., `get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model"`)
@@ -86,7 +88,7 @@ where,
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `10000`)
 * `num_gpus` - number of GPUs (e.g., `4`)
 
-The config for the best architecture is at `<experiment_name>/evo_results_29.xls`.
+The config for the best architecture is at `<parent_experiment_name>/<exp_name>/evo_results_29.xls`.
 
 ### (4) Finetune best subnet on downstream task
 Run finetuning best subnet on all GLUE downstream tasks by adding the following command in  `aws/start_jobs.py`:
@@ -96,12 +98,12 @@ Run finetuning best subnet on all GLUE downstream tasks by adding the following 
         
 
 where,
-* `nov22_finetune_neuronmoe_50M_` - experiment name
+* `nov22_finetune_neuronmoe_50M_` - parent experiment name
+* `exp_name` - child experiment name
 * `num_gpus` - number of GPUs (e.g., `2`)
 * `tasks` - set of GLUE tasks (e.g., `["mnli", "mrpc", "rte"]`)
 * `glue_config` - finetuning settings (e.g., `"supernetbasev3.standard.distill.supernet_finetune"`)
 * `sweep` - sweep for finetuning (e.g., `get_finetuning_sweeps("bert")`)
-* `exp_name` - experiment name
 * `model_name_or_path` - path to the best supernet checkpoint (e.g., `get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model"`)
 * `subtransformer_config_path` - path to the best subnet config (e.g., `get_experiments_dir() + "/nov21_neuronmoe_50M/50M/evo_results_29.xls"`)
 * `tokenizer_name` - tokenizer name (e.g., `bert-base-uncased`)
@@ -117,7 +119,8 @@ Re-pretrain best subnet by adding the following command in `aws/start_jobs.py`:
     script_creator(get_experiments_dir() + "/nov22_standalone_neuronmoe_50M", [ {"exp_name": "stand_50M", "runs": [{"pyfile": "train_mlm.py", "params": modify_config_and_to_string(config_factory("supernetbasev3.standard.train_mlm"), {"experiment_name": "nov22_standalone_neuronmoe_50M", "max_train_steps": 125000, "sampling_type": "none", "num_warmup_steps": 0, "sampling_rule": "none", "model_name_or_path": get_experiments_dir() + "/nov10_neuronrouting_jack_2L/neuron/best_model", "subtransformer_config_path": get_experiments_dir() + "/nov21_neuronmoe_50M/50M/evo_results_29.xls", "tokenized_c4_dir": dataset_factory("wikibooks_acabert_bertbaseuncased_128len"), "tokenizer_name": "bert-base-uncased", "mixing": "bert-bottleneck"})}]} ], time_in_mins=8000, wandb="online", generate_port=True, num_gpus=8)
 
 where,
-* `nov22_standalone_neuronmoe_50M` - experiment name
+* `nov22_standalone_neuronmoe_50M` - parent experiment name
+* `exp_name` - child experiment name
 * `pyfile` - supernet re-pretraining script (e.g., `train_mlm.py`)
 * `params` - parameters for the run
 * `experiment_name` - experiment name (e.g., `nov22_standalone_neuronmoe_50M`)
@@ -126,8 +129,9 @@ where,
 * `max_train_steps` - maximum number of train steps (e.g., `125000`)
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `8000`)
 * `num_gpus` - number of GPUs (e.g., `8`)
+* `subtransformer_config_path` - path to the subnet configuration file (e.g., `<parent_experiment_name>/<exp_name>/evo_results_29.xls`)
 
-
+The best checkpoint is at `<parent_experiment_name>/<exp_name>/checkpoint_best.pt`.
 
 
 
