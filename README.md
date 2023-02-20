@@ -28,7 +28,7 @@ Set the path to parent directory of the codebase:
     
 
 #### (2c) Path to preprocessed data
-Download preprocessed data from [here]() and extract. Set the path to extracted preprocessed data:
+Download preprocessed data from [here](https://1drv.ms/u/s!AlflMXNPVy-wgpEBtZFHfRkp9IMm3w?e=ujMhfG) and extract. Set the path to extracted preprocessed data:
 
     def dataset_factory(name):
         datasets = {}
@@ -36,7 +36,7 @@ Download preprocessed data from [here]() and extract. Set the path to extracted 
         return datasets[name]
 
 #### (2d) Path to finetuned BERT-Base GLUE models 
-Download finetuned models from [here]() and extract. Set the path to extracted finetuned models:
+Download finetuned models from [here](https://1drv.ms/u/s!AlflMXNPVy-wgpEE2i9FvCUTQkpN6Q?e=IILAmX) and extract. Set the path to extracted finetuned models:
 
     def task_specific_trained_teacher(name):
         teacher_models = {}
@@ -67,7 +67,7 @@ where,
 * `max_train_steps` - maximum number of train steps (e.g., `125000`)
 * `time_in_mins` - maximum number of minutes for the job to run (e.g., `10000`)
 
-The best checkpoint is at `<parent_experiment_name>/<exp_name>/checkpoint_best.pt`.
+The best checkpoint is at `<parent_experiment_name>/<exp_name>/checkpoint_best.pt`. Pre-trained supernets can be download from [here](https://1drv.ms/u/s!AlflMXNPVy-wgpEDtGrTgezWmmU2lw?e=3Aa1kE).
 
 ### (3) Run evolutionary search
 Run evolutionary search by adding the following command in  `aws/start_jobs.py`:
